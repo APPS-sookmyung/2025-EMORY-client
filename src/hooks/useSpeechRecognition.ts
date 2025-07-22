@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { SpeechRecognitionState } from '../types/chat';
+import type { SpeechRecognitionState } from '../types/chat';
 
 interface UseSpeechRecognitionReturn extends SpeechRecognitionState {
   startListening: () => void;
