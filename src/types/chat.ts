@@ -1,6 +1,7 @@
+export type MessageType = 'user' | 'ai';
 export interface ChatMessage {
   id: string;
-  type: 'user' | 'ai';
+  type: MessageType;
   message: string;
   timestamp: Date;
 }

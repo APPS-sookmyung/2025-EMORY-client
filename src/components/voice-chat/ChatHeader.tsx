@@ -1,5 +1,5 @@
 import { Menu, User } from 'lucide-react';
-import { Button } from '../components/ui/button';
+import { Button } from '../ui/Button';
 
 interface ChatHeaderProps {
   onMenuClick: () => void;
