@@ -37,12 +37,14 @@ export default function VoiceChat() {
         message: 'Hello! 안녕하세요!',
         timestamp: new Date(),
       },
+      /*
       {
         id: '2',
         type: 'ai',
         message: 'How are you today?',
         timestamp: new Date(Date.now() + 1000),
       },
+      */
     ];
     setMessages(welcomeMessages);
   }, []);
