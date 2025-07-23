@@ -2,12 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 import { ChatHeader } from '../components/voice-chat/ChatHeader';
-import { VoiceButton } from '@/components/voice-chat/VoiceButton';
-import { ChatMessage } from '@/components/voice-chat/ChatMessage';
-import { LoadingIndicator } from '@/components/voice-chat/LoadingIndicator';
-import { Button } from '@/components/ui/button';
+import { VoiceButton } from '../components/voice-chat/VoiceButton';
+import { ChatMessage } from '../components/voice-chat/ChatMessage';
+import { LoadingIndicator } from '../components/voice-chat/LoadingIndicator';
+import { Button } from '../components/ui/button';
 import type { ChatMessage as ChatMessageType } from '../types/chat';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '../hooks/use-toast';
 
 export default function VoiceChat() {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
