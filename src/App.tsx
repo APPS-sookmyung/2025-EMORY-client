@@ -5,12 +5,14 @@ import { Toaster } from './components/ui/toaster';
 import { TooltipProvider } from './components/ui/tooltip';
 //import NotFound from './pages/';
 import VoiceChat from './pages/voice-chat';
+import MyPage from './pages/my-page';
 
 function Router() {
   return (
     <Switch>
       <Route path='/' component={VoiceChat} />
       <Route path='/voice-chat' component={VoiceChat} />
+      <Route path='/my-page' component={MyPage} />
       {/*<Route component={NotFound} />*/}
     </Switch>
   );

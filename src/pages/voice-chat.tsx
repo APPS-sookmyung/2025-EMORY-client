@@ -8,6 +8,7 @@ import { LoadingIndicator } from '../components/voice-chat/LoadingIndicator';
 import { Button } from '../components/ui/button';
 import type { ChatMessage as ChatMessageType } from '../types/chat';
 import { useToast } from '../hooks/use-toast';
+import { useLocation } from 'wouter';
 
 export default function VoiceChat() {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
@@ -15,6 +16,7 @@ export default function VoiceChat() {
   const [statusText, setStatusText] = useState('Emory agent 와 대화하세요...');
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const [, navigate] = useLocation();
 
   const {
     isListening,
@@ -184,13 +186,18 @@ export default function VoiceChat() {
     });
   };
 
+    // const handleProfileClick = () => {
+    //   // 아직 구현 X - 프로필 기능
+    //   toast({
+    //     title: '프로필',
+    //     description: '프로필 기능은 향후 구현 예정입니다.',
+    //   });
+    // };
+  
   const handleProfileClick = () => {
-    // 아직 구현 X - 프로필 기능
-    toast({
-      title: '프로필',
-      description: '프로필 기능은 향후 구현 예정입니다.',
-    });
-  };
+      navigate('/my-page'); // ✅ 수정: 마이페이지로 이동
+    };
+
 
   const handleKeyboardClick = () => {
     // 아직 구현 X

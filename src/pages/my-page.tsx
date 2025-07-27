@@ -1,14 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation } from "wouter"
 import { ArrowLeft, ChevronRight, User } from "lucide-react"
 import { Button } from "../components/ui/button"
 import SettingsModal from "../components/mypage/SettingsModal"
 
 export default function MyPage() {
   const [showSettingsModal, setShowSettingsModal] = useState(false)
-  const navigate = useNavigate()
+  const [, navigate] = useLocation()
 
   const openSettingsModal = () => {
     setShowSettingsModal(true)
@@ -18,10 +18,10 @@ export default function MyPage() {
     setShowSettingsModal(false)
   }
 
-  // 음성 채팅으로 이동
-  const goToVoiceChat = () => {
-    navigate("/voice-chat")
-  }
+  // // 음성 채팅으로 이동
+  // const goToVoiceChat = () => {
+  //   navigate("/voice-chat")
+  // }
 
   const handleLogout = () => {
     navigate("/logout")
@@ -57,7 +57,6 @@ export default function MyPage() {
           {/* Menu Items */}
           <div className="w-full space-y-3 mt-8">
             <button
-              onClick={goToVoiceChat}
               className="w-full bg-white/80 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-sm hover:bg-white/90 transition-colors"
             >
               <span className="text-gray-700 font-medium">감정 일기 히스토리</span>
@@ -65,7 +64,7 @@ export default function MyPage() {
             </button>
 
             <button className="w-full bg-white/80 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-sm hover:bg-white/90 transition-colors">
-              <span className="text-gray-700 font-medium">오늘책</span>
+              <span className="text-gray-700 font-medium">emory plus 요금제</span>
               <ChevronRight className="w-5 h-5 text-orange-400" />
             </button>
 
