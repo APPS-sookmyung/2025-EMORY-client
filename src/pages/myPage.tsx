@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft, ChevronRight, User } from "lucide-react"
 import { Button } from "../components/ui/button"
-import SettingsModal from "../components/SettingsModal"
+import SettingsModal from "../components/mypage/SettingsModal"
 
 export default function MyPage() {
   const [showSettingsModal, setShowSettingsModal] = useState(false)
