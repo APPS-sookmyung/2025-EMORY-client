@@ -3,7 +3,8 @@
 import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { ArrowLeft, ChevronRight, Mail, Clock, UserMinus, Edit, LogOut, Moon } from "lucide-react"
-import { Switch } from "@/components/ui/switch"
+import { Switch } from "../../components/ui/switch"
+
 
 interface SettingsModalProps {
   isOpen: boolean
@@ -17,13 +18,14 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const [darkMode, setDarkMode] = useState(false)
 
+
   const handleTouchStart = (e: React.TouchEvent) => {
     setIsDragging(true)
     setStartY(e.touches[0].clientY)
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return
+    if (!isDragging) return 
 
     const currentY = e.touches[0].clientY
     const deltaY = currentY - startY
@@ -102,7 +104,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
         ref={modalRef}
         className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-white z-50 transition-transform duration-300 ease-out h-3/4 rounded-t-3xl ${
           isOpen ? "translate-y-0" : "translate-y-full"
-        }`}
+        } `}
         style={{
           transform: isOpen ? `translateX(-50%) translateY(${dragY}px)` : "translateX(-50%) translateY(100%)",
           transition: isDragging ? "none" : "transform 0.3s ease-out",

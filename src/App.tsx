@@ -7,6 +7,8 @@ import { TooltipProvider } from './components/ui/tooltip';
 import VoiceChat from './pages/voice-chat';
 import MyPage from './pages/my-page';
 import LogoutPage from './pages/logout';
+import WithdrawalPage from './pages/withdrawal';
+
 
 function Router() {
   return (
@@ -15,6 +17,7 @@ function Router() {
       <Route path='/voice-chat' component={VoiceChat} />
       <Route path='/my-page' component={MyPage} />
       <Route path='/logout' component={LogoutPage} />
+      <Route path='/withdrawal' component={WithdrawalPage} />
       {/*<Route component={NotFound} />*/}
     </Switch>
   );

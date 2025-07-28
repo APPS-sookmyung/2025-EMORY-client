@@ -48,7 +48,7 @@
 }
 
 /* 애니메이션 효과 */
-@keyframes gradientShift {
+/* @keyframes gradientShift {
   0%,
   100% {
     background-position: 0% 0%;
@@ -68,10 +68,10 @@
   100% {
     background-position: 0% 50%;
   }
-}
+} */
 
 /* 홀로그래픽 효과를 위한 오버레이 */
-.gradient-default::before {
+/* .gradient-default::before {
   content: "";
   position: absolute;
   top: 0;
@@ -91,7 +91,7 @@
   50% {
     opacity: 0.7;
   }
-}
+} */
 
 /* 모바일 최적화 */
 @media (max-width: 640px) {

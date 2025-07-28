@@ -1,13 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation } from "wouter"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "../components/ui/button"
 import { Checkbox } from "../components/ui/checkbox"
 
 export default function WithdrawalPage() {
-  const navigate = useNavigate()
+  const [, navigate] = useLocation()
   const [withdrawalChecks, setWithdrawalChecks] = useState({
     check1: false,
     check2: false,
@@ -35,24 +35,21 @@ export default function WithdrawalPage() {
   }
 
   return (
-    <div className="max-w-sm mx-auto bg-white min-h-screen">
-      <div className="min-h-screen bg-gradient-to-b from-orange-200 via-pink-200 via-purple-200 to-blue-200">
-        <div className="bg-gradient-to-r from-orange-300 via-pink-300 to-purple-300 p-4">
-          <div className="flex items-center mb-4">
+    <div className="gradient-mypage">
+      
+          <div className="p-4">
             <button onClick={() => navigate(-1)}>
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </button>
           </div>
-          <h1 className="text-xl font-medium text-gray-800 mb-6">회원탈퇴</h1>
-        </div>
 
-        <div className="bg-white/80 backdrop-blur-sm mx-4 mt-4 rounded-lg p-4">
+        <div className="bg-white/80 backdrop-blur-sm mx-4 mt-4 rounded-lg p-4 ">
           <h2 className="text-lg font-medium mb-4 text-gray-800">회원 탈퇴</h2>
 
           <div className="mb-6">
             <p className="text-sm text-gray-600 mb-2">회원탈퇴 후, 언제든지 재가입하실 수 있습니다.</p>
             <p className="text-sm text-gray-600 mb-4">
-              회원탈퇴 시 <span className="text-orange-500 font-medium">😊</span> 재정으로 가입하실수있습니다.
+              회원님은 현재 <span className="text-orange-500 font-medium">1234@naver.com</span> 계정으로 가입하셨습니다.
             </p>
             <p className="text-sm text-gray-500">* 본 계정으로 발행된 인증서가 있습니다.</p>
           </div>
@@ -93,6 +90,5 @@ export default function WithdrawalPage() {
           </div>
         </div>
       </div>
-    </div>
   )
 }
