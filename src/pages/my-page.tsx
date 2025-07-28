@@ -7,7 +7,6 @@ import { useLocation } from "wouter"
 import { ArrowLeft, ChevronRight, User } from "lucide-react"
 import { Button } from "../components/ui/button"
 import SettingsModal from "../components/mypage/SettingsModal"
-import GradientBackground from "../styles/components/background" // ✅ 수정됨: background 컴포넌트 임포트
 
 export default function MyPage() {
   const [showSettingsModal, setShowSettingsModal] = useState(false)
@@ -32,7 +31,7 @@ export default function MyPage() {
         {/* 상단 뒤로가기 버튼 */}
         <div className="p-4">
           <button onClick={() => navigate("/")}>
-            <ArrowLeft className="w-6 h-6 text-white" /> {/* ✅ 수정됨: 흰색 아이콘으로 변경 */}
+            <ArrowLeft className="w-6 h-6 text-gray-400" /> {/* ✅ 수정됨: 흰색 아이콘으로 변경 */}
           </button>
         </div>
 

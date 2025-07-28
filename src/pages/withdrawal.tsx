@@ -38,7 +38,7 @@ export default function WithdrawalPage() {
     <div className="gradient-mypage">
       
           <div className="p-4">
-            <button onClick={() => navigate(-1)}>
+            <button onClick={() => navigate("/my-page")}>
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </button>
           </div>

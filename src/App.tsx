@@ -8,6 +8,7 @@ import VoiceChat from './pages/voice-chat';
 import MyPage from './pages/my-page';
 import LogoutPage from './pages/logout';
 import WithdrawalPage from './pages/withdrawal';
+import StartPage from './pages/start-page';
 
 
 function Router() {
@@ -18,6 +19,7 @@ function Router() {
       <Route path='/my-page' component={MyPage} />
       <Route path='/logout' component={LogoutPage} />
       <Route path='/withdrawal' component={WithdrawalPage} />
+      <Route path='/start-page' component={StartPage} />
       {/*<Route component={NotFound} />*/}
     </Switch>
   );
