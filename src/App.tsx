@@ -5,12 +5,21 @@ import { Toaster } from './components/ui/toaster';
 import { TooltipProvider } from './components/ui/tooltip';
 //import NotFound from './pages/';
 import VoiceChat from './pages/voice-chat';
+import MyPage from './pages/my-page';
+import LogoutConfirmPage from './pages/logout-confirm-page';
+import WithdrawalPage from './pages/withdrawal';
+import StartPage from './pages/start-page';
+
 
 function Router() {
   return (
     <Switch>
       <Route path='/' component={VoiceChat} />
       <Route path='/voice-chat' component={VoiceChat} />
+      <Route path='/my-page' component={MyPage} />
+      <Route path='/logout-confirm-page' component={LogoutConfirmPage} />
+      <Route path='/withdrawal' component={WithdrawalPage} />
+      <Route path='/start-page' component={StartPage} />
       {/*<Route component={NotFound} />*/}
     </Switch>
   );
