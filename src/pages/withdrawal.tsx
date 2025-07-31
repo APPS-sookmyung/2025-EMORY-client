@@ -25,11 +25,11 @@ export default function WithdrawalPage() {
   }
 
   const handleWithdrawal = () => {
-    const confirmed = window.confirm("정말로 회원탈퇴를 진행하시겠습니까?")
+    const confirmed = window.confirm("정말로 회원 탈퇴를 진행하시겠습니까?")
     if (confirmed) {
-      console.log("회원탈퇴 진행...")
+      console.log("회원 탈퇴 진행...")
       // 실제 탈퇴 API 호출 로직
-      alert("회원탈퇴가 완료되었습니다.")
+      alert("회원 탈퇴가 완료되었습니다.")
       navigate("/")
     }
   }
@@ -47,7 +47,7 @@ export default function WithdrawalPage() {
           <h2 className="text-lg font-medium mb-4 text-gray-800">회원 탈퇴</h2>
 
           <div className="mb-6">
-            <p className="text-sm text-gray-600 mb-2">회원탈퇴 후, 언제든지 재가입하실 수 있습니다.</p>
+            <p className="text-sm text-gray-600 mb-2">회원 탈퇴 후, 언제든지 재가입하실 수 있습니다.</p>
             <p className="text-sm text-gray-600 mb-4">
               회원님은 현재 <span className="text-orange-500 font-medium">1234@naver.com</span> 계정으로 가입하셨습니다.
             </p>
@@ -59,7 +59,7 @@ export default function WithdrawalPage() {
 
             <div className="space-y-2">
               {[
-                "잘못 가입 신청함",
+                "잘못 가입한 계정",
                 "이메일 변경 후 재가입",
                 "서비스 사용이 불편함",
                 "콘텐츠가 기대에 못 미침",
