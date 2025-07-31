@@ -95,7 +95,7 @@
   }
 
   .gradient-mypage {
-    background-image: url("C:/Users/ygkgy/Documents/김영교/2025-EMORY-client/화면 캡처 2025-07-28 201555.png");
+    background-image: url("C:/Users/ygkgy/Documents/김영교/2025-EMORY-client/src/styles/gradientbackground.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -105,7 +105,7 @@
     position: relative;
     overflow: hidden;
     border-radius: 20px;
-    box-shadow: 0 0 30px gray(0.6);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
 }
   }
   .voice-button-gradient {
