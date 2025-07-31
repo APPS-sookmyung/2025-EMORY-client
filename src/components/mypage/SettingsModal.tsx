@@ -5,7 +5,6 @@ import { useState, useRef, useEffect } from "react"
 import { ArrowLeft, ChevronRight, Mail, Clock, UserMinus, Edit, LogOut, Moon } from "lucide-react"
 import { Switch } from "../../components/ui/switch"
 
-
 interface SettingsModalProps {
   isOpen: boolean
   onClose: () => void
@@ -185,7 +184,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             {/* Logout */}
             <button
               onClick={() => {
-                window.location.href = "/logout"
+                window.location.href = "/logout-confirm-page"
               }}
               className="flex items-center justify-between w-full py-4 border-b border-gray-50 hover:bg-gray-50 rounded-lg px-2 -mx-2"
             >

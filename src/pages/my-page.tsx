@@ -21,7 +21,7 @@ export default function MyPage() {
   }
 
   const handleLogout = () => {
-    navigate("/logout")
+    navigate("/logout-confirm-page")
   }
 
   return (

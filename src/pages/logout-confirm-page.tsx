@@ -5,20 +5,25 @@ import { Card } from "../components/ui/card"
 import { useToast } from '../hooks/use-toast';
 import { useLocation } from "wouter";   
 
-export default function LogoutPage() {
+export default function LogoutConfirmPage() {
     const { toast } = useToast();
     const [, navigate] = useLocation();
     const handleLogout = () => {
         // 로그아웃 로직 추후에 추가
+
+        localStorage.removeItem("token"); 
+        sessionStorage.clear()
+        setTimeout(() => {
+            navigate('/my-page')
+        }, 2000) // 마이페이지로 2초 후에 리다이렉트
+
+        // 토스트 메시지 표시
         toast({
             title: "로그아웃 성공",
             description: "안전하게 로그아웃되었습니다.",
         });
 
 
-        // setTimeout(() => {
-        //     navigate('/my-page')
-        // }, 2000) // 마이페이지로 2초 후에 리다이렉트
     };
 
 
