@@ -1,62 +1,227 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import {
-  ArrowLeft,
-  Download,
-  TrendingUp,
-  Sun,
-  Cloud,
-  Brain,
-  Search,
-  Heart,
-  Smile,
-} from 'lucide-react';
+import { ArrowLeft, Download, TrendingUp, Heart } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
+import { useToast } from '../hooks/use-toast';
 
-export default function EmotionReport() {
-  const [, navigate] = useLocation();
+// 감정 데이터 타입 정의 (백엔드 연동용)
+interface EmotionData {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+  percentage: number;
+  color: string;
+}
 
-  const handleSaveReport = () => {
-    // 감정 리포트 저장 로직
-    console.log('감정 리포트 저장');
-  };
+interface EmotionReport {
+  id: string;
+  userId: string;
+  createdAt: string;
+  mainEmotion: EmotionData;
+  emotionDistribution: EmotionData[];
+  feedback: string;
+}
 
-  const emotions = [
+// 더미 데이터 생성 함수 (나중에 API 호출로 교체)
+const createDummyEmotionReport = (): EmotionReport => {
+  const emotions: EmotionData[] = [
     {
+      id: 'joy',
       name: '기쁨',
-      icon: <Sun className='w-5 h-5' />,
+      icon: 'sun',
       description: '밝고 긍정적인 순간들',
-      percentage: '35%',
+      percentage: 35,
       color: 'bg-orange-500',
-      progressColor: 'bg-orange-400',
     },
     {
+      id: 'calm',
       name: '평온',
-      icon: <Cloud className='w-5 h-5' />,
+      icon: 'cloud',
       description: '평화롭고 차분한 상태',
-      percentage: '28%',
+      percentage: 25,
       color: 'bg-blue-400',
-      progressColor: 'bg-blue-300',
     },
     {
+      id: 'thoughtful',
       name: '사려깊음',
-      icon: <Brain className='w-5 h-5' />,
+      icon: 'brain',
       description: '깊은 성찰과 분석',
-      percentage: '22%',
+      percentage: 20,
       color: 'bg-purple-500',
-      progressColor: 'bg-purple-400',
     },
     {
-      name: '호기심',
-      icon: <Search className='w-5 h-5' />,
-      description: '배우고 탐구하려는 열망',
-      percentage: '15%',
-      color: 'bg-green-500',
-      progressColor: 'bg-green-400',
+      id: 'anger',
+      name: '분노',
+      icon: 'flame',
+      description: '강한 감정적 반응',
+      percentage: 10,
+      color: 'bg-red-500',
+    },
+    {
+      id: 'anxiety',
+      name: '불안',
+      icon: 'alert-triangle',
+      description: '걱정과 긴장감',
+      percentage: 5,
+      color: 'bg-yellow-500',
+    },
+    {
+      id: 'sadness',
+      name: '슬픔',
+      icon: 'droplets',
+      description: '우울하고 슬픈 감정',
+      percentage: 3,
+      color: 'bg-indigo-500',
+    },
+    {
+      id: 'excitement',
+      name: '신남',
+      icon: 'zap',
+      description: '흥미진진하고 즐거운 기분',
+      percentage: 2,
+      color: 'bg-pink-500',
     },
   ];
+
+  // 가장 높은 퍼센티지를 가진 감정을 주요 감정으로 설정
+  const mainEmotion = emotions.reduce((max, current) =>
+    current.percentage > max.percentage ? current : max
+  );
+
+  return {
+    id: `report_${Date.now()}`,
+    userId: 'user_123',
+    createdAt: new Date().toISOString(),
+    mainEmotion,
+    emotionDistribution: emotions,
+    feedback:
+      '오늘 대화에서 기쁨과 평온이 주를 이루었습니다. 전반적으로 긍정적인 에너지가 느껴졌어요. 특히 새로운 아이디어에 대한 호기심과 사려깊은 성찰이 돋보였습니다.',
+  };
+};
+
+// 감정 아이콘 컴포넌트 (간단한 버전)
+const EmotionIcon = ({
+  iconName,
+  className = 'w-5 h-5',
+}: {
+  iconName: string;
+  className?: string;
+}) => {
+  const iconMap: Record<string, React.ReactNode> = {
+    sun: <div className={`${className} bg-yellow-400 rounded-full`} />,
+    cloud: <div className={`${className} bg-blue-300 rounded-full`} />,
+    brain: <div className={`${className} bg-purple-400 rounded-full`} />,
+    flame: <div className={`${className} bg-red-400 rounded-full`} />,
+    'alert-triangle': (
+      <div className={`${className} bg-yellow-400 rounded-full`} />
+    ),
+    droplets: <div className={`${className} bg-blue-400 rounded-full`} />,
+    zap: <div className={`${className} bg-yellow-300 rounded-full`} />,
+  };
+
+  return (
+    iconMap[iconName] || (
+      <div className={`${className} bg-gray-400 rounded-full`} />
+    )
+  );
+};
+
+export default function EmotionReportPage() {
+  const [, navigate] = useLocation();
+  const { toast } = useToast();
+  const [emotionReport, setEmotionReport] = useState<EmotionReport | null>(
+    null
+  );
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 감정 리포트 데이터 로드 (나중에 API 호출로 교체)
+  useEffect(() => {
+    const loadEmotionReport = async () => {
+      try {
+        setIsLoading(true);
+
+        // TODO: 여기에 실제 API 호출 코드를 넣으세요
+        // 예시:
+        // const reportId = new URLSearchParams(window.location.search).get('reportId')
+        // const response = await fetch(`/api/emotion-reports/${reportId}`)
+        // const report = await response.json()
+
+        // 현재는 더미 데이터 사용
+        const report = createDummyEmotionReport();
+        setEmotionReport(report);
+      } catch (error) {
+        console.error('감정 리포트 로드 실패:', error);
+        toast({
+          title: '오류',
+          description: '감정 리포트를 불러오는데 실패했습니다.',
+          variant: 'destructive',
+        });
+        // 에러 시에도 더미 데이터 표시
+        setEmotionReport(createDummyEmotionReport());
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadEmotionReport();
+  }, [toast]);
+
+  const handleSaveReport = async () => {
+    if (!emotionReport) return;
+
+    try {
+      // TODO: 여기에 실제 저장 API 호출 코드를 넣으세요
+      // 예시:
+      // const response = await fetch(`/api/emotion-reports/${emotionReport.id}/save`, {
+      //   method: 'POST'
+      // })
+      // const result = await response.json()
+
+      toast({
+        title: '성공',
+        description: '감정 리포트가 저장되었습니다.',
+      });
+    } catch (error) {
+      console.error('감정 리포트 저장 실패:', error);
+      toast({
+        title: '오류',
+        description: '감정 리포트 저장에 실패했습니다.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className='gradient-emotion-report flex flex-col relative h-full'>
+        <div className='flex items-center justify-center h-full'>
+          <div className='text-center'>
+            <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4'></div>
+            <p className='text-gray-400'>감정 리포트를 분석하고 있습니다...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!emotionReport) {
+    return (
+      <div className='gradient-emotion-report flex flex-col relative h-full'>
+        <div className='flex items-center justify-center h-full'>
+          <div className='text-center'>
+            <p className='text-gray-400'>감정 리포트를 불러올 수 없습니다.</p>
+            <Button onClick={() => navigate('/voice-chat')} className='mt-4'>
+              돌아가기
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='gradient-emotion-report flex flex-col relative h-full'>
@@ -98,14 +263,17 @@ export default function EmotionReport() {
 
               {/* 감정 리스트 */}
               <div className='space-y-2 mb-4'>
-                {emotions.map((emotion, index) => (
+                {emotionReport.emotionDistribution.map((emotion, index) => (
                   <div key={index} className='bg-white/20 rounded-lg p-3'>
                     <div className='flex items-center justify-between'>
                       <div className='flex items-center space-x-3'>
                         <div
                           className={`w-6 h-6 ${emotion.color} rounded-full flex items-center justify-center text-white`}
                         >
-                          {emotion.icon}
+                          <EmotionIcon
+                            iconName={emotion.icon}
+                            className='w-4 h-4'
+                          />
                         </div>
                         <div>
                           <div className='text-sm font-medium text-gray-400'>
@@ -118,7 +286,7 @@ export default function EmotionReport() {
                       </div>
                       <div className='text-right'>
                         <div className='font-bold text-gray-400 text-sm'>
-                          {emotion.percentage}
+                          {emotion.percentage}%
                         </div>
                       </div>
                     </div>
@@ -138,11 +306,18 @@ export default function EmotionReport() {
 
               <div className='text-center'>
                 <div className='w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3'>
-                  <Smile className='w-8 h-8 text-gray-400' />
+                  <EmotionIcon
+                    iconName={emotionReport.mainEmotion.icon}
+                    className='w-8 h-8'
+                  />
                 </div>
-                <h3 className='text-xl font-bold text-gray-400 mb-1'>기쁨</h3>
+                <h3 className='text-xl font-bold text-gray-400 mb-1'>
+                  {emotionReport.mainEmotion.name}
+                </h3>
                 <div className='flex items-center justify-center space-x-2'>
-                  <span className='text-sm text-gray-400'>대화의 35%</span>
+                  <span className='text-sm text-gray-400'>
+                    대화의 {emotionReport.mainEmotion.percentage}%
+                  </span>
                   <TrendingUp className='w-4 h-4 text-orange-300' />
                 </div>
               </div>
@@ -155,8 +330,7 @@ export default function EmotionReport() {
               </h3>
               <div className='bg-white/20 rounded-lg p-3'>
                 <p className='text-sm text-gray-400 leading-relaxed text-center'>
-                  이 감정이 오늘 대화를 주도했으며, 전반적으로 긍정적인 관점을
-                  반영합니다. 밝은 에너지와 희망적인 태도가 돋보였어요.
+                  {emotionReport.feedback}
                 </p>
               </div>
             </Card>
