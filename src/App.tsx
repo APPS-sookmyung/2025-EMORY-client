@@ -9,7 +9,7 @@ import MyPage from './pages/my-page';
 import LogoutConfirmPage from './pages/logout-confirm-page';
 import WithdrawalPage from './pages/withdrawal';
 import StartPage from './pages/start-page';
-
+import EmotionReportPage from './pages/emotion-report';
 
 function Router() {
   return (
@@ -20,6 +20,7 @@ function Router() {
       <Route path='/logout-confirm-page' component={LogoutConfirmPage} />
       <Route path='/withdrawal' component={WithdrawalPage} />
       <Route path='/start-page' component={StartPage} />
+      <Route path='/emotion-report' component={EmotionReportPage} />
       {/*<Route component={NotFound} />*/}
     </Switch>
   );

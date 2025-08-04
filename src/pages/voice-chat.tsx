@@ -186,18 +186,17 @@ export default function VoiceChat() {
     });
   };
 
-    // const handleProfileClick = () => {
-    //   // 아직 구현 X - 프로필 기능
-    //   toast({
-    //     title: '프로필',
-    //     description: '프로필 기능은 향후 구현 예정입니다.',
-    //   });
-    // };
-  
-  const handleProfileClick = () => {
-      navigate('/my-page'); // ✅ 수정: 마이페이지로 이동
-    };
+  // const handleProfileClick = () => {
+  //   // 아직 구현 X - 프로필 기능
+  //   toast({
+  //     title: '프로필',
+  //     description: '프로필 기능은 향후 구현 예정입니다.',
+  //   });
+  // };
 
+  const handleProfileClick = () => {
+    navigate('/my-page'); // ✅ 수정: 마이페이지로 이동
+  };
 
   const handleKeyboardClick = () => {
     // 아직 구현 X
@@ -219,30 +218,12 @@ export default function VoiceChat() {
   };
 
   const handleFinishChat = () => {
-    // 아직 구현 X - 초기 화면으로 돌아가기
-    const confirmed = window.confirm('대화를 종료하시겠습니까?');
+    const confirmed = window.confirm(
+      '대화를 종료하고 감정 리포트를 확인하시겠습니까?'
+    );
     if (confirmed) {
-      // Reset to initial state
-      setMessages([
-        {
-          id: '1',
-          type: 'ai',
-          message: 'Hello! 안녕하세요!',
-          timestamp: new Date(),
-        },
-        {
-          id: '2',
-          type: 'ai',
-          message: 'How are you today?',
-          timestamp: new Date(Date.now() + 1000),
-        },
-      ]);
-      setIsLoading(false);
-      setStatusText('Emory agent 와 대화하세요...');
-      toast({
-        title: '대화 초기화',
-        description: '새로운 대화를 시작할 수 있습니다.',
-      });
+      // 감정 리포트 페이지로 이동
+      navigate('/emotion-report');
     }
   };
 

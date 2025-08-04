@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(20, 14.3%, 4.1%);
@@ -95,7 +94,7 @@
   }
 
   .gradient-mypage {
-    background-image: url("C:/Users/ygkgy/Documents/김영교/2025-EMORY-client/src/styles/gradientbackground.png");
+    background-image: url('@/assets/img/home.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -105,50 +104,63 @@
     position: relative;
     overflow: hidden;
     border-radius: 20px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .gradient-emotion-report {
+    background-image: url('@/assets/img/home.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 480px;
+    height: 844px;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+  }
 }
-  }
-  .voice-button-gradient {
-    background: linear-gradient(145deg, hsl(266, 83%, 65%), hsl(262, 83%, 58%));
-  }
+.voice-button-gradient {
+  background: linear-gradient(145deg, hsl(266, 83%, 65%), hsl(262, 83%, 58%));
+}
 
-  .voice-button-shadow {
-    box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
-  }
+.voice-button-shadow {
+  box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+}
 
-  .voice-button-listening {
-    animation: voice-pulse 2s infinite;
-  }
+.voice-button-listening {
+  animation: voice-pulse 2s infinite;
+}
 
-  .chat-blur {
-    filter: blur(4px);
-    opacity: 0.3;
-    transition: all 0.3s ease;
-  }
+.chat-blur {
+  filter: blur(4px);
+  opacity: 0.3;
+  transition: all 0.3s ease;
+}
 
-  .overlay-dark {
-    background: rgba(0, 0, 0, 0.7);
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 50;
-    backdrop-filter: blur(8px);
-  }
+.overlay-dark {
+  background: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  backdrop-filter: blur(8px);
+}
 
-  .chat-bubble::before {
-    content: '';
-    position: absolute;
-    left: -8px;
-    top: 12px;
-    width: 0;
-    height: 0;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    border-right: 8px solid rgba(255, 255, 255, 0.9);
-  }
-
+.chat-bubble::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 12px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid rgba(255, 255, 255, 0.9);
+}
 
 @layer utilities {
   @keyframes pulse-ring {
@@ -239,6 +251,18 @@
     100% {
       transform: scale(1.2);
       opacity: 0;
+    }
+  }
+
+  @keyframes gradientShift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
     }
   }
 
