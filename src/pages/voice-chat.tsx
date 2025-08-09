@@ -179,12 +179,7 @@ export default function VoiceChat() {
     }
   };
 
-  const handleMenuClick = () => {
-    toast({
-      title: '메뉴',
-      description: '메뉴 기능은 향후 구현 예정입니다.',
-    });
-  };
+  const handleMenuClick = () => {};
 
     // const handleProfileClick = () => {
     //   // 아직 구현 X - 프로필 기능

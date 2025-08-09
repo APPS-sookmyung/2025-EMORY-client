@@ -3,6 +3,7 @@
 import { useLocation } from "wouter"
 import { Button } from "../components/ui/button"
 import { GoogleIcon, AppleIcon, KakaoIcon } from "../components/ui/socialicons"
+import Hamburger from "../components/common/Hamburger"
 import { useToast } from '../hooks/use-toast';
 
 
@@ -30,6 +31,9 @@ export default function StartPage() {
 
   return (
     <div className="gradient-mypage">
+      <div className="absolute top-2 right-2">
+        <Hamburger />
+      </div>
       {/* 상단 여백 */}
       {/* 메인 콘텐츠 - 중앙 정렬 */}
       <div className="flex-1 flex flex-col items-center justify-center p-9">

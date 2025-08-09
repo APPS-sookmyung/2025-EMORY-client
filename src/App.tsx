@@ -3,6 +3,8 @@ import { queryClient } from './lib/queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from './components/ui/toaster';
 import { TooltipProvider } from './components/ui/tooltip';
+import { SidebarProvider } from './components/sidebar/SidebarContext';
+import Sidebar from './components/sidebar/Sidebar';
 //import NotFound from './pages/';
 import VoiceChat from './pages/voice-chat';
 import MyPage from './pages/my-page';
@@ -29,10 +31,14 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className='min-h-screen bg-gray-100 flex items-center justify-center p-4'>
-          <Toaster />
-          <Router />
-        </div>
+        <SidebarProvider>
+          <div className='min-h-screen bg-gray-100 flex items-center justify-center p-4'>
+            <Toaster />
+            <Router />
+            {/* 글로벌 사이드바 */}
+            <Sidebar />
+          </div>
+        </SidebarProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

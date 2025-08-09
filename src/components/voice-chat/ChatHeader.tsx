@@ -1,5 +1,6 @@
 import { Menu, User } from 'lucide-react';
 import { Button } from '../ui/button';
+import { useSidebar } from '../sidebar/SidebarContext';
 
 interface ChatHeaderProps {
   onMenuClick: () => void;
@@ -7,12 +8,16 @@ interface ChatHeaderProps {
 }
 
 export function ChatHeader({ onMenuClick, onProfileClick }: ChatHeaderProps) {
+  const { open } = useSidebar();
   return (
     <header className='flex items-center justify-between px-6 pt-14 pb-4 z-10'>
       <Button
         variant='ghost'
         size='icon'
-        onClick={onMenuClick}
+        onClick={() => {
+          open();
+          onMenuClick?.();
+        }}
         className='p-2 rounded-lg hover:bg-white/20 transition-colors text-purple-600'
       >
         <Menu className='w-6 h-6' />

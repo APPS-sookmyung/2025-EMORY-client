@@ -5,6 +5,7 @@
 import { useState } from "react"
 import { useLocation } from "wouter"
 import { ArrowLeft, ChevronRight, User } from "lucide-react"
+import Hamburger from "../components/common/Hamburger"
 import { Button } from "../components/ui/button"
 import SettingsModal from "../components/mypage/SettingsModal"
 
@@ -28,11 +29,12 @@ export default function MyPage() {
     // <GradientBackground variant="default"> {/* ✅ 수정됨: 전체 페이지를 GradientBackground로 감쌈 */}
       <div className="gradient-mypage flex flex-col relative"> 
 
-        {/* 상단 뒤로가기 버튼 */}
-        <div className="p-4">
+        {/* 상단 뒤로가기 + 햄버거 */}
+        <div className="p-4 flex items-center justify-between">
           <button onClick={() => navigate("/")}>
-            <ArrowLeft className="w-6 h-6 text-gray-400" /> {/* ✅ 수정됨: 흰색 아이콘으로 변경 */}
+            <ArrowLeft className="w-6 h-6 text-gray-400" />
           </button>
+          <Hamburger />
         </div>
 
         <div className="flex flex-col items-center px-6 pt-16">
