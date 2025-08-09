@@ -10,38 +10,33 @@ export default function Sidebar() {
   const [, navigate] = useLocation();
 
   const go = (path: string) => {
-    navigate(path);
+    // 먼저 닫기 애니메이션
     close();
+    // 애니메이션 지속시간(300ms)에 맞춰 살짝 지연 후 이동
+    setTimeout(() => navigate(path), 300);
   };
 
   return (
     <>
-      {/* overlay sized to phone canvas (480x844) */}
+      {/* dim overlay */}
       <div
-        className={`absolute z-40 transition ${
-          isOpen ? 'bg-black/40 visible' : 'invisible bg-black/0'
+        className={`absolute inset-0 z-40 transition ${
+          isOpen ? 'bg-black/20 visible' : 'invisible bg-transparent'
         }`}
-        style={{
-          left: 'calc(50% - 240px)',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          width: 480,
-          height: 844,
-          borderRadius: 20,
-        }}
+        style={{ borderRadius: 20 }}
         onClick={close}
       />
 
       {/* panel attached to phone left edge */}
       <aside
-        className={`absolute top-1/2 -translate-y-1/2 z-50 h-[844px] w-[340px] rounded-r-2xl shadow-2xl backdrop-blur-md
-        bg-[rgba(191,158,158,0.95)] text-white transition-transform duration-300 ${
+        className={`absolute top-0 left-0 z-50 h-full w-[220px] rounded-r-2xl shadow-2xl backdrop-blur-md
+        bg-[rgba(191,158,158,0.92)] text-white transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
-        style={{ width: 340, left: 'calc(50% - 240px)' }}
+        style={{ width: 220 }}
       >
-        <div className='px-7 pt-10 pb-4 border-b border-white/40 flex items-center justify-between'>
-          <h2 className='text-3xl font-semibold'>메뉴</h2>
+        <div className='px-5 pt-8 pb-3 border-b border-white/30 flex items-center justify-between'>
+          <h2 className='text-2xl font-semibold'>메뉴</h2>
           <Button
             variant='ghost'
             size='icon'
@@ -53,35 +48,38 @@ export default function Sidebar() {
         </div>
 
         {/* 프로필 */}
-        <div className='px-7 py-6 flex items-start space-x-4'>
-          <div className='w-12 h-12 rounded-full bg-white/20 flex items-center justify-center'>
-            <User className='w-7 h-7 text-white' />
+        <div
+          className='px-5 py-5 flex items-start space-x-3 cursor-pointer select-none'
+          onClick={() => go('/my-page')}
+        >
+          <div className='w-10 h-10 rounded-full bg-white/20 flex items-center justify-center'>
+            <User className='w-6 h-6 text-white' />
           </div>
           <div>
-            <div className='text-2xl font-semibold leading-tight'>Jeewon</div>
-            <div className='text-white/80 text-sm'>emory@gmail.com</div>
+            <div className='text-lg font-semibold leading-tight'>Jeewon</div>
+            <div className='text-white/80 text-xs'>emory@gmail.com</div>
           </div>
         </div>
 
         {/* 메뉴 리스트 */}
-        <nav className='px-7 space-y-6 mt-6'>
+        <nav className='px-5 space-y-5 mt-5'>
           <div className='flex items-center justify-between'>
             <button
               className='flex items-center space-x-3 text-white/95'
-              onClick={() => go('/voice-chat')}
+              onClick={() => go('/emotion-diary')}
             >
-              <Smile className='w-6 h-6' />
-              <span className='text-xl'>감정 일기</span>
+              <Smile className='w-5 h-5' />
+              <span className='text-lg'>감정 일기</span>
             </button>
           </div>
 
           <div className='flex items-center justify-between'>
             <button
               className='flex items-center space-x-3 text-white/95'
-              onClick={() => go('/my-page')}
+              onClick={() => go('/emotion-report')}
             >
-              <ClipboardList className='w-6 h-6' />
-              <span className='text-xl'>리포트</span>
+              <ClipboardList className='w-5 h-5' />
+              <span className='text-lg'>리포트</span>
             </button>
           </div>
 
@@ -90,8 +88,19 @@ export default function Sidebar() {
               className='flex items-center space-x-3 text-white/95'
               onClick={() => go('/start-page')}
             >
-              <Calendar className='w-6 h-6' />
-              <span className='text-xl'>캘린더</span>
+              <Calendar className='w-5 h-5' />
+              <span className='text-lg'>캘린더</span>
+            </button>
+          </div>
+
+          {/* 마이페이지 바로가기 */}
+          <div className='flex items-center justify-between'>
+            <button
+              className='flex items-center space-x-3 text-white/95'
+              onClick={() => go('/my-page')}
+            >
+              <User className='w-5 h-5' />
+              <span className='text-lg'>마이페이지</span>
             </button>
           </div>
         </nav>
