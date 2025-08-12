@@ -121,6 +121,8 @@ const initialScheduleData: Record<number, Schedule[]> = {
 
 export default function MoodCalendar(){
     const [month, setMonth]= useState<Date>(new Date(2025,4))
+    const {toast} = useToast();
+    const [, navigate]=useLocation();
     const [selectedDate, setSelectedDate]=useState<Date | undefined>(undefined)
     const [showScrapedOnly, setShowScrapedOnly]=useState<boolean>(true)
     const [showAddSheduleModal, setShowAddSheduleModal]=useState<boolean>(false)
