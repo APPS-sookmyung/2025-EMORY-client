@@ -16,7 +16,7 @@ import EmotionReportPage from './pages/emotion-report';
 function Router() {
   return (
     <Switch>
-      <Route path='/' component={VoiceChat} />
+      <Route path='/' component={StartPage} />
       <Route path='/voice-chat' component={VoiceChat} />
       <Route path='/emotion-report' component={EmotionReportPage} />
       <Route path='/my-page' component={MyPage} />
@@ -35,7 +35,7 @@ function App() {
         <SidebarProvider>
           <div className='min-h-screen bg-gray-100 flex items-center justify-center p-4'>
             <Toaster />
-            <div className='relative' style={{ width: 480, height: 844 }}>
+            <div className='relative overflow-hidden' style={{ width: 480, height: 844 }}>
               <Router />
               {/* 글로벌 사이드바 */}
               <Sidebar />

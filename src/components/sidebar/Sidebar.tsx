@@ -29,11 +29,10 @@ export default function Sidebar() {
 
       {/* panel attached to phone left edge */}
       <aside
-        className={`absolute top-0 left-0 z-50 h-full w-[220px] rounded-r-2xl shadow-2xl backdrop-blur-md
-        bg-[rgba(191,158,158,0.92)] text-white transition-transform duration-300 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`absolute top-0 z-50 h-full w-[220px] rounded-r-2xl shadow-2xl backdrop-blur-md
+        bg-[rgba(191,158,158,0.92)] text-white transition-all duration-300 ${
+          isOpen ? 'left-0' : '-left-[220px]'
         }`}
-        style={{ width: 220 }}
       >
         <div className='px-5 pt-8 pb-3 border-b border-white/30 flex items-center justify-between'>
           <h2 className='text-2xl font-semibold'>메뉴</h2>
@@ -66,10 +65,10 @@ export default function Sidebar() {
           <div className='flex items-center justify-between'>
             <button
               className='flex items-center space-x-3 text-white/95'
-              onClick={() => go('/emotion-diary')}
+              onClick={() => go('/voice-chat')}
             >
               <Smile className='w-5 h-5' />
-              <span className='text-lg'>감정 일기</span>
+              <span className='text-lg'>음성 채팅</span>
             </button>
           </div>
 
@@ -86,7 +85,7 @@ export default function Sidebar() {
           <div className='flex items-center justify-between'>
             <button
               className='flex items-center space-x-3 text-white/95'
-              onClick={() => go('/start-page')}
+              onClick={() => go('/calendar')}
             >
               <Calendar className='w-5 h-5' />
               <span className='text-lg'>캘린더</span>
