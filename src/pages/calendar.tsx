@@ -1,86 +1,83 @@
 "use client"
 
-import { useMemo, useState } from "react"
-import { Button } from "../components/ui/button"
+import { useState } from "react"
+import { ChevronLeft, ChevronRight, Menu, Plus, X, User } from "lucide-react"
+import { Button } from "../styles/components/ui/button"
 import { Switch } from "../components/ui/switch"
-import { ChevronRight, ChevronLeft, Menu, Plus, X } from "lucide-react"
-import { input } from "../components/ui/input"
+import { Input } from "../components/ui/input"
 import { Textarea } from "../components/ui/textarea"
-import { ArrowLeft } from "lucide-react"
-import { useToast } from "../hooks/use-toast"
-import { Toaster } from "../components/ui/toaster"
-import { useLocation } from "wouter"; 
+import { useToast } from  "../hooks/use-toast"
+import { useLocation } from "wouter"
 
-import { DayPicker } from "react-day-picker"
-import "react-day-picker/dist/style.css"
-import { ko } from "date-fns/locale"
-
-//이모지 정의
+// 기분 이모지 타입 정의
 type MoodEmoji = string
 
-//일기 데이터 타입 정의
-type DiaryEntry={
-    title: string
-    content: string
-    image?: string
+// 일기 데이터 타입 정의
+type DiaryEntry = {
+  title: string
+  content: string
+  image?: string
 }
 
-//일기 데이터 타입 정의
-type Schedule={
-    id: string
-    title: string
-    time: string
-    description: string
+// 일정 데이터 타입 정의
+type Schedule = {
+  id: string
+  title: string
+  time: string
+  description?: string
 }
 
-//날짜별 기분 데이터- 이미지 파일 경로
-const moodData: Record< number, {emogi: MoodEmoji; isScraped: boolean}>={
-    1: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood1.png?height=20&width=20", isScraped: true},
-    2: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood2.png?height=20&width=20", isScraped: false},
-    3: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood3.png?height=20&width=20", isScraped: false},
-    4: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood4.png?height=20&width=20", isScraped: false},
-    5: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood5.png?height=20&width=20", isScraped: false},
-    6: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood6.png?height=20&width=20", isScraped: false},
-    7: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood7.png?height=20&width=20", isScraped: true},
-    8: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood8.png?height=20&width=20", isScraped: false},
-    9: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood9.png?height=20&width=20", isScraped: false},
-    10: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood10.png?height=20&width=20", isScraped: false},
-    11: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood11.png?height=20&width=20", isScraped: false},
-    12: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood12.png?height=20&width=20", isScraped: true},
-    13: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood13.png?height=20&width=20", isScraped: true},
-    14: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood14.png?height=20&width=20", isScraped: false},
-    15: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood15.png?height=20&width=20", isScraped: false},
-    16: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood16.png?height=20&width=20", isScraped: false},
-    17: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood17.png?height=20&width=20", isScraped: false},
-    18: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood18.png?height=20&width=20", isScraped: false},
-    19: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood19.png?height=20&width=20", isScraped: false},
-    20: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood20.png?height=20&width=20", isScraped: false},  
-    21: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood21.png?height=20&width=20", isScraped: false},
-    22: {emogi: "C:\\Users\\ygkgy\\Documents\\김영교\\2025-EMORY-client\\src\\styles\\mood22.png?height=20&width=20", isScraped: false},    
+// 날짜별 기분 데이터 (예시)
+const moodData: Record<number, { emoji: MoodEmoji; isScraped: boolean }> = {
+  1: { emoji: "src/emoji1.png", isScraped: true },
+  3: { emoji: "src/emoji2.png", isScraped: false },
+  6: { emoji: "src/emoji3.png", isScraped: false },
+  9: { emoji: "src/emoji4.png", isScraped: true },
+  10: { emoji: "src/emoji5.png", isScraped: true },
+  11: { emoji: "src/emoji6.png", isScraped: true },
+  12: { emoji: "src/emoji7.png", isScraped: false },
+  14: { emoji: "src/emoji8.png", isScraped: false },
+  16: { emoji: "src/emoji9.png", isScraped: true },
+  17: { emoji: "src/emoji10.png", isScraped: true },
+  18: { emoji: "src/emoji11.png", isScraped: true },
+  19: { emoji: "src/emoji12.png", isScraped: true },
+  20: { emoji: "src/emoji13.png", isScraped: false },
+  22: { emoji: "src/emoji14.png", isScraped: false },
+  23: { emoji: "src/emoji15.png", isScraped: true },
 }
 
-
-//날짜별 일기 데이터(예)-스크랩해둔 것만 표시
-const diaryData: Record<number, DiaryEntry>={
-    1: {title: "힘든 하루", content: "오늘은 정말 힘든 하루였다. 일이 잘 풀리지 않아서 스트레스를 많이 받았다. 내일은 더 좋은 날이 되길 바란다.", image: "/placeholder.svg?height=200&width=300"},
-    7: {title: "태현이 생일파티", content: "오늘은 태현이 생일이라 파티에 다녀왔다. 다음엔 더 자주 만나야지!!😭",image: "/placeholder.svg?height=200&width=300"},
-    12: {title: "200일", content: "200일 기념일이라 특별한 날이었다. 케이크도 맞추고 재밌는 하루였다.", image: "/placeholder.svg?height=200&width=300"},
-    13: {title: "봄나들이", content: "날씨가 좋아서 공원에 나들이를 갔다. 꽃이 많이 펴서 사진을 많이 찍었다.", image: "/placeholder.svg?height=200&width=300"},
-
-
-    // ...Array.from({length: 31}, (_, i) => i + 1)
-    // .filter(day=> ![1,7,12,13].includes(day)) // 스크랩된 날짜 제외
-    // .reduce((acc, day) => {
-    //     acc[day]={
-    //         title: '일기를 작성하지 않았습니다.',
-    //         content: '오늘은 일기를 작성하지 않았습니다.',
-    //         image: undefined
-    //     }
-    //     return acc
-    // }, {} as Record<number, DiaryEntry>)
+// 날짜별 일기 데이터 (예시)
+const diaryData: Record<number, DiaryEntry> = {
+  1: {
+    title: "새해 첫날",
+    content: "새해가 밝았다. 올해는 더 열심히 살아보자고 다짐했다. 가족들과 함께 떡국을 먹으며 새해 인사를 나누었다.",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  9: {
+    title: "힘든 하루",
+    content:
+      "오늘은 정말 힘든 하루였다. 일이 잘 풀리지 않아서 스트레스를 많이 받았다. 내일은 더 좋은 날이 되길 바란다.",
+  },
+  10: {
+    title: "태현의 생일파티",
+    content:
+      "오늘은 태현의 생일이라 생일파티에 다녀왔다. 태현은 나의 가장 친한 친구다. 오랜만에 친구들과 만나서 즐거운 시간을 보냈다. 케이크도 맛있었고 선물도 마음에 들어했다. 다음에는 더 자주 만나기로 했다. 좋은 하루였다.",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  14: {
+    title: "발렌타인데이",
+    content: "발렌타인데이라서 특별한 사람과 함께 시간을 보냈다. 달콤한 초콜릿과 함께 행복한 하루였다.",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  18: {
+    title: "봄나들이",
+    content:
+      "날씨가 좋아서 공원에 나들이를 갔다. 벚꽃이 만개해서 정말 아름다웠다. 사진도 많이 찍고 좋은 추억을 만들었다.",
+    image: "/placeholder.svg?height=200&width=300",
+  },
 }
 
-//날짜별 일정 데이터
+// 날짜별 일정 데이터 (예시 - Google 캘린더에서 가져온 일정들)
 const initialScheduleData: Record<number, Schedule[]> = {
   21: [
     { id: "g1", title: "프로젝트 미팅", time: "09:00", description: "분기별 프로젝트 리뷰" },
@@ -119,120 +116,187 @@ const initialScheduleData: Record<number, Schedule[]> = {
   ],
 }
 
-export default function MoodCalendar(){
-    const [month, setMonth]= useState<Date>(new Date(2025,4))
-    const {toast} = useToast();
-    const [, navigate]=useLocation();
-    const [selectedDate, setSelectedDate]=useState<Date | undefined>(undefined)
-    const [showScrapedOnly, setShowScrapedOnly]=useState<boolean>(true)
-    const [showAddSheduleModal, setShowAddSheduleModal]=useState<boolean>(false)
-    const [selectedScheduleIds, setSelectedScheduleIds]=useState<string[]>([])
-    const [scheduledDataState, setScheduleDataState]=useState<Record<number, Schedule[]>>(initialScheduleData)
-    const [newSchedule, setNewSchedule]=useState<Schedule>({
-        id: "",
-        title: "",
-        time: "",
-        description: ""
+export default function MoodCalendar() {
+  const [currentDate, setCurrentDate] = useState(new Date(2024, 4)) // May 2024
+  const [showScrapedOnly, setShowScrapedOnly] = useState(false)
+  const [selectedDate, setSelectedDate] = useState<number | null>(null)
+  const [showAddScheduleModal, setShowAddScheduleModal] = useState(false)
+  const [selectedScheduleIds, setSelectedScheduleIds] = useState<string[]>([]) // 여러 개 선택 가능하도록 배열로 변경
+  const [newSchedule, setNewSchedule] = useState({
+    title: "",
+    time: "", // HH:MM 형식으로 저장
+    description: "",
+  })
+  const [scheduleDataState, setScheduleDataState] = useState<Record<number, Schedule[]>>(initialScheduleData) // 일정 데이터를 상태로 관리
+
+  const [, navigate] = useLocation() // useLocation 훅 사용
+  const { toast } = useToast() // useToast 훅 사용
+
+  // 오늘 날짜 (예시로 23일로 설정)
+  const today = 23
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ]
+
+  const daysOfWeek = ["S", "M", "T", "W", "T", "F", "S"]
+
+  // 현재 월의 첫 번째 날과 마지막 날 계산
+  const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
+  const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)
+  const firstDayWeekday = firstDayOfMonth.getDay()
+  const daysInMonth = lastDayOfMonth.getDate()
+
+  // 이전 월의 마지막 며칠
+  const prevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 0)
+  const daysInPrevMonth = prevMonth.getDate()
+
+  // 캘린더 날짜 배열 생성
+  const calendarDays = []
+
+  // 이전 월의 날짜들
+  for (let i = firstDayWeekday - 1; i >= 0; i--) {
+    calendarDays.push({
+      day: daysInPrevMonth - i,
+      isCurrentMonth: false,
+      isPrevMonth: true,
+    })
+  }
+
+  // 현재 월의 날짜들
+  for (let day = 1; day <= daysInMonth; day++) {
+    calendarDays.push({
+      day,
+      isCurrentMonth: true,
+      isPrevMonth: false,
+    })
+  }
+
+  // 다음 월의 날짜들 (6주 완성을 위해)
+  const remainingDays = 42 - calendarDays.length
+  for (let day = 1; day <= remainingDays; day++) {
+    calendarDays.push({
+      day,
+      isCurrentMonth: false,
+      isPrevMonth: false,
+    })
+  }
+
+  const navigateMonth = (direction: "prev" | "next") => {
+    setCurrentDate((prev) => {
+      const newDate = new Date(prev)
+      if (direction === "prev") {
+        newDate.setMonth(prev.getMonth() - 1)
+      } else {
+        newDate.setMonth(prev.getMonth() + 1)
+      }
+      return newDate
+    })
+    setSelectedDate(null) // 월 변경 시 선택 초기화
+    setSelectedScheduleIds([]) // 월 변경 시 선택된 일정 초기화
+  }
+
+  const shouldShowEmoji = (day: number) => {
+    // 오늘 이후의 날짜는 이모지 표시 안함
+    if (day > today) return false
+
+    const dayData = moodData[day]
+    if (!dayData) return false
+
+    // 스크랩 모드가 켜져있으면 스크랩된 것만 표시
+    if (showScrapedOnly) {
+      return dayData.isScraped
+    }
+
+    // 스크랩 모드가 꺼져있으면 모든 이모지 표시
+    return true
+  }
+
+  const handleDateClick = (day: number) => {
+    setSelectedDate(day)
+    setSelectedScheduleIds([]) // 날짜 변경 시 선택된 일정 초기화
+  }
+
+  const handleAddSchedule = () => {
+    if (!selectedDate) {
+      toast({
+        title: "오류",
+        description: "일정을 추가할 날짜를 먼저 선택해주세요.",
+        variant: "destructive",
+      })
+      return
+    }
+    if (!newSchedule.title || !newSchedule.time) {
+      toast({
+        title: "오류",
+        description: "제목과 시간을 입력해주세요.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const newId = `user-${Date.now()}` // 사용자 추가 일정 ID
+    const addedSchedule: Schedule = {
+      id: newId,
+      title: newSchedule.title,
+      time: newSchedule.time,
+      description: newSchedule.description,
+    }
+
+    setScheduleDataState((prev) => ({
+      ...prev,
+      [selectedDate]: [...(prev[selectedDate] || []), addedSchedule].sort((a, b) => a.time.localeCompare(b.time)), // 시간 순으로 정렬
+    }))
+
+    toast({
+      title: "일정 추가 완료",
+      description: `${newSchedule.title} 일정이 추가되었습니다.`,
     })
 
-    const { toast } = useToast()
+    setShowAddScheduleModal(false)
+    setNewSchedule({ title: "", time: "", description: "" })
+  }
 
-    const today=23
-
-    const selectedDayNum=selectedDate?.getDate()
-    const selectedDiary=
-      selectedDayNum && selectedDayNum <= today ? diaryData[selectedDayNum] : undefined
-
-    const selectedDateSchedules=selectedDayNum ? scheduledDataState[selectedDayNum] || []: []
-    const showScheduleSelection = !!selectedDayNum && !selectedDiary
-
-    const inThisMonth=(d: Date)=>
-      d.getFullYear()===month.getFullYear() && d.getMonth()===month.getMonth()
-    const dayNumber=(d:Date)=> d.getDate()
-
-
-    const modifiers=useMemo(
-      ()=>({
-        today:(d: Date)=> inThisMonth(d) && dayNumber(d)===today,
-        hasEmoji:(d: Date) => {
-          if (!inThisMonth(d)) return false
-          const n= dayNumber(d)
-          const data=moodData[n]
-          if (!data) return false
-          if (showScrapedOnly) return data?.isScraped
-          return n <= today
-
-        },
-        
-      })
-      , [month, showScrapedOnly, today]
-    )
-    
-    const modifiersClassNames={
-      today:"ring-2 ring-green-500 rounded-md",
-      selected: "bg-green-200 text-gray-900 rounded-md",
-      hasEmoji: "relative",
-    }
-
-
-    const navigateMonth=(direction: "prev" | "next")=>{
-        setMonth((prev) => {
-          const d=new Date(prev)
-            d.setMonth(prev.getMonth()+(direction==="next"?1:-1))
-            return d
-        })
-        setSelectedDate(undefined)
-        setSelectedScheduleIds([])
-    }
-
-    const handleScheduleSelect=(scheduleID: string)=>{
-      setSelectedScheduleIds((prev)=>
-        prev.includes(scheduleID) ? prev.filter(id => id !== scheduleID) : [...prev, scheduleID]
-      )
-    }
-
-    const handleAddSchedule=()=>{
-      if (!selectedDayNum){
-        toast({title:"오류", description:"일정을 추가할 날짜를 선택해주세요.", variant:"destructive"})
-        return
+  const handleScheduleSelect = (scheduleId: string) => {
+    setSelectedScheduleIds((prevSelected) => {
+      if (prevSelected.includes(scheduleId)) {
+        // 이미 선택된 경우, 제거
+        return prevSelected.filter((id) => id !== scheduleId)
+      } else {
+        // 선택되지 않은 경우, 추가
+        return [...prevSelected, scheduleId]
       }
+    })
+  }
 
-      if (!newSchedule.title || !newSchedule.time){
-        toast({title: "오류", description:"일정 제목과 시간을 입력해주세요.", variant:"destructive"})
-        return
-      }
-
-      const newId=`user-${Date.now()}`
-      const added: Schedule={
-        id: newId,
-        title: newSchedule.title,
-        time: newSchedule.time,
-        description: newSchedule.description,
-      }
-      setScheduleDataState((prev)=>({
-        ...prev,
-        [selectedDayNum]: [...(prev[selectedDayNum] || []), added].sort((a,b)=>a.time.localeCompare(b.time)),
-      }))
-      toast({title:"일정 추가 완료", description: `${newSchedule.title} 일정이 추가되었습니다.`})
-      setShowAddSheduleModal(false)
-      setNewSchedule({id: "", title: "", time: "", description: ""})
-    }
-
-    const handleTalkToAgent=()=>{
-      if (selectedScheduleIds.length>0 && selectedDayNum){
-        const schedulesForAgent=selectedDateSchedules.filter((s)=>selectedScheduleIds.includes(s.id))
-        alert(`AI Agent와 대화: ${schedulesForAgent.map(s => `${s.title} (${s.time})`).join(", ")}`)
+  const handleTalkToAgent = () => {
+    if (selectedScheduleIds.length > 0 && selectedDate) {
+      const schedulesForAgent = selectedDateSchedules.filter((s) => selectedScheduleIds.includes(s.id))
+      console.log("AI Agent와 대화할 일정:", schedulesForAgent)
+      alert(`AI Agent와 대화: ${schedulesForAgent.map((s) => s.title).join(", ")}`)
+      // 여기에 AI Agent와 대화하는 로직을 추가합니다.
+      // 예를 들어, 선택된 일정 정보 배열을 AI Agent에게 전달할 수 있습니다.
     } else {
-      alert("일정을 하나 이상 선택해주세요.")
+      alert("먼저 일정을 하나 이상 선택해주세요.")
     }
-}
+  }
 
+  const selectedDiary = selectedDate && selectedDate <= today ? diaryData[selectedDate] : null
+  const selectedDateSchedules = selectedDate ? scheduleDataState[selectedDate] || [] : [] // scheduleDataState 사용
+  const showScheduleSelection = selectedDate && !selectedDiary
 
-
-
-
-
-return (
+  return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="gradient-bg flex flex-col">
         {/* Header */}
@@ -240,7 +304,10 @@ return (
           <Button variant="ghost" size="icon" className="text-gray-700">
             <Menu className="h-6 w-6" />
           </Button>
+
           <h1 className="text-xl font-semibold text-gray-800">Calendar</h1>
+
+          {/* 마이페이지 아이콘 */}
           <Button variant="ghost" size="icon" className="text-gray-700" onClick={() => alert("마이페이지로 이동")}>
             <User className="h-6 w-6" />
           </Button>
@@ -249,57 +316,82 @@ return (
         {/* Scrollable Content Area */}
         <div className="flex-grow overflow-y-auto custom-scrollbar px-4 pb-4">
           <div className="bg-white rounded-2xl shadow-lg p-6 w-full relative">
+            {" "}
+            {/* relative 추가 */}
             {/* Switch (캘린더 박스 우측 상단) */}
             <div className="absolute top-4 right-4 z-10">
-              <Switch checked={showScrapedOnly} onCheckedChange={setShowScrapedOnly} className="data-[state=checked]:bg-green-600" />
+              {" "}
+              {/* absolute, top-4, right-4, z-10 추가 */}
+              <Switch
+                checked={showScrapedOnly}
+                onCheckedChange={setShowScrapedOnly}
+                className="data-[state=checked]:bg-green-600"
+              />
             </div>
+            {/* Month Navigation */}
+            <div className="flex items-center justify-between mb-6">
+              <Button variant="ghost" size="icon" onClick={() => navigateMonth("prev")} className="h-8 w-8">
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
 
-            {/* DayPicker: 기본 헤더(월/이전/다음) 사용 */}
-            <DayPicker
-              mode="single"
-              month={month}
-              onMonthChange={(m) => {
-                setMonth(m)
-                setSelectedDate(undefined)
-                setSelectedScheduleIds([])
-              }}
-              selected={selectedDate}
-              onSelect={(d) => {
-                setSelectedDate(d)
-                setSelectedScheduleIds([])
-              }}
-              showOutsideDays
-              locale={ko}
-              modifiers={modifiers}
-              modifiersClassNames={modifiersClassNames}
-              components={{
-                DayContent: (props) => {
-                  const n = props.date.getDate()
-                  const showEmoji = inThisMonth(props.date) && modifiers.hasEmoji(props.date)
-                  return (
-                    <div className="flex flex-col items-center justify-start">
-                      <span className="text-xs">{n}</span>
-                      {showEmoji && moodData[n]?.emoji && (
-                        <span className={`text-xs mt-0.5 ${moodData[n].isScraped ? "opacity-100" : "opacity-70"}`}>
-                          {moodData[n].emoji}
-                        </span>
-                      )}
-                    </div>
-                  )
-                },
-              }}
-            />
+              <h2 className="text-lg font-medium text-gray-800">{monthNames[currentDate.getMonth()]}</h2>
 
-            {/* 선택된 날짜의 일기 내용 */}
-            {selectedDayNum && selectedDiary && (
-              <div className="mt-6 space-y-4">
-                <div className="text-lg font-semibold text-gray-800">
-                  {month.getMonth() + 1}/{selectedDayNum}
+              <Button variant="ghost" size="icon" onClick={() => navigateMonth("next")} className="h-8 w-8">
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+            {/* Days of Week Header */}
+            <div className="grid grid-cols-7 gap-1 mb-2">
+              {daysOfWeek.map((day) => (
+                <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+                  {day}
                 </div>
+              ))}
+            </div>
+            {/* Calendar Grid */}
+            <div className="grid grid-cols-7 gap-1 mb-6">
+              {calendarDays.map((date, index) => (
+                <div
+                  key={index}
+                  onClick={() => date.isCurrentMonth && handleDateClick(date.day)}
+                  className={`
+                    relative flex flex-col items-center justify-start text-sm rounded-lg p-1 h-12 cursor-pointer
+                    ${date.isCurrentMonth ? "text-gray-900 hover:bg-gray-50" : "text-gray-400"}
+                    ${date.isCurrentMonth && date.day === today ? "border-2 border-green-500" : ""}
+                    ${date.isCurrentMonth && date.day === selectedDate ? "bg-green-200 border-2 border-green-500" : ""}
+                  `}
+                >
+                  <span className="text-xs font-medium pt-1">{date.day}</span>
+
+                  {/* 기분 이모지 - 날짜 숫자 아래에 배치 */}
+                  {date.isCurrentMonth && shouldShowEmoji(date.day) && (
+                    <div className="mt-0.5">
+                      <span
+                        className={`
+                        text-xs
+                        ${moodData[date.day]?.isScraped ? "opacity-100" : "opacity-70"}
+                      `}
+                      >
+                        {moodData[date.day]?.emoji}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            {/* 선택된 날짜의 일기 내용 */}
+            {selectedDate && selectedDiary && (
+              <div className="space-y-4">
+                <div className="text-lg font-semibold text-gray-800">
+                  {currentDate.getMonth() + 1}/{selectedDate}
+                </div>
+
                 <div className="bg-green-100 rounded-lg p-4 border-l-4 border-green-400">
                   <h3 className="font-semibold text-gray-800 mb-2">{selectedDiary.title}</h3>
                   <p className="text-sm text-gray-700 leading-relaxed">{selectedDiary.content}</p>
                 </div>
+
+                {/* 대표 이미지 */}
                 {selectedDiary.image && (
                   <div className="mt-4">
                     <img
@@ -311,26 +403,32 @@ return (
                 )}
               </div>
             )}
-
             {/* 일정 선택 화면 (일기가 없는 날짜에만 표시) */}
             {showScheduleSelection && (
-              <div className="mt-6 space-y-4">
+              <div className="space-y-4">
                 <div className="text-center text-gray-700 font-medium">일기를 쓸 당신의 하루를 선택하세요</div>
+
+                {/* 통합된 일정 목록 (Google 캘린더 + 사용자 추가) */}
                 <div className="space-y-2 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
                   {selectedDateSchedules.length > 0 ? (
                     selectedDateSchedules.map((schedule) => (
                       <div
                         key={schedule.id}
                         onClick={() => handleScheduleSelect(schedule.id)}
-                        className={`p-3 rounded-lg cursor-pointer transition-colors duration-200 ${
-                          selectedScheduleIds.includes(schedule.id) ? "bg-green-500 text-white" : "bg-green-400 text-white hover:bg-green-500"
-                        }`}
+                        className={`
+                          p-3 rounded-lg cursor-pointer transition-colors duration-200
+                          ${
+                            selectedScheduleIds.includes(schedule.id)
+                              ? "bg-green-500 text-white"
+                              : "bg-green-400 text-white hover:bg-green-500"
+                          }
+                        `}
                       >
                         <div className="flex justify-between items-center">
                           <div>
                             <div className="font-medium">{schedule.title}</div>
                             <div className="text-sm opacity-90">
-                              {month.getMonth() + 1}월 {selectedDayNum}일
+                              {currentDate.getMonth() + 1}월 {selectedDate}일
                             </div>
                           </div>
                           <div className="text-sm font-medium">{schedule.time}</div>
@@ -342,7 +440,7 @@ return (
                       <div className="text-sm">이 날짜에는 일정이 없습니다</div>
                     </div>
                   )}
-                  {/* 새 일정 추가 버튼 */}
+                  {/* 새 일정 추가 버튼 - 모달을 띄우도록 변경 */}
                   <div
                     onClick={() => setShowAddScheduleModal(true)}
                     className="p-4 bg-green-300 rounded-lg cursor-pointer hover:bg-green-400 transition-colors flex items-center justify-center"
@@ -358,7 +456,8 @@ return (
         {/* 하단 고정 버튼들 */}
         <div className="flex-shrink-0 p-4 bg-white rounded-b-2xl shadow-lg">
           <div className="space-y-2">
-            {showScheduleSelection && (
+            {/* Google 캘린더와 연동하기 버튼 삭제 */}
+            {showScheduleSelection && ( // showScheduleSelection이 true일 때만 표시
               <Button onClick={handleTalkToAgent} className="w-full bg-gray-600 hover:bg-gray-700 text-white">
                 {"Let's talk to Emory Agent"}
               </Button>
@@ -376,6 +475,7 @@ return (
                   <X className="h-4 w-4" />
                 </Button>
               </div>
+
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">제목</label>
@@ -385,6 +485,7 @@ return (
                     onChange={(e) => setNewSchedule({ ...newSchedule, title: e.target.value })}
                   />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">시간</label>
                   <input
@@ -394,6 +495,7 @@ return (
                     onChange={(e) => setNewSchedule({ ...newSchedule, time: e.target.value })}
                   />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">설명 (선택사항)</label>
                   <Textarea
@@ -403,6 +505,7 @@ return (
                     rows={3}
                   />
                 </div>
+
                 <div className="flex space-x-3 pt-4">
                   <Button onClick={handleAddSchedule} className="flex-1 bg-green-600 hover:bg-green-700">
                     추가
@@ -420,5 +523,3 @@ return (
     </div>
   )
 }
-
-

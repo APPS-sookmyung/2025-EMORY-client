@@ -10,6 +10,7 @@ import LogoutConfirmPage from './pages/logout-confirm-page';
 import WithdrawalPage from './pages/withdrawal';
 import StartPage from './pages/start-page';
 import EmotionReportPage from './pages/emotion-report';
+import MoodCalendar from './pages/calendar';
 
 function Router() {
   return (
@@ -21,6 +22,7 @@ function Router() {
       <Route path='/withdrawal' component={WithdrawalPage} />
       <Route path='/start-page' component={StartPage} />
       <Route path='/emotion-report' component={EmotionReportPage} />
+      <Route path='/calendar' component={MoodCalendar} />
       {/*<Route component={NotFound} />*/}
     </Switch>
   );
