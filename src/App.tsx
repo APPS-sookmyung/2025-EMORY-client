@@ -11,7 +11,6 @@ import MyPage from './pages/my-page';
 import LogoutConfirmPage from './pages/logout-confirm-page';
 import WithdrawalPage from './pages/withdrawal';
 import StartPage from './pages/start-page';
-import EmotionDiaryPage from './pages/emotion-diary';
 import EmotionReportPage from './pages/emotion-report';
 
 function Router() {
@@ -19,7 +18,6 @@ function Router() {
     <Switch>
       <Route path='/' component={VoiceChat} />
       <Route path='/voice-chat' component={VoiceChat} />
-      <Route path='/emotion-diary' component={EmotionDiaryPage} />
       <Route path='/emotion-report' component={EmotionReportPage} />
       <Route path='/my-page' component={MyPage} />
       <Route path='/logout-confirm-page' component={LogoutConfirmPage} />
