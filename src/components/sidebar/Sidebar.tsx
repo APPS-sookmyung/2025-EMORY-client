@@ -8,6 +8,12 @@ import { useSidebar } from './SidebarContext';
 export default function Sidebar() {
   const { isOpen, close } = useSidebar();
   const [, navigate] = useLocation();
+  
+  // 임시 더미 사용자 데이터 (나중에 실제 사용자 컨텍스트로 교체)
+  const user = {
+    name: 'Jeewon',
+    email: 'emory@gmail.com'
+  };
 
   const go = (path: string) => {
     // 먼저 닫기 애니메이션
@@ -55,8 +61,12 @@ export default function Sidebar() {
             <User className='w-6 h-6 text-white' />
           </div>
           <div>
-            <div className='text-lg font-semibold leading-tight'>Jeewon</div>
-            <div className='text-white/80 text-xs'>emory@gmail.com</div>
+            <div className='text-lg font-semibold leading-tight'>
+              {user?.name || 'User'}
+            </div>
+            <div className='text-white/80 text-xs'>
+              {user?.email || 'user@example.com'}
+            </div>
           </div>
         </div>
 
