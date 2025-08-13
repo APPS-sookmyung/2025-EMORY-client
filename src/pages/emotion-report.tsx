@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { ArrowLeft, Download, TrendingUp, Heart } from 'lucide-react';

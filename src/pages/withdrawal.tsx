@@ -5,6 +5,7 @@ import { useLocation } from "wouter"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "../components/ui/button"
 import { Checkbox } from "../components/ui/checkbox"
+import Hamburger from "../components/common/Hamburger";
 
 export default function WithdrawalPage() {
   const [, navigate] = useLocation()
@@ -37,10 +38,11 @@ export default function WithdrawalPage() {
   return (
     <div className="gradient-mypage">
       
-          <div className="p-4">
+          <div className="p-4 flex items-center justify-between">
             <button onClick={() => navigate("/my-page")}>
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </button>
+            <Hamburger />
           </div>
 
         <div className="bg-white/80 backdrop-blur-sm mx-4 mt-4 rounded-lg p-4 ">
