@@ -138,7 +138,7 @@ export default function DiaryWriting() {
       // const res = await fetch("/api/generate-image", { method:"POST" });
       // const data = await res.json(); // { images: string[] }
       // setImages(data.images);
-      toast({ title: "요청 전송", description: "서버에 이미지 생성을 요청했습니다." });
+      toast({ title: "이미지 생성 요청", description: "이미지 생성을 요청했습니다." });
     } finally {
       setIsGenLoading(false);
     }
