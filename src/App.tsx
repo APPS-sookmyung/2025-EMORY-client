@@ -35,6 +35,7 @@ function Router() {
       <Route path='/logout-confirm-page' component={LogoutConfirmPage} />
       <Route path='/withdrawal' component={WithdrawalPage} />
       <Route path='/start-page' component={StartPage} />
+
       <Route path='/time-capsule' component={TimeCapsulePage} />
 
       <Route path='/calendar' component={MoodCalendar} />
@@ -57,7 +58,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <SidebarProvider>
+
           <div className='min-h-dvh bg-gray-100 flex items-center justify-center p-4'>
+
             <Toaster />
             <div
               className='relative overflow-hidden'

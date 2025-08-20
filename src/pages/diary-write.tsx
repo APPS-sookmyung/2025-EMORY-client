@@ -9,12 +9,13 @@ import { useLocation } from "wouter";
 import { useSidebar } from "../components/sidebar/SidebarContext";
 
 // 이모지 경로
-import angryEmoji from "../assets/img/emotion/angry-emoji.png";
-import anxiousEmoji from "../assets/img/emotion/anxiety-emoji.png";
-import calmEmoji from "../assets/img/emotion/expressionless-emoji.png";
-import happyEmoji from "../assets/img/emotion/happiness-emoji.png";
-import joyEmoji from "../assets/img/emotion/joy-emoji.png";
-import sadEmoji from "../assets/img/emotion/sadness-emoji.png";
+
+import angryEmoji from "../assets/img/angry-emoji.png";
+import anxiousEmoji from "../assets/img/anxiety-emoji.png";
+import calmEmoji from "../assets/img/expressionless-emoji.png";
+import happyEmoji from "../assets/img/happiness-emoji.png";
+import joyEmoji from "../assets/img/joy-emoji.png";
+import sadEmoji from "../assets/img/sadness-emoji.png";
 
 export default function DiaryWriting() {
   const [body, setBody] = useState("");
@@ -139,6 +140,7 @@ export default function DiaryWriting() {
       // const data = await res.json(); // { images: string[] }
       // setImages(data.images);
       toast({ title: "이미지 생성 요청", description: "이미지 생성을 요청했습니다." });
+
     } finally {
       setIsGenLoading(false);
     }
@@ -153,8 +155,11 @@ export default function DiaryWriting() {
       <div className={`w-full h-full rounded-3xl ${cardBgClass}
                        shadow-xl overflow-hidden flex flex-col min-h-0`}>
 
-        {/* 헤더 */}
-        <header className="flex items-center justify-between p-4 flex-shrink-0">
+
+        {/* 상단바 (고정) */}
+        {/* === 상단바 480 x 112 === */}
+        <header className="w-full h-[112px] px-4 flex items-end pb-3 border-b border-white/50">
+
           <div className="w-full flex items-center justify-between">
             {/* 왼쪽: 햄버거 */}
             <Button
@@ -296,6 +301,7 @@ export default function DiaryWriting() {
 
         {/* 컨텐츠 스크롤 영역 (이모지/텍스트/AI 이미지 전부) */}
         <div className="px-4 flex-1 min-h-0 overflow-y-auto pb-6 custom-scrollbar">
+
           {/* 본문 입력 (흰 라인 배경) */}
           <textarea
             value={body}
