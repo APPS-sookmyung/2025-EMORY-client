@@ -94,7 +94,7 @@
   }
 
   .gradient-mypage {
-    background-image: url('@/assets/img/home.png');
+    background-image: url('@/assets/img/gradientbackground.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -107,6 +107,20 @@
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
   }
 
+  .gradient-time-capsule-page{
+    
+    background-image: url('@/assets/img/time_capsule.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 480px;
+    height: 844px;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  }
   .gradient-emotion-report {
     background-image: url('@/assets/img/home.png');
     background-size: cover;

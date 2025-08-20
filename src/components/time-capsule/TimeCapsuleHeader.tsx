@@ -23,7 +23,7 @@ export function TimeCapsuleHeader({ onMenuClick, onProfileClick }: ChatHeaderPro
         <Menu className='w-6 h-6' />
       </Button>
 
-      <h1 className='text-purple-700 text-lg font-semibold drop-shadow-sm'>
+      <h1 className='text-red-700 text-lg font-semibold drop-shadow-sm'>
         Time Capsule
       </h1>
 
