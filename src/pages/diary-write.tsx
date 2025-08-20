@@ -139,7 +139,6 @@ export default function DiaryWriting() {
       // const data = await res.json(); // { images: string[] }
       // setImages(data.images);
       toast({ title: "이미지 생성 요청", description: "이미지 생성을 요청했습니다." });
-
     } finally {
       setIsGenLoading(false);
     }
