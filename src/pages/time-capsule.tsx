@@ -1,16 +1,21 @@
 "use client"
 
-import { Menu, Tag } from "lucide-react"
+import { Tag } from "lucide-react"
 import { Card } from "../components/ui/card"
+import Hamburger from "../components/common/Hamburger"
 
 export default function TimeCapsulePage() {
   return (
-    <div className="gradient-bg">
+    <div className="gradient-time-capsule">
       {/* Header */}
-      <header className="flex items-center justify-between p-4">
-        <Menu className="w-6 h-6 text-pink-800" />
-        <Tag className="w-8 h-8 text-pink-800" />
-        <div></div> {/* Spacer for center alignment */}
+      <header className="grid grid-cols-3 items-center p-4">
+        <div className="justify-self-start">
+          <Hamburger />
+        </div>
+        <div className="justify-self-center">
+          <Tag className="w-8 h-8 text-pink-800" />
+        </div>
+        <div className="justify-self-end"></div>
       </header>
 
       {/* Main Content */}
@@ -24,18 +29,18 @@ export default function TimeCapsulePage() {
           <p className="text-pink-800 text-sm ml-3">작년 이 시간에 가장 키워드 한 주를 보내셨습니다!</p>
         </div>
 
-        {/* Main Memory Cards - Split into two separate cards */}
+        {/* 왼쪽 대표사진 */}
         <div className="grid grid-cols-2 gap-4 mb-8">
           {/* Left Card - Image */}
           <Card className="aspect-square overflow-hidden bg-white/80 backdrop-blur-sm border-0 shadow-lg rounded-xl">
             <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-zJg3EykGl8UGvFayQKzcsIhWSL4uSu.png"
-              alt="Majestic tree with sunlight"
+              src="../src/assets/img/coverimage.png"
+              alt="AI가 작성해주는 대표사진"
               className="w-full h-full object-cover"
             />
           </Card>
 
-          {/* Right Card - Text */}
+          {/* 오른쪽 AI 요약문구 */}
           <Card className="aspect-square bg-white/80 backdrop-blur-sm border-0 shadow-lg rounded-xl">
             <div className="h-full p-4 flex items-center justify-center bg-gradient-to-br from-white to-pink-50 rounded-xl">
               <div className="text-center">
