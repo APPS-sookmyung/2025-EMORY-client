@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button"
 import { Card } from "../components/ui/card"
 import { useToast } from '../hooks/use-toast';
 import { useLocation } from "wouter";   
+import Hamburger from "../components/common/Hamburger";
 
 export default function LogoutConfirmPage() {
     const { toast } = useToast();
@@ -30,11 +31,12 @@ export default function LogoutConfirmPage() {
  return (
     <div className="gradient-mypage">
       
-          <div className="p-4">
-          <button onClick={() => navigate("/")}>
-            <ArrowLeft className="w-6 h-6 text-gray-600" /> {/* ✅ 수정됨: 흰색 아이콘으로 변경 */}
-          </button>
-        </div>
+          <div className="p-4 flex items-center justify-between">
+            <button onClick={() => navigate("/")}>
+              <ArrowLeft className="w-6 h-6 text-gray-600" />
+            </button>
+            <Hamburger />
+          </div>
 
         <div className="flex items-center justify-center min-h-[75vh]">
           <Card className="bg-white/90 backdrop-blur-sm p-6 mx-4 rounded-lg shadow-lg max-w-sm w-full">
