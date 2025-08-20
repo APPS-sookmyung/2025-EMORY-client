@@ -12,6 +12,7 @@ import LogoutConfirmPage from './pages/logout-confirm-page';
 import WithdrawalPage from './pages/withdrawal';
 import StartPage from './pages/start-page';
 import EmotionReportPage from './pages/emotion-report';
+import DiaryWriting from './pages/diary-write';
 
 function Router() {
   return (
@@ -23,8 +24,9 @@ function Router() {
       <Route path='/logout-confirm-page' component={LogoutConfirmPage} />
       <Route path='/withdrawal' component={WithdrawalPage} />
       <Route path='/start-page' component={StartPage} />
-      {/*<Route component={NotFound} />*/}
-    </Switch>
+      <Route path='/diary/write' component={DiaryWriting} />
+  {/*<Route component={NotFound} />*/ }
+    </Switch >
   );
 }
 
@@ -33,7 +35,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <SidebarProvider>
-          <div className='min-h-screen bg-gray-100 flex items-center justify-center p-4'>
+          <div className="min-h-dvh bg-gray-100 flex items-center justify-center p-4">
             <Toaster />
             <div className='relative overflow-hidden' style={{ width: 480, height: 844 }}>
               <Router />
