@@ -9,12 +9,12 @@ import { useLocation } from "wouter";
 import { useSidebar } from "../components/sidebar/SidebarContext";
 
 // 이모지 경로
-import angryEmoji from "../assets/img/angry-emoji.png";
-import anxiousEmoji from "../assets/img/anxiety-emoji.png";
-import calmEmoji from "../assets/img/expressionless-emoji.png";
-import happyEmoji from "../assets/img/happiness-emoji.png";
-import joyEmoji from "../assets/img/joy-emoji.png";
-import sadEmoji from "../assets/img/sadness-emoji.png";
+import angryEmoji from "../assets/img/emotion/angry-emoji.png";
+import anxiousEmoji from "../assets/img/emotion/anxiety-emoji.png";
+import calmEmoji from "../assets/img/emotion/expressionless-emoji.png";
+import happyEmoji from "../assets/img/emotion/happiness-emoji.png";
+import joyEmoji from "../assets/img/emotion/joy-emoji.png";
+import sadEmoji from "../assets/img/emotion/sadness-emoji.png";
 
 export default function DiaryWriting() {
   const [body, setBody] = useState("");
