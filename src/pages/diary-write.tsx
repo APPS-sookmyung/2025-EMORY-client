@@ -9,12 +9,12 @@ import { useLocation } from "wouter";
 import { useSidebar } from "../components/sidebar/SidebarContext";
 
 // 이모지 경로
-import angryEmoji from "../assets/img/angry-emoji.png";
-import anxiousEmoji from "../assets/img/anxiety-emoji.png";
-import calmEmoji from "../assets/img/expressionless-emoji.png";
-import happyEmoji from "../assets/img/happiness-emoji.png";
-import joyEmoji from "../assets/img/joy-emoji.png";
-import sadEmoji from "../assets/img/sadness-emoji.png";
+import angryEmoji from "../assets/img/emotion/angry-emoji.png";
+import anxiousEmoji from "../assets/img/emotion/anxiety-emoji.png";
+import calmEmoji from "../assets/img/emotion/expressionless-emoji.png";
+import happyEmoji from "../assets/img/emotion/happiness-emoji.png";
+import joyEmoji from "../assets/img/emotion/joy-emoji.png";
+import sadEmoji from "../assets/img/emotion/sadness-emoji.png";
 
 export default function DiaryWriting() {
   const [body, setBody] = useState("");
@@ -138,7 +138,7 @@ export default function DiaryWriting() {
       // const res = await fetch("/api/generate-image", { method:"POST" });
       // const data = await res.json(); // { images: string[] }
       // setImages(data.images);
-      toast({ title: "요청 전송", description: "서버에 이미지 생성을 요청했습니다." });
+      toast({ title: "이미지 생성 요청", description: "이미지 생성을 요청했습니다." });
     } finally {
       setIsGenLoading(false);
     }
