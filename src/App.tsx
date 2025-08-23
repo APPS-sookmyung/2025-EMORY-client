@@ -12,6 +12,8 @@ import LogoutConfirmPage from './pages/logout-confirm-page';
 import WithdrawalPage from './pages/withdrawal';
 import StartPage from './pages/start-page';
 import EmotionReportPage from './pages/emotion-report';
+
+import TimeCapsulePage from './pages/time-capsule';
 import DiaryWriting from './pages/diary-write';
 
 function Router() {
@@ -24,6 +26,9 @@ function Router() {
       <Route path='/logout-confirm-page' component={LogoutConfirmPage} />
       <Route path='/withdrawal' component={WithdrawalPage} />
       <Route path='/start-page' component={StartPage} />
+      <Route path='/time-capsule' component={TimeCapsulePage} />
+      {/*<Route component={NotFound} />*/}
+    </Switch>
       <Route path='/diary/write' component={DiaryWriting} />
   {/*<Route component={NotFound} />*/ }
     </Switch >
