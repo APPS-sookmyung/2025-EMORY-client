@@ -28,7 +28,6 @@ function Router() {
       <Route path='/start-page' component={StartPage} />
       <Route path='/time-capsule' component={TimeCapsulePage} />
       {/*<Route component={NotFound} />*/}
-    </Switch>
       <Route path='/diary/write' component={DiaryWriting} />
   {/*<Route component={NotFound} />*/ }
     </Switch >
