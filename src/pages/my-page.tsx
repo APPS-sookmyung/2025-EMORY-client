@@ -20,8 +20,8 @@ export default function MyPage() {
   };
 
   const handleLogout = () => {
-    navigate("/logout-confirm-page")
-  }
+    navigate('/logout-confirm-page');
+  };
 
   return (
     // <GradientBackground variant="default"> {/* ✅ 수정됨: 전체 페이지를 GradientBackground로 감쌈 */}
@@ -58,32 +58,39 @@ export default function MyPage() {
           </Button>
         </div>
 
-          {/* 메뉴 항목들 */}
-          <div className="w-full px-6 space-y-3 mt-8 pb-10"> {/* ✅ 수정됨: 전체 폭 사용 */}
-            <button className="w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40">
-              <span className="text-gray-400 font-medium">감정 일기 히스토리</span> {/* ✅ 수정됨 */}
-              <ChevronRight className="w-5 h-5 text-orange-300" />
-            </button>
-
-            <button className="w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40">
-              <span className="text-gray-400 font-medium">요금제</span> {/* ✅ 수정됨 */}
-              <ChevronRight className="w-5 h-5 text-orange-300" />
-            </button>
-
-            <button className="w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40">
-              <span className="text-gray-400 font-medium">타임캡슐</span> {/* ✅ 수정됨 */}
-              <ChevronRight className="w-5 h-5 text-orange-300" />
-            </button>
-
-            <button
-              onClick={openSettingsModal}
-              className="w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40"
-            >
-              <span className="text-gray-400 font-medium">설정</span> {/* ✅ 수정됨 */}
-              <ChevronRight className="w-5 h-5 text-orange-300" />
-            </button>
-          </div>
+        {/* 메뉴 항목들 */}
+        <div className='w-full px-6 space-y-3 mt-8 pb-10'>
+          {' '}
+          {/* ✅ 수정됨: 전체 폭 사용 */}
+          <button className='w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
+            <span className='text-gray-400 font-medium'>
+              감정 일기 히스토리
+            </span>{' '}
+            {/* ✅ 수정됨 */}
+            <ChevronRight className='w-5 h-5 text-orange-300' />
+          </button>
+          <button className='w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
+            <span className='text-gray-400 font-medium'>요금제</span>{' '}
+            {/* ✅ 수정됨 */}
+            <ChevronRight className='w-5 h-5 text-orange-300' />
+          </button>
+          <button 
+            onClick={() => navigate('/time-capsule')}
+            className='w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
+            <span className='text-gray-400 font-medium'>타임캡슐</span>{' '}
+            {/* ✅ 수정됨 */}
+            <ChevronRight className='w-5 h-5 text-orange-300' />
+          </button>
+          <button
+            onClick={openSettingsModal}
+            className='w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'
+          >
+            <span className='text-gray-400 font-medium'>설정</span>{' '}
+            {/* ✅ 수정됨 */}
+            <ChevronRight className='w-5 h-5 text-orange-300' />
+          </button>
         </div>
+      </div>
 
       {showSettingsModal && (
         <SettingsModal
