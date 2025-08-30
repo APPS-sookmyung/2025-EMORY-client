@@ -12,7 +12,7 @@ import LogoutConfirmPage from './pages/logout-confirm-page';
 import WithdrawalPage from './pages/withdrawal';
 import StartPage from './pages/start-page';
 import EmotionReportPage from './pages/emotion-report';
-
+import CalendarPage from './pages/calendar';
 import TimeCapsulePage from './pages/time-capsule';
 import DiaryWriting from './pages/diary-write';
 
@@ -29,6 +29,7 @@ function Router() {
       <Route path='/time-capsule' component={TimeCapsulePage} />
       {/*<Route component={NotFound} />*/}
       <Route path='/diary/write' component={DiaryWriting} />
+      <Route path='/calendar' component={CalendarPage} />
   {/*<Route component={NotFound} />*/ }
     </Switch >
   );
