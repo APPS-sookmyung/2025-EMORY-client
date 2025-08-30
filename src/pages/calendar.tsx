@@ -6,14 +6,19 @@ import { Button } from "../components/ui/button"
 import { Switch } from "../components/ui/switch"
 import { Input } from "../components/ui/input"
 import { Textarea } from "../components/ui/textarea"
-import { useToast } from "../hooks/use-toast"
 import { useLocation } from 'wouter';
-import { Toaster } from "../components/ui/toaster"
+import { useToast } from "../hooks/use-toast";
 import Hamburger from "../components/common/Hamburger"
 
+// import angryEmoji from "../assets/img/angry-emoji.png";
+// import anxiousEmoji from "../assets/img/anxiety-emoji.png";
+// import calmEmoji from "../assets/img/expressionless-emoji.png";
+// import happyEmoji from "../assets/img/happiness-emoji.png";
+// import joyEmoji from "../assets/img/joy-emoji.png";
+// import sadEmoji from "../assets/img/sadness-emoji.png";
 
-// 기분 이모지 타입 정의
-type MoodEmoji = "😊" | "😢" | "😡" | "😴" | "🤔" | "😍"
+
+type MoodEmoji = string
 
 // 일기 데이터 타입 정의
 type DiaryEntry = {
@@ -30,13 +35,14 @@ type Schedule = {
   description?: string
 }
 
+
+
 // 날짜별 기분 데이터 (예시)
 const moodData: Record<number, { emoji: MoodEmoji; isScraped: boolean }> = {
-  1: { emoji: "😊", isScraped: true },
-  3: { emoji: "😢", isScraped: false },
+  1: { emoji: "😡", isScraped: true },
+  3: { emoji: "😡", isScraped: false },
   6: { emoji: "😡", isScraped: false },
   9: { emoji: "😊", isScraped: true },
-  10: { emoji: "😊", isScraped: true },
   10: { emoji: "😊", isScraped: true },
   12: { emoji: "🤔", isScraped: false },
   14: { emoji: "😍", isScraped: false },
@@ -54,7 +60,7 @@ const diaryData: Record<number, DiaryEntry> = {
   1: {
     title: "새해 첫날",
     content: "새해가 밝았다. 올해는 더 열심히 살아보자고 다짐했다. 가족들과 함께 떡국을 먹으며 새해 인사를 나누었다.",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/",
   },
   6: {
     title: "힘든 하루",
@@ -65,18 +71,18 @@ const diaryData: Record<number, DiaryEntry> = {
     title: "태현의 생일파티",
     content:
       "오늘은 태현의 생일이라 생일파티에 다녀왔다. 태현은 나의 가장 친한 친구다. 오랜만에 친구들과 만나서 즐거운 시간을 보냈다. 케이크도 맛있었고 선물도 마음에 들어했다. 다음에는 더 자주 만나기로 했다. 좋은 하루였다.",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/",
   },
   14: {
     title: "발렌타인데이",
     content: "발렌타인데이라서 특별한 사람과 함께 시간을 보냈다. 달콤한 초콜릿과 함께 행복한 하루였다.",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/",
   },
   18: {
     title: "봄나들이",
     content:
       "날씨가 좋아서 공원에 나들이를 갔다. 벚꽃이 만개해서 정말 아름다웠다. 사진도 많이 찍고 좋은 추억을 만들었다.",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/",
   },
 }
 
@@ -288,8 +294,7 @@ export default function MoodCalendar() {
       const schedulesForAgent = selectedDateSchedules.filter((s) => selectedScheduleIds.includes(s.id))
       console.log("AI Agent와 대화할 일정:", schedulesForAgent)
       alert(`AI Agent와 대화: ${schedulesForAgent.map((s) => s.title).join(", ")}`)
-      // 여기에 AI Agent와 대화하는 로직을 추가합니다.
-      // 예를 들어, 선택된 일정 정보 배열을 AI Agent에게 전달할 수 있습니다.
+      // 여기서 agent로 이동동
     } else {
       alert("먼저 일정을 하나 이상 선택해주세요.")
     }
@@ -303,15 +308,13 @@ export default function MoodCalendar() {
     <div className="flex justify-center min-h-screen bg-gray-100">
       {" "}
       
-<div className="gradient-bg flex flex-col max-h-[90vh]">
+<div className="gradient-calendar flex flex-col max-h-[90vh]">
         {" "}
         {/* Header */}
         <div className="flex items-center justify-between p-4 flex-shrink-0">
-          <Hamburger variant="ghost" size="icon" className="text-gray-700">
-            <Menu className="h-6 w-6" />
-          </Hamburger>
+          <Hamburger className="text-gray-700" />
 
-          <h1 className="text-xl font-semibold text-gray-800">Calendar</h1>
+          <h1 className="text-xl font-semibold text-green-700">Calendar</h1>
 
           {/* 마이페이지 아이콘 */}
           <Button variant="ghost" size="icon" className="text-gray-700" onClick={() => navigate('/my-page')}>
@@ -347,7 +350,7 @@ export default function MoodCalendar() {
             {/* Days of Week Header */}
             <div className="grid grid-cols-7 gap-1 mb-2">
               {daysOfWeek.map((day) => (
-                <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+                <div key={day} className="text-center text-sm font-medium text-gray-500">
                   {day}
                 </div>
               ))}
@@ -521,7 +524,6 @@ export default function MoodCalendar() {
           </div>
         </div>
       )}
-      <Toaster />
     </div>
   )
 }

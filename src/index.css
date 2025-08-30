@@ -75,6 +75,24 @@
 }
 
 @layer components {
+  .gradient-calendar{
+    background: linear-gradient(
+      to bottom,
+      #86efac 0%,
+      #bbf7d0 25%,
+      #dcfce7 50%,
+      #f0fdf4 75%,
+      #ffffff 100%
+    );
+    width: 480px;
+    height: 844px;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(134, 239, 172, 0.3);
+  }
+
   .gradient-bg {
     background: linear-gradient(
       to bottom,
