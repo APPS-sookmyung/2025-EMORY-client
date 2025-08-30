@@ -36,6 +36,7 @@ function Router() {
       <Route path='/withdrawal' component={WithdrawalPage} />
       <Route path='/start-page' component={StartPage} />
       <Route path='/time-capsule' component={TimeCapsulePage} />
+
       <Route path='/calendar' component={MoodCalendar} />
       <Route path='/diary-write' component={DiaryWriting} />
       <Route path='/diary-preview' component={DiaryPreview} />
