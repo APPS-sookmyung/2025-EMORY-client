@@ -15,6 +15,7 @@ import EmotionReportPage from './pages/emotion-report';
 import TimeCapsulePage from './pages/time-capsule';
 import DiaryWriting from './pages/diary-write';
 import DiaryPreview from './pages/diary-preview';
+import DiaryLibrary from './pages/diary-library';
 
 function Router() {
   return (
@@ -29,7 +30,8 @@ function Router() {
       <Route path='/time-capsule' component={TimeCapsulePage} />
       <Route path='/diary/write' component={DiaryWriting} />
       <Route path='/diary-preview' component={DiaryPreview} />
-    </Switch>
+      <Route path='/diary-library' component={DiaryLibrary} />
+    </Switch >
   );
 }
 

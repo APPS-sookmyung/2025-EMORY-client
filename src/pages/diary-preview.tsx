@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { useToast } from "../hooks/use-toast";
 import { useSidebar } from "../components/sidebar/SidebarContext";
 import { Button } from "../components/ui/button";
+import ToggleSwitch from "../components/ui/ToggleSwitch";
 import {
   Menu, CircleUserRound,
   Bookmark, BookmarkCheck, Trash2, Plus,
@@ -20,9 +21,9 @@ const MOCK: DiaryItem[] = [
   { id: "d1", dateLabel: "6/28", hasContent: true },
   { id: "d2", dateLabel: "6/29", hasContent: true },
   { id: "d3", dateLabel: "6/30", hasContent: true },
-  { id: "d4", dateLabel: "7/1",  hasContent: false },
-  { id: "d5", dateLabel: "7/2",  hasContent: true },
-  { id: "d6", dateLabel: "7/3",  hasContent: true },
+  { id: "d4", dateLabel: "7/1", hasContent: false },
+  { id: "d5", dateLabel: "7/2", hasContent: true },
+  { id: "d6", dateLabel: "7/3", hasContent: true },
 ];
 
 /* ========= 휠/터치로 인덱스 전환(쓰로틀) ========= */
@@ -61,7 +62,6 @@ function DiaryCard({
   item, onOpen, onToggleBookmark, onDelete,
 }: {
   item: DiaryItem;
-  isCenter: boolean;
   onOpen: () => void;
   onToggleBookmark: () => void;
   onDelete: () => void;
@@ -104,7 +104,7 @@ function DiaryCard({
 }
 
 /* ========= 페이지 ========= */
-export default function EmoryTimeline() {
+export default function DiaryPreview() {
   const [items, setItems] = useState<DiaryItem[]>(MOCK);
   const [current, setCurrent] = useState(Math.floor(MOCK.length / 2));
   const clamp = (n: number) => Math.max(0, Math.min(items.length - 1, n));
@@ -134,9 +134,9 @@ export default function EmoryTimeline() {
     if (!it) return;
     if (it.hasContent) {
       toast({ title: it.dateLabel, description: "상세 페이지로 이동 준비 중…" });
-      // navigate(`/diary/${it.id}`)
+      // navigate(`/diary-${it.id}`)
     } else {
-      navigate("/diary-write");
+      navigate("/diary-write"); // 경로 수정
     }
   };
 
@@ -193,6 +193,14 @@ export default function EmoryTimeline() {
 
         {/* 콘텐츠 */}
         <main className="flex-1 min-h-0 px-3 md:px-4 pb-[calc(env(safe-area-inset-bottom)+32px)]">
+          {/* 토글: 상단바 하얀 줄 바로 밑, 우측 */}
+          <div className="flex justify-end pt-2 pe-1 mt-2">
+            <ToggleSwitch
+              checked={false}
+              onChange={(v) => v && navigate("/diary-library")}
+            />
+          </div>
+
           <section
             className="relative select-none pt-4"
             style={{ height: `60vh` }}
@@ -220,7 +228,6 @@ export default function EmoryTimeline() {
                 >
                   <DiaryCard
                     item={item}
-                    isCenter={i === current}
                     onOpen={() => openItem(i)}
                     onToggleBookmark={() => onToggleBookmark(i)}
                     onDelete={() => onDelete(i)}
