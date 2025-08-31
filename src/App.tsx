@@ -5,16 +5,17 @@ import { Toaster } from './components/ui/toaster';
 import { TooltipProvider } from './components/ui/tooltip';
 import { SidebarProvider } from './components/sidebar/SidebarContext';
 import Sidebar from './components/sidebar/Sidebar';
-//import NotFound from './pages/';
+
 import VoiceChat from './pages/voice-chat';
 import MyPage from './pages/my-page';
 import LogoutConfirmPage from './pages/logout-confirm-page';
 import WithdrawalPage from './pages/withdrawal';
 import StartPage from './pages/start-page';
 import EmotionReportPage from './pages/emotion-report';
-
 import TimeCapsulePage from './pages/time-capsule';
 import DiaryWriting from './pages/diary-write';
+import DiaryPreview from './pages/diary-preview';
+import DiaryLibrary from './pages/diary-library';
 
 function Router() {
   return (
@@ -27,10 +28,9 @@ function Router() {
       <Route path='/withdrawal' component={WithdrawalPage} />
       <Route path='/start-page' component={StartPage} />
       <Route path='/time-capsule' component={TimeCapsulePage} />
-      {/*<Route component={NotFound} />*/}
-    </Switch>
-      <Route path='/diary/write' component={DiaryWriting} />
-  {/*<Route component={NotFound} />*/ }
+      <Route path='/diary-write' component={DiaryWriting} />
+      <Route path='/diary-preview' component={DiaryPreview} />
+      <Route path='/diary-library' component={DiaryLibrary} />
     </Switch >
   );
 }
