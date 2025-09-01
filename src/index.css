@@ -125,6 +125,29 @@
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
   }
 
+  .custom-scrollbar::-webkit-scrollbar{
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track{
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb{
+    background: rgba(0,0,0,0.2);
+    border-radius: 2px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover{
+    background:rgba(0, 0, 0, 0.3);
+  }
+
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.2) transparent;
+    }
+  }
+
   .gradient-time-capsule-page{
     
     background-image: url('@/assets/img/time_capsule.png');
@@ -170,7 +193,6 @@
     overflow: hidden;
     border-radius: 20px;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
-  }
 }
 .voice-button-gradient {
   background: linear-gradient(145deg, hsl(266, 83%, 65%), hsl(262, 83%, 58%));
