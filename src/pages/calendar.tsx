@@ -305,14 +305,14 @@ export default function MoodCalendar() {
   const showScheduleSelection = selectedDate && !selectedDiary
 
   return (
-    <div className="flex justify-center min-h-screen bg-gray-100">
+    <div className="flex justify-center min-h-screen bg-gray-100 ">
       {" "}
       
-<div className="gradient-calendar flex flex-col max-h-[90vh]">
+<div className="gradient-calendar flex flex-col relative ">
         {" "}
         {/* Header */}
         <div className="flex items-center justify-between p-4 flex-shrink-0">
-          <Hamburger className="text-gray-700" />
+          <Hamburger className="stroke-green-700" />
 
           <h1 className="text-xl font-semibold text-green-700">Calendar</h1>
 
@@ -322,7 +322,7 @@ export default function MoodCalendar() {
           </Button>
         </div>
         
-        {/* Scrollable Content Area - 모든 콘텐츠 포함 */}
+        {/* 스크롤 영역*/}
         <div className="flex-grow overflow-y-auto custom-scrollbar px-4 pb-4">
           <div className="bg-white rounded-2xl shadow-lg p-6 w-full relative">
             {/* Switch (캘린더 박스 우측 상단) */}
@@ -366,7 +366,7 @@ export default function MoodCalendar() {
                     relative flex flex-col items-center justify-start text-sm rounded-lg p-1 h-12 cursor-pointer
                     ${date.isCurrentMonth ? "text-gray-900 hover:bg-gray-50" : "text-gray-400"}
                     ${date.isCurrentMonth && date.day === today ? "border-2 border-green-500" : ""}
-                    ${date.isCurrentMonth && date.day === selectedDate ? "bg-green-200 border-2 border-green-500" : ""}
+                    ${date.isCurrentMonth && date.day === selectedDate ? "bg-green-200  border-green-500" : ""}
                   `}
                 >
                   <span className="text-xs font-medium pt-1">{date.day}</span>
