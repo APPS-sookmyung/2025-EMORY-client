@@ -358,34 +358,39 @@ export default function MoodCalendar() {
 
             {/* Calendar Grid */}
             <div className="grid grid-cols-7 gap-1 mb-6">
-              {calendarDays.map((date, index) => (
-                <div
-                  key={index}
-                  onClick={() => date.isCurrentMonth && handleDateClick(date.day)}
-                  className={`
-                    relative flex flex-col items-center justify-start text-sm rounded-lg p-1 h-12 cursor-pointer
-                    ${date.isCurrentMonth ? "text-gray-900 hover:bg-gray-50" : "text-gray-400"}
-                    ${date.isCurrentMonth && date.day === today ? "border-2 border-green-500" : ""}
-                    ${date.isCurrentMonth && date.day === selectedDate ? "bg-green-200  border-green-500" : ""}
-                  `}
-                >
-                  <span className="text-xs font-medium pt-1">{date.day}</span>
+              {calendarDays.map((date, index) => {
+                const isCurrentMonth = date.isCurrentMonth;
+                const isToday = isCurrentMonth && date.day === today;
+                const isSelected = isCurrentMonth && date.day === selectedDate;
+                const shouldShowEmojiForDay = isCurrentMonth && shouldShowEmoji(date.day);
+                const dayMoodData = isCurrentMonth ? moodData[date.day] : null;
+                
+                return (
+                  <div
+                    key={index}
+                    onClick={() => isCurrentMonth && handleDateClick(date.day)}
+                                         className={`
+                       relative flex flex-col items-center justify-start text-sm rounded-lg p-1 h-12 cursor-pointer
+                       ${isCurrentMonth ? "text-gray-900" : "text-gray-400"}
+                       ${isToday ? "border-2 border-green-500" : ""}
+                       ${isSelected ? "bg-green-200" : ""}
+                     `}
+                  >
+                    <span className="text-xs font-medium pt-1">{date.day}</span>
 
-                  {/* 기분 이모지 - 날짜 숫자 아래에 배치 */}
-                  {date.isCurrentMonth && shouldShowEmoji(date.day) && (
-                    <div className="mt-0.5">
-                      <span
-                        className={`
-                        text-xs
-                        ${moodData[date.day]?.isScraped ? "opacity-100" : "opacity-70"}
-                      `}
-                      >
-                        {moodData[date.day]?.emoji}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              ))}
+                    {/* 기분 이모지 - 날짜 숫자 아래에 배치 */}
+                    {shouldShowEmojiForDay && dayMoodData && (
+                      <div className="mt-0.5">
+                        <span
+                          className={`text-xs ${dayMoodData.isScraped ? "opacity-100" : "opacity-70"}`}
+                        >
+                          {dayMoodData.emoji}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* 선택된 날짜의 일기 내용 */}
@@ -426,14 +431,14 @@ export default function MoodCalendar() {
                       <div
                         key={schedule.id}
                         onClick={() => handleScheduleSelect(schedule.id)}
-                        className={`
-                          p-3 rounded-lg cursor-pointer transition-colors duration-200
-                          ${
-                            selectedScheduleIds.includes(schedule.id)
-                              ? "bg-green-500 text-white"
-                              : "bg-green-400 text-white hover:bg-green-500"
-                          }
-                        `}
+                                                 className={`
+                           p-3 rounded-lg cursor-pointer
+                           ${
+                             selectedScheduleIds.includes(schedule.id)
+                               ? "bg-green-200 text-green-800"
+                               : "bg-green-100 text-green-700"
+                           }
+                         `}
                       >
                         <div className="flex justify-between items-center">
                           <div>
@@ -454,9 +459,9 @@ export default function MoodCalendar() {
                   {/* 새 일정 추가 버튼  */}
                   <div
                     onClick={() => setShowAddScheduleModal(true)}
-                    className="p-4 bg-green-300 rounded-lg cursor-pointer hover:bg-green-400 transition-colors flex items-center justify-center"
+                    className="p-4 bg-green-100 rounded-lg cursor-pointer hover:bg-green-200 transition-colors flex items-center justify-center border border-green-200"
                   >
-                    <Plus className="h-6 w-6 text-white" />
+                    <Plus className="h-6 w-6 text-green-600" />
                   </div>
                 </div>
 
@@ -513,7 +518,7 @@ export default function MoodCalendar() {
               </div>
 
               <div className="flex space-x-3 pt-4">
-                <Button onClick={handleAddSchedule} className="flex-1 bg-green-600 hover:bg-green-700">
+                <Button onClick={handleAddSchedule} className="flex-1 bg-green-200 hover:bg-green-300 text-green-800">
                   추가
                 </Button>
                 <Button variant="outline" onClick={() => setShowAddScheduleModal(false)} className="flex-1">
