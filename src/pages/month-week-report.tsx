@@ -211,11 +211,13 @@ const ReportCard = ({ title, data }: { title: string; data: ReportData }) => {
 
   return (
     <div className='space-y-4'>
-      <div className='flex items-center space-x-3 mb-6'>
+      <div className='flex items-center space-x-3 mb-4'>
         <div className='w-1 h-6 bg-orange-500 rounded'></div>
-        <h2 className='text-[#364153] text-xl font-bold tracking-wide' style={{ fontFamily: 'serif' }}>{title}</h2>
-        <span className='text-lg font-bold text-[#364153] tracking-wide' style={{ fontFamily: 'serif' }}>
-          {title === '주별 분석' ? '7월 1주차' : '7월'}
+        <h2 className='text-[#364153] text-xl font-bold tracking-wide' style={{ fontFamily: 'Quicksand, sans-serif' }}>
+          {title === '주별 분석' ? 'Weekly Analysis' : 'Monthly Insights'}
+        </h2>
+        <span className='text-lg font-semibold text-[#364153] tracking-wide' style={{ fontFamily: 'Cute Font, cursive' }}>
+          {title === '주별 분석' ? 'July Week 1' : 'July 2025'}
         </span>
       </div>
 
@@ -311,12 +313,12 @@ export default function MonthWeekReport() {
           <ArrowLeft className='w-5 h-5 mr-2' />
           뒤로
         </Button>
-        <h1 className='text-[#364153] text-xl font-bold'>데이터 리포트</h1>
+        <h1 className='text-[#364153] text-xl font-bold' style={{ fontFamily: 'Comfortaa, cursive' }}>Data Report</h1>
         <div className='w-10'></div>
       </div>
 
       {/* 메인 콘텐츠 - 스크롤 가능 */}
-      <div className='flex-1 overflow-y-auto px-4 pb-8 space-y-8'>
+      <div className='flex-1 overflow-y-auto px-4 pb-8 space-y-4'>
         {/* 주별 분석 */}
         <ReportCard title='주별 분석' data={reportData.weekly} />
 
