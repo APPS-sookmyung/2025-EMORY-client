@@ -196,7 +196,7 @@ export default function EmotionReportPage() {
 
   if (isLoading) {
     return (
-      <div className='gradient-emotion-report flex flex-col relative h-full'>
+      <div className='gradient-mypage flex flex-col relative h-full'>
         <div className='flex items-center justify-center h-full'>
           <div className='text-center'>
             <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4'></div>
@@ -209,7 +209,7 @@ export default function EmotionReportPage() {
 
   if (!emotionReport) {
     return (
-      <div className='gradient-emotion-report flex flex-col relative h-full'>
+      <div className='gradient-mypage flex flex-col relative h-full'>
         <div className='flex items-center justify-center h-full'>
           <div className='text-center'>
             <p className='text-gray-400'>감정 리포트를 불러올 수 없습니다.</p>
@@ -223,7 +223,7 @@ export default function EmotionReportPage() {
   }
 
   return (
-    <div className='gradient-emotion-report flex flex-col relative h-full'>
+    <div className='gradient-mypage flex flex-col relative h-full'>
       {/* 상단 뒤로가기 버튼 */}
       <div className='p-4 flex-shrink-0'>
         <button onClick={() => navigate('/voice-chat')}>

@@ -94,7 +94,7 @@
   }
 
   .gradient-mypage {
-    background-image: url('@/assets/img/gradientbackground.png');
+    background-image: url('@/assets/img/home.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

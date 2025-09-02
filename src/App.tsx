@@ -12,6 +12,7 @@ import LogoutConfirmPage from './pages/logout-confirm-page';
 import WithdrawalPage from './pages/withdrawal';
 import StartPage from './pages/start-page';
 import EmotionReportPage from './pages/emotion-report';
+import MonthWeekReport from './pages/month-week-report';
 import TimeCapsulePage from './pages/time-capsule';
 import DiaryWriting from './pages/diary-write';
 import DiaryPreview from './pages/diary-preview';
@@ -23,6 +24,7 @@ function Router() {
       <Route path='/' component={StartPage} />
       <Route path='/voice-chat' component={VoiceChat} />
       <Route path='/emotion-report' component={EmotionReportPage} />
+      <Route path='/month-week-report' component={MonthWeekReport} />
       <Route path='/my-page' component={MyPage} />
       <Route path='/logout-confirm-page' component={LogoutConfirmPage} />
       <Route path='/withdrawal' component={WithdrawalPage} />
