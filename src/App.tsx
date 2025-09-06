@@ -46,7 +46,7 @@ function App() {
             <Toaster />
             <div
               className='relative overflow-hidden'
-              style={{ width: 480, height: 844 }}
+              style={{ width: 480, height: 844, borderRadius: '20px' }}
             >
               <Router />
               {/* 글로벌 사이드바 */}
