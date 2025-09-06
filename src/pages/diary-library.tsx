@@ -55,7 +55,7 @@ export default function DiaryLibrary() {
                     className="
             flex-1 min-h-0 px-3 md:px-4
             pb-[calc(env(safe-area-inset-bottom)+32px)]
-            overflow-y-auto no-scrollbar scroll-smooth
+            overflow-y-auto custom-scrollbar scroll-smooth
           "
                 >
                     {/* 토글 */}

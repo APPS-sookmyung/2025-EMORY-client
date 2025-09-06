@@ -85,10 +85,10 @@ export default function Sidebar() {
           <div className='flex items-center justify-between'>
             <button
               className='flex items-center space-x-3 text-white/95'
-              onClick={() => go('/emotion-report')}
+              onClick={() => go('/month-week-report')}
             >
               <ClipboardList className='w-5 h-5' />
-              <span className='text-lg'>리포트</span>
+              <span className='text-lg'>감정 리포트</span>
             </button>
           </div>
 
