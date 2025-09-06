@@ -232,7 +232,7 @@ export default function EmotionReportPage() {
       </div>
 
       {/* 스크롤 가능한 메인 콘텐츠 */}
-      <div className='flex-1 overflow-y-auto px-6 pb-6'>
+      <div className='flex-1 overflow-y-auto px-6 pb-6 custom-scrollbar'>
         <div className='flex flex-col items-center pt-8'>
           {/* 프로필 섹션 */}
           <div className='flex flex-col items-center mb-8'>

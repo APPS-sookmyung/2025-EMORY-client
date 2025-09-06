@@ -318,7 +318,7 @@ export default function MonthWeekReport() {
       </div>
 
       {/* 메인 콘텐츠 - 스크롤 가능 */}
-      <div className='flex-1 overflow-y-auto px-4 pb-8 space-y-4'>
+      <div className='flex-1 overflow-y-auto px-4 pb-8 space-y-4 custom-scrollbar'>
         {/* 주별 분석 */}
         <ReportCard title='주별 분석' data={reportData.weekly} />
 
