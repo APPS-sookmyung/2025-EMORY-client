@@ -18,6 +18,7 @@ import DiaryWriting from './pages/diary-write';
 import DiaryPreview from './pages/diary-preview';
 import DiaryLibrary from './pages/diary-library';
 
+import MoodCalendar from './pages/calendar';
 
 function Router() {
   return (
@@ -30,6 +31,7 @@ function Router() {
       <Route path='/withdrawal' component={WithdrawalPage} />
       <Route path='/start-page' component={StartPage} />
       <Route path='/time-capsule' component={TimeCapsulePage} />
+      <Route path='/calendar' component={MoodCalendar} />
       {/*<Route component={NotFound} />*/}
       <Route path='/diary/write' component={DiaryWriting} />
   {/*<Route component={NotFound} />*/ }
