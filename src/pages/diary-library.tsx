@@ -23,8 +23,8 @@ export default function DiaryLibrary() {
       `}</style>
 
             <div className="w-full h-full rounded-3xl bg-gradient-to-b from-[#A1CBFF] to-white shadow-xl flex flex-col min-h-0">
-                {/* 상단바 */}
-                <header className="w-full h-[112px] px-4 flex items-end pb-3 border-b border-white/50">
+                {/* 헤더 */}
+                <header className="flex items-center justify-between p-4 flex-shrink-0">
                     <div className="w-full flex items-center justify-between">
                         <Button
                             variant="ghost"

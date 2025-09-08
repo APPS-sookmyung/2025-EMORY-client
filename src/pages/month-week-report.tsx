@@ -1,10 +1,12 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { ArrowLeft, TrendingUp, Calendar, BarChart3, Sparkles, Cloud, Brain, AlertTriangle } from 'lucide-react';
+import { useSidebar } from '../components/sidebar/SidebarContext';
+import { TrendingUp, Calendar, BarChart3, Sparkles, Cloud, Brain, AlertTriangle, Menu } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { useToast } from '../hooks/use-toast';
+import { EmotionIcon } from '../types/emotion';
 
 // 데이터 타입 정의
 interface CategoryData {
@@ -12,7 +14,7 @@ interface CategoryData {
   days: number;
   color: string;
   percentage: number;
-  icon: string;
+  icon: EmotionIcon;
 }
 
 interface ReportData {
@@ -35,21 +37,21 @@ const createDummyReportData = (): {
         days: 4,
         color: 'bg-orange-300',
         percentage: 57,
-        icon: 'sparkles',
+        icon: 'sparkles' as EmotionIcon,
       },
       {
         name: '평온',
         days: 2,
         color: 'bg-blue-300',
         percentage: 29,
-        icon: 'cloud',
+        icon: 'cloud' as EmotionIcon,
       },
       {
         name: '사려깊음',
         days: 1,
         color: 'bg-purple-300',
         percentage: 14,
-        icon: 'brain',
+        icon: 'brain' as EmotionIcon,
       },
     ],
   };
@@ -63,28 +65,28 @@ const createDummyReportData = (): {
         days: 18,
         color: 'bg-orange-300',
         percentage: 58,
-        icon: 'sparkles',
+        icon: 'sparkles' as EmotionIcon,
       },
       {
         name: '평온',
         days: 8,
         color: 'bg-blue-300',
         percentage: 26,
-        icon: 'cloud',
+        icon: 'cloud' as EmotionIcon,
       },
       {
         name: '사려깊음',
         days: 3,
         color: 'bg-purple-300',
         percentage: 10,
-        icon: 'brain',
+        icon: 'brain' as EmotionIcon,
       },
       {
         name: '불안',
         days: 2,
         color: 'bg-yellow-300',
         percentage: 6,
-        icon: 'alert-triangle',
+        icon: 'alert-triangle' as EmotionIcon,
       },
     ],
   };
@@ -169,13 +171,18 @@ const ProgressBar = ({ category }: { category: CategoryData }) => {
     <div className='flex items-center space-x-3'>
       <div className='flex items-center justify-center w-5 h-5'>
         {(() => {
-          const IconComponent = {
+          const IconComponent: Record<EmotionIcon, typeof Sparkles> = {
             sparkles: Sparkles,
             cloud: Cloud,
             brain: Brain,
             'alert-triangle': AlertTriangle,
-          }[category.icon] || Sparkles;
-          return <IconComponent className='w-3 h-3 text-[#364153]' />;
+            sun: Sparkles,
+            flame: Sparkles,
+            droplets: Sparkles,
+            zap: Sparkles,
+          };
+          const SelectedIcon = IconComponent[category.icon];
+          return <SelectedIcon className='w-3 h-3 text-[#364153]' />;
         })()}
       </div>
       <div className='flex-1'>
@@ -230,12 +237,17 @@ const ReportCard = ({ title, data }: { title: string; data: ReportData }) => {
 
             <div className='flex-1 space-y-4'>
               {data.categories.map((category, index) => {
-                const IconComponent = {
+                const IconComponent: Record<EmotionIcon, typeof Sparkles> = {
                   sparkles: Sparkles,
                   cloud: Cloud,
                   brain: Brain,
                   'alert-triangle': AlertTriangle,
-                }[category.icon] || Sparkles;
+                  sun: Sparkles,
+                  flame: Sparkles,
+                  droplets: Sparkles,
+                  zap: Sparkles,
+                };
+                const SelectedIcon = IconComponent[category.icon];
 
                 return (
                   <div
@@ -250,7 +262,7 @@ const ReportCard = ({ title, data }: { title: string; data: ReportData }) => {
                     }}
                   >
                     <div className='flex items-center justify-center w-8 h-8'>
-                      <IconComponent className={`w-5 h-5 text-[#364153]`} />
+                      <SelectedIcon className={`w-5 h-5 text-[#364153]`} />
                     </div>
                     <span className='text-[#364153] text-lg font-medium'>{category.name}</span>
                     <span className='text-[#364153]/70 text-base'>
@@ -277,6 +289,7 @@ const ReportCard = ({ title, data }: { title: string; data: ReportData }) => {
 export default function MonthWeekReport() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { open } = useSidebar();
   const [reportData, setReportData] = useState<{
     weekly: ReportData;
     monthly: ReportData;
@@ -287,9 +300,6 @@ export default function MonthWeekReport() {
     setReportData(data);
   }, []);
 
-  const handleBack = () => {
-    setLocation('/emotion-report');
-  };
 
 
   if (!reportData) {
@@ -306,15 +316,14 @@ export default function MonthWeekReport() {
       <div className='flex items-center justify-between p-4 flex-shrink-0'>
         <Button
           variant='ghost'
-          size='sm'
-          onClick={handleBack}
+          size='icon'
+          onClick={() => open()}
           className='text-[#364153] hover:bg-white/30'
         >
-          <ArrowLeft className='w-5 h-5 mr-2' />
-          뒤로
+          <Menu className='w-6 h-6' />
         </Button>
         <h1 className='text-[#364153] text-xl font-bold' style={{ fontFamily: 'Comfortaa, cursive' }}>Data Report</h1>
-        <div className='w-10'></div>
+        <div className='w-6'></div>
       </div>
 
       {/* 메인 콘텐츠 - 스크롤 가능 */}

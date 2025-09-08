@@ -5,81 +5,63 @@ import { ArrowLeft, Download, TrendingUp, Heart } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { useToast } from '../hooks/use-toast';
-
-// 감정 데이터 타입 정의 (백엔드 연동용)
-interface EmotionData {
-  id: string;
-  name: string;
-  icon: string;
-  description: string;
-  percentage: number;
-  color: string;
-}
-
-interface EmotionReport {
-  id: string;
-  userId: string;
-  createdAt: string;
-  mainEmotion: EmotionData;
-  emotionDistribution: EmotionData[];
-  feedback: string;
-}
+import { EmotionData, EmotionReport, EmotionIcon, EmotionCategory, EMOTION_ICON_MAP } from '../types/emotion';
 
 // 더미 데이터 생성 함수 (나중에 API 호출로 교체)
 const createDummyEmotionReport = (): EmotionReport => {
   const emotions: EmotionData[] = [
     {
-      id: 'joy',
+      id: 'joy' as EmotionCategory,
       name: '기쁨',
-      icon: 'sun',
+      icon: 'sun' as EmotionIcon,
       description: '밝고 긍정적인 순간들',
       percentage: 35,
       color: 'bg-orange-500',
     },
     {
-      id: 'calm',
+      id: 'calm' as EmotionCategory,
       name: '평온',
-      icon: 'cloud',
+      icon: 'cloud' as EmotionIcon,
       description: '평화롭고 차분한 상태',
       percentage: 25,
       color: 'bg-blue-400',
     },
     {
-      id: 'thoughtful',
+      id: 'thoughtful' as EmotionCategory,
       name: '사려깊음',
-      icon: 'brain',
+      icon: 'brain' as EmotionIcon,
       description: '깊은 성찰과 분석',
       percentage: 20,
       color: 'bg-purple-500',
     },
     {
-      id: 'anger',
+      id: 'anger' as EmotionCategory,
       name: '분노',
-      icon: 'flame',
+      icon: 'flame' as EmotionIcon,
       description: '강한 감정적 반응',
       percentage: 10,
       color: 'bg-red-500',
     },
     {
-      id: 'anxiety',
+      id: 'anxiety' as EmotionCategory,
       name: '불안',
-      icon: 'alert-triangle',
+      icon: 'alert-triangle' as EmotionIcon,
       description: '걱정과 긴장감',
       percentage: 5,
       color: 'bg-yellow-500',
     },
     {
-      id: 'sadness',
+      id: 'sadness' as EmotionCategory,
       name: '슬픔',
-      icon: 'droplets',
+      icon: 'droplets' as EmotionIcon,
       description: '우울하고 슬픈 감정',
       percentage: 3,
       color: 'bg-indigo-500',
     },
     {
-      id: 'excitement',
+      id: 'excitement' as EmotionCategory,
       name: '신남',
-      icon: 'zap',
+      icon: 'zap' as EmotionIcon,
       description: '흥미진진하고 즐거운 기분',
       percentage: 2,
       color: 'bg-pink-500',
@@ -102,15 +84,15 @@ const createDummyEmotionReport = (): EmotionReport => {
   };
 };
 
-// 감정 아이콘 컴포넌트 (간단한 버전)
+// 감정 아이콘 컴포넌트 (타입 안전 버전)
 const EmotionIcon = ({
   iconName,
   className = 'w-5 h-5',
 }: {
-  iconName: string;
+  iconName: EmotionIcon;
   className?: string;
 }) => {
-  const iconMap: Record<string, React.ReactNode> = {
+  const iconMap: Record<EmotionIcon, React.ReactNode> = {
     sun: <div className={`${className} bg-yellow-400 rounded-full`} />,
     cloud: <div className={`${className} bg-blue-300 rounded-full`} />,
     brain: <div className={`${className} bg-purple-400 rounded-full`} />,
@@ -122,11 +104,7 @@ const EmotionIcon = ({
     zap: <div className={`${className} bg-yellow-300 rounded-full`} />,
   };
 
-  return (
-    iconMap[iconName] || (
-      <div className={`${className} bg-gray-400 rounded-full`} />
-    )
-  );
+  return iconMap[iconName];
 };
 
 export default function EmotionReportPage() {
@@ -224,11 +202,13 @@ export default function EmotionReportPage() {
 
   return (
     <div className='gradient-mypage flex flex-col relative h-full'>
-      {/* 상단 뒤로가기 버튼 */}
-      <div className='p-4 flex-shrink-0'>
+      {/* 헤더 */}
+      <div className='flex items-center justify-between p-4 flex-shrink-0'>
         <button onClick={() => navigate('/voice-chat')}>
           <ArrowLeft className='w-6 h-6 text-gray-400' />
         </button>
+        <h1 className='text-xl font-semibold text-gray-600'>감정 리포트</h1>
+        <div className='w-6'></div>
       </div>
 
       {/* 스크롤 가능한 메인 콘텐츠 */}
