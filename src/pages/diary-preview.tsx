@@ -136,7 +136,7 @@ export default function DiaryPreview() {
       toast({ title: it.dateLabel, description: "상세 페이지로 이동 준비 중…" });
       // navigate(`/diary-${it.id}`)
     } else {
-      navigate("/diary-write"); // 경로 수정
+      navigate("/diary/write"); // 경로 수정
     }
   };
 
