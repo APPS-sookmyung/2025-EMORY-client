@@ -111,7 +111,13 @@ const CircularChart = ({ data }: { data: CategoryData[] }) => {
 
   return (
     <div className='relative'>
-      <svg width={size} height={size} className='transform -rotate-90'>
+      <svg 
+        width={size} 
+        height={size} 
+        className='transform -rotate-90'
+        role='img'
+        aria-label={`원형 차트: 감정 분포를 보여주는 차트입니다. ${data.map(cat => `${cat.name} ${cat.percentage}%`).join(', ')}`}
+      >
         {/* 배경 원 */}
         <circle
           cx={size / 2}
@@ -123,9 +129,11 @@ const CircularChart = ({ data }: { data: CategoryData[] }) => {
         />
         {/* 데이터 원들 */}
         {data.map((category, index) => {
-          const strokeDasharray = circumference;
-          const targetOffset = circumference - (category.percentage / 100) * circumference;
-          const strokeDashoffset = isAnimated ? targetOffset : circumference;
+          const currentRadius = radius - index * (strokeWidth + 4);
+          const ringCircumference = 2 * Math.PI * currentRadius;
+          const strokeDasharray = ringCircumference;
+          const targetOffset = ringCircumference - (category.percentage / 100) * ringCircumference;
+          const strokeDashoffset = isAnimated ? targetOffset : ringCircumference;
           const colorMap: { [key: string]: string } = {
             'bg-orange-300': '#fdba74',
             'bg-blue-300': '#93c5fd',
@@ -139,7 +147,7 @@ const CircularChart = ({ data }: { data: CategoryData[] }) => {
               key={category.name}
               cx={size / 2}
               cy={size / 2}
-              r={radius - index * (strokeWidth + 4)}
+              r={currentRadius}
               stroke={colorMap[category.color]}
               strokeWidth={strokeWidth - 2}
               fill='none'
@@ -190,7 +198,7 @@ const ProgressBar = ({ category }: { category: CategoryData }) => {
           <span className='text-[#364153]'>{category.name}</span>
           <span className='text-[#364153]/70'>{category.days}일</span>
         </div>
-        <div className='w-full bg-gray-200 rounded-full h-2'>
+        <div className='w-full bg-gray-200 rounded-full h-2' role='progressbar' aria-valuenow={category.percentage} aria-valuemin={0} aria-valuemax={100} aria-label={`${category.name} ${category.percentage}%`}>
           <div
             className={`${colorMap[category.color]} h-2 rounded-full relative`}
             style={{ width: `${category.percentage}%` }}
@@ -295,10 +303,45 @@ export default function MonthWeekReport() {
     monthly: ReportData;
   } | null>(null);
   useEffect(() => {
-    // 즉시 더미 데이터 로드
-    const data = createDummyReportData();
-    setReportData(data);
-  }, []);
+    const loadReportData = async () => {
+      try {
+        // 현재는 더미 데이터 사용, 나중에 실제 API 호출로 교체
+        const data = createDummyReportData();
+        setReportData(data);
+        
+        // TODO: 실제 API 연결시 아래 주석 해제
+        /*
+        const currentDate = new Date().toISOString().split('T')[0];
+        const currentYearMonth = currentDate.substring(0, 7);
+        
+        const [weeklyData, monthlyData] = await Promise.all([
+          reportService.getWeeklyReport(currentDate),
+          reportService.getMonthlyReport(currentYearMonth)
+        ]);
+        
+        setReportData({
+          weekly: transformWeeklyData(weeklyData),
+          monthly: transformMonthlyData(monthlyData)
+        });
+        */
+      } catch (error) {
+        console.error('Report data loading failed:', error);
+        toast({
+          title: '리포트 로드 실패',
+          description: error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.',
+          variant: 'destructive',
+        });
+        
+        // 에러 발생시 빈 데이터로 대체
+        setReportData({
+          weekly: { period: '이번 주', categories: [], totalDays: 0 },
+          monthly: { period: '이번 달', categories: [], totalDays: 0 }
+        });
+      }
+    };
+
+    loadReportData();
+  }, [toast]);
 
 
 
