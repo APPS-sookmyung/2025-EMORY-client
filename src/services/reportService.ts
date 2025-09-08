@@ -1,4 +1,4 @@
-import { WeeklyReportResponse, MonthlyReportResponse } from '../types/reports';
+import type { WeeklyReportResponse, MonthlyReportResponse } from '../types/reports';
 
 // API 타임아웃 설정 (10초)
 const API_TIMEOUT = 10000;

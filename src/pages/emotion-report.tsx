@@ -5,7 +5,7 @@ import { ArrowLeft, Download, TrendingUp, Heart } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { useToast } from '../hooks/use-toast';
-import { EmotionData, EmotionReport, EmotionIcon, EmotionCategory, EMOTION_ICON_MAP } from '../types/emotion';
+import type { EmotionData, EmotionReport, EmotionIcon as EmotionIconType, EmotionCategory } from '../types/emotion';
 
 // 더미 데이터 생성 함수 (나중에 API 호출로 교체)
 const createDummyEmotionReport = (): EmotionReport => {
@@ -13,7 +13,7 @@ const createDummyEmotionReport = (): EmotionReport => {
     {
       id: 'joy' as EmotionCategory,
       name: '기쁨',
-      icon: 'sun' as EmotionIcon,
+      icon: 'sun' as EmotionIconType,
       description: '밝고 긍정적인 순간들',
       percentage: 35,
       color: 'bg-orange-500',
@@ -21,7 +21,7 @@ const createDummyEmotionReport = (): EmotionReport => {
     {
       id: 'calm' as EmotionCategory,
       name: '평온',
-      icon: 'cloud' as EmotionIcon,
+      icon: 'cloud' as EmotionIconType,
       description: '평화롭고 차분한 상태',
       percentage: 25,
       color: 'bg-blue-400',
@@ -29,7 +29,7 @@ const createDummyEmotionReport = (): EmotionReport => {
     {
       id: 'thoughtful' as EmotionCategory,
       name: '사려깊음',
-      icon: 'brain' as EmotionIcon,
+      icon: 'brain' as EmotionIconType,
       description: '깊은 성찰과 분석',
       percentage: 20,
       color: 'bg-purple-500',
@@ -37,7 +37,7 @@ const createDummyEmotionReport = (): EmotionReport => {
     {
       id: 'anger' as EmotionCategory,
       name: '분노',
-      icon: 'flame' as EmotionIcon,
+      icon: 'flame' as EmotionIconType,
       description: '강한 감정적 반응',
       percentage: 10,
       color: 'bg-red-500',
@@ -45,7 +45,7 @@ const createDummyEmotionReport = (): EmotionReport => {
     {
       id: 'anxiety' as EmotionCategory,
       name: '불안',
-      icon: 'alert-triangle' as EmotionIcon,
+      icon: 'alert-triangle' as EmotionIconType,
       description: '걱정과 긴장감',
       percentage: 5,
       color: 'bg-yellow-500',
@@ -53,7 +53,7 @@ const createDummyEmotionReport = (): EmotionReport => {
     {
       id: 'sadness' as EmotionCategory,
       name: '슬픔',
-      icon: 'droplets' as EmotionIcon,
+      icon: 'droplets' as EmotionIconType,
       description: '우울하고 슬픈 감정',
       percentage: 3,
       color: 'bg-indigo-500',
@@ -61,7 +61,7 @@ const createDummyEmotionReport = (): EmotionReport => {
     {
       id: 'excitement' as EmotionCategory,
       name: '신남',
-      icon: 'zap' as EmotionIcon,
+      icon: 'zap' as EmotionIconType,
       description: '흥미진진하고 즐거운 기분',
       percentage: 2,
       color: 'bg-pink-500',
@@ -85,14 +85,14 @@ const createDummyEmotionReport = (): EmotionReport => {
 };
 
 // 감정 아이콘 컴포넌트 (타입 안전 버전)
-const EmotionIcon = ({
+const EmotionIconComponent = ({
   iconName,
   className = 'w-5 h-5',
 }: {
-  iconName: EmotionIcon;
+  iconName: EmotionIconType;
   className?: string;
 }) => {
-  const iconMap: Record<EmotionIcon, React.ReactNode> = {
+  const iconMap: Record<EmotionIconType, React.ReactNode> = {
     sun: <div className={`${className} bg-yellow-400 rounded-full`} />,
     cloud: <div className={`${className} bg-blue-300 rounded-full`} />,
     brain: <div className={`${className} bg-purple-400 rounded-full`} />,
@@ -102,6 +102,7 @@ const EmotionIcon = ({
     ),
     droplets: <div className={`${className} bg-blue-400 rounded-full`} />,
     zap: <div className={`${className} bg-yellow-300 rounded-full`} />,
+    sparkles: <div className={`${className} bg-orange-300 rounded-full`} />,
   };
 
   return iconMap[iconName];
@@ -249,7 +250,7 @@ export default function EmotionReportPage() {
                         <div
                           className={`w-6 h-6 ${emotion.color} rounded-full flex items-center justify-center text-white`}
                         >
-                          <EmotionIcon
+                          <EmotionIconComponent
                             iconName={emotion.icon}
                             className='w-4 h-4'
                           />
@@ -285,7 +286,7 @@ export default function EmotionReportPage() {
 
               <div className='text-center'>
                 <div className='w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3'>
-                  <EmotionIcon
+                  <EmotionIconComponent
                     iconName={emotionReport.mainEmotion.icon}
                     className='w-8 h-8'
                   />

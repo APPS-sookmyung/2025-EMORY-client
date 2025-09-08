@@ -1,12 +1,11 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useLocation } from 'wouter';
 import { useSidebar } from '../components/sidebar/SidebarContext';
-import { TrendingUp, Calendar, BarChart3, Sparkles, Cloud, Brain, AlertTriangle, Menu } from 'lucide-react';
+import { Sparkles, Cloud, Brain, AlertTriangle, Menu } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { useToast } from '../hooks/use-toast';
-import { EmotionIcon } from '../types/emotion';
+import type { EmotionIcon } from '../types/emotion';
 
 // 데이터 타입 정의
 interface CategoryData {
@@ -100,7 +99,6 @@ const CircularChart = ({ data }: { data: CategoryData[] }) => {
   const size = 120;
   const strokeWidth = 12;
   const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -295,7 +293,6 @@ const ReportCard = ({ title, data }: { title: string; data: ReportData }) => {
 };
 
 export default function MonthWeekReport() {
-  const [, setLocation] = useLocation();
   const { toast } = useToast();
   const { open } = useSidebar();
   const [reportData, setReportData] = useState<{
