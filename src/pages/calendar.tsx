@@ -1,14 +1,16 @@
-'use client';
 
-import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Menu, Plus, X, User } from 'lucide-react'; // User 아이콘 추가
-import { Button } from '../components/ui/button';
-import { Switch } from '../components/ui/switch';
-import { Input } from '../components/ui/input';
-import { Textarea } from '../components/ui/textarea';
+"use client"
+
+import { useState } from "react"
+import { ChevronLeft, ChevronRight, Menu, Plus, X, User } from "lucide-react" // User 아이콘 추가
+import { Button } from "../components/ui/button"
+import { Switch } from "../components/ui/switch"
+import { Input } from "../components/ui/input"
+import { Textarea } from "../components/ui/textarea"
 import { useLocation } from 'wouter';
-import { useToast } from '../hooks/use-toast';
-import Hamburger from '../components/common/Hamburger';
+import { useToast } from "../hooks/use-toast";
+import Hamburger from "../components/common/Hamburger"
+
 
 // import angryEmoji from "../assets/img/angry-emoji.png";
 // import anxiousEmoji from "../assets/img/anxiety-emoji.png";
@@ -17,7 +19,10 @@ import Hamburger from '../components/common/Hamburger';
 // import joyEmoji from "../assets/img/joy-emoji.png";
 // import sadEmoji from "../assets/img/sadness-emoji.png";
 
-type MoodEmoji = string;
+
+
+type MoodEmoji = string
+
 
 // 일기 데이터 타입 정의
 type DiaryEntry = {
@@ -34,54 +39,62 @@ type Schedule = {
   description?: string;
 };
 
+
+
 // 날짜별 기분 데이터 (예시)
 const moodData: Record<number, { emoji: MoodEmoji; isScraped: boolean }> = {
-  1: { emoji: '😡', isScraped: true },
-  3: { emoji: '😡', isScraped: false },
-  6: { emoji: '😡', isScraped: false },
-  9: { emoji: '😊', isScraped: true },
-  10: { emoji: '😊', isScraped: true },
-  12: { emoji: '🤔', isScraped: false },
-  14: { emoji: '😍', isScraped: false },
-  16: { emoji: '😊', isScraped: true },
-  17: { emoji: '😊', isScraped: true },
-  18: { emoji: '😊', isScraped: true },
-  19: { emoji: '😊', isScraped: true },
-  20: { emoji: '😴', isScraped: false },
-  22: { emoji: '🤔', isScraped: false },
-  23: { emoji: '😊', isScraped: true },
-};
+
+  1: { emoji: "😡", isScraped: true },
+  3: { emoji: "😡", isScraped: false },
+  6: { emoji: "😡", isScraped: false },
+  9: { emoji: "😊", isScraped: true },
+  10: { emoji: "😊", isScraped: true },
+  12: { emoji: "🤔", isScraped: false },
+  14: { emoji: "😍", isScraped: false },
+  16: { emoji: "😊", isScraped: true },
+  17: { emoji: "😊", isScraped: true },
+  18: { emoji: "😊", isScraped: true },
+  19: { emoji: "😊", isScraped: true },
+  20: { emoji: "😴", isScraped: false },
+  22: { emoji: "🤔", isScraped: false },
+  23: { emoji: "😊", isScraped: true },
+}
+
 
 // 날짜별 일기 데이터 (예시)
 const diaryData: Record<number, DiaryEntry> = {
   1: {
-    title: '새해 첫날',
-    content:
-      '새해가 밝았다. 올해는 더 열심히 살아보자고 다짐했다. 가족들과 함께 떡국을 먹으며 새해 인사를 나누었다.',
-    image: '/',
+
+    title: "새해 첫날",
+    content: "새해가 밝았다. 올해는 더 열심히 살아보자고 다짐했다. 가족들과 함께 떡국을 먹으며 새해 인사를 나누었다.",
+    image: "/",
   },
   6: {
-    title: '힘든 하루',
+    title: "힘든 하루",
+
     content:
       '오늘은 정말 힘든 하루였다. 일이 잘 풀리지 않아서 스트레스를 많이 받았다. 내일은 더 좋은 날이 되길 바란다.',
   },
   10: {
     title: '태현의 생일파티',
     content:
-      '오늘은 태현의 생일이라 생일파티에 다녀왔다. 태현은 나의 가장 친한 친구다. 오랜만에 친구들과 만나서 즐거운 시간을 보냈다. 케이크도 맛있었고 선물도 마음에 들어했다. 다음에는 더 자주 만나기로 했다. 좋은 하루였다.',
-    image: '/',
+
+      "오늘은 태현의 생일이라 생일파티에 다녀왔다. 태현은 나의 가장 친한 친구다. 오랜만에 친구들과 만나서 즐거운 시간을 보냈다. 케이크도 맛있었고 선물도 마음에 들어했다. 다음에는 더 자주 만나기로 했다. 좋은 하루였다.",
+    image: "/",
   },
   14: {
-    title: '발렌타인데이',
-    content:
-      '발렌타인데이라서 특별한 사람과 함께 시간을 보냈다. 달콤한 초콜릿과 함께 행복한 하루였다.',
-    image: '/',
+    title: "발렌타인데이",
+    content: "발렌타인데이라서 특별한 사람과 함께 시간을 보냈다. 달콤한 초콜릿과 함께 행복한 하루였다.",
+    image: "/",
+
   },
   18: {
     title: '봄나들이',
     content:
-      '날씨가 좋아서 공원에 나들이를 갔다. 벚꽃이 만개해서 정말 아름다웠다. 사진도 많이 찍고 좋은 추억을 만들었다.',
-    image: '/',
+
+      "날씨가 좋아서 공원에 나들이를 갔다. 벚꽃이 만개해서 정말 아름다웠다. 사진도 많이 찍고 좋은 추억을 만들었다.",
+    image: "/",
+
   },
 };
 
@@ -205,12 +218,14 @@ const initialScheduleData: Record<number, Schedule[]> = {
 };
 
 export default function MoodCalendar() {
-  const [, navigate] = useLocation();
-  const [currentDate, setCurrentDate] = useState(new Date(2024, 4)); // May 2024
-  const [showScrapedOnly, setShowScrapedOnly] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<number | null>(null);
-  const [showAddScheduleModal, setShowAddScheduleModal] = useState(false);
-  const [selectedScheduleIds, setSelectedScheduleIds] = useState<string[]>([]); // 여러 개 선택 가능하도록 배열로 변경
+
+  const [, navigate] = useLocation()
+  const [currentDate, setCurrentDate] = useState(new Date(2024, 4)) // May 2024
+  const [showScrapedOnly, setShowScrapedOnly] = useState(false)
+  const [selectedDate, setSelectedDate] = useState<number | null>(null)
+  const [showAddScheduleModal, setShowAddScheduleModal] = useState(false)
+  const [selectedScheduleIds, setSelectedScheduleIds] = useState<string[]>([]) // 여러 개 선택 가능하도록 배열로 변경
+
   const [newSchedule, setNewSchedule] = useState({
     title: '',
     time: '', // HH:MM 형식으로 저장
@@ -219,7 +234,8 @@ export default function MoodCalendar() {
   const [scheduleDataState, setScheduleDataState] =
     useState<Record<number, Schedule[]>>(initialScheduleData); // 일정 데이터를 상태로 관리
 
-  const { toast } = useToast(); // useToast 훅 사용
+  const { toast } = useToast() // useToast 훅 사용
+
 
   // 오늘 날짜 (예시로 23일로 설정)
   const today = 23;
@@ -385,13 +401,10 @@ export default function MoodCalendar() {
 
   const handleTalkToAgent = () => {
     if (selectedScheduleIds.length > 0 && selectedDate) {
-      const schedulesForAgent = selectedDateSchedules.filter((s) =>
-        selectedScheduleIds.includes(s.id)
-      );
-      console.log('AI Agent와 대화할 일정:', schedulesForAgent);
-      alert(
-        `AI Agent와 대화: ${schedulesForAgent.map((s) => s.title).join(', ')}`
-      );
+      const schedulesForAgent = selectedDateSchedules.filter((s) => selectedScheduleIds.includes(s.id))
+      console.log("AI Agent와 대화할 일정:", schedulesForAgent)
+      alert(`AI Agent와 대화: ${schedulesForAgent.map((s) => s.title).join(", ")}`)
+
       // 여기서 agent로 이동동
     } else {
       alert('먼저 일정을 하나 이상 선택해주세요.');
@@ -406,31 +419,28 @@ export default function MoodCalendar() {
   const showScheduleSelection = selectedDate && !selectedDiary;
 
   return (
-    <div className='flex justify-center min-h-screen bg-gray-100 '>
-      {' '}
-      <div className='gradient-calendar flex flex-col relative '>
-        {' '}
+    <div className="flex justify-center min-h-screen bg-gray-100 ">
+      {" "}
+      
+<div className="gradient-calendar flex flex-col relative ">
+        {" "}
         {/* Header */}
-        <div className='flex items-center justify-between p-4 flex-shrink-0'>
-          <Hamburger className='stroke-green-700' />
+        <div className="flex items-center justify-between p-4 flex-shrink-0">
+          <Hamburger className="stroke-green-700" />
 
-          <h1 className='text-xl font-semibold text-green-700'>Calendar</h1>
+          <h1 className="text-xl font-semibold text-green-700">Calendar</h1>
 
           {/* 마이페이지 아이콘 */}
-          <Button
-            variant='ghost'
-            size='icon'
-            className='text-gray-700'
-            onClick={() => navigate('/my-page')}
-          >
-            <User className='h-6 w-6' />
+          <Button variant="ghost" size="icon" className="text-gray-700" onClick={() => navigate('/my-page')}>
+            <User className="h-6 w-6" />
           </Button>
         </div>
+        
         {/* 스크롤 영역*/}
-        <div className='flex-grow overflow-y-auto custom-scrollbar px-4 pb-4'>
-          <div className='bg-white rounded-2xl shadow-lg p-6 w-full relative'>
+        <div className="flex-grow overflow-y-auto custom-scrollbar px-4 pb-4">
+          <div className="bg-white rounded-2xl shadow-lg p-6 w-full relative">
             {/* Switch (캘린더 박스 우측 상단) */}
-            <div className='absolute top-1 right-4 z-10'>
+            <div className="absolute top-1 right-4 z-10">
               <Switch
                 checked={showScrapedOnly}
                 onCheckedChange={setShowScrapedOnly}
@@ -466,43 +476,42 @@ export default function MoodCalendar() {
             {/* Days of Week Header */}
             <div className='grid grid-cols-7 gap-1 mb-2'>
               {daysOfWeek.map((day) => (
-                <div
-                  key={day}
-                  className='text-center text-sm font-medium text-gray-500'
-                >
+                <div key={day} className="text-center text-sm font-medium text-gray-500">
                   {day}
                 </div>
               ))}
             </div>
 
             {/* Calendar Grid */}
-            <div className='grid grid-cols-7 gap-1 mb-6'>
+
+            <div className="grid grid-cols-7 gap-1 mb-6">
+
               {calendarDays.map((date, index) => {
                 const isCurrentMonth = date.isCurrentMonth;
                 const isToday = isCurrentMonth && date.day === today;
                 const isSelected = isCurrentMonth && date.day === selectedDate;
-                const shouldShowEmojiForDay =
-                  isCurrentMonth && shouldShowEmoji(date.day);
+                const shouldShowEmojiForDay = isCurrentMonth && shouldShowEmoji(date.day);
                 const dayMoodData = isCurrentMonth ? moodData[date.day] : null;
-
+                
                 return (
                   <div
                     key={index}
                     onClick={() => isCurrentMonth && handleDateClick(date.day)}
-                    className={`
+                                         className={`
                        relative flex flex-col items-center justify-start text-sm rounded-lg p-1 h-12 cursor-pointer
-                       ${isCurrentMonth ? 'text-gray-900' : 'text-gray-400'}
-                       ${isToday ? 'border-2 border-green-500' : ''}
-                       ${isSelected ? 'bg-green-200' : ''}
+                       ${isCurrentMonth ? "text-gray-900" : "text-gray-400"}
+                       ${isToday ? "border-2 border-green-500" : ""}
+                       ${isSelected ? "bg-green-200" : ""}
                      `}
                   >
-                    <span className='text-xs font-medium pt-1'>{date.day}</span>
+                    <span className="text-xs font-medium pt-1">{date.day}</span>
 
                     {/* 기분 이모지 - 날짜 숫자 아래에 배치 */}
                     {shouldShowEmojiForDay && dayMoodData && (
-                      <div className='mt-0.5'>
+                      <div className="mt-0.5">
                         <span
-                          className={`text-xs ${dayMoodData.isScraped ? 'opacity-100' : 'opacity-70'}`}
+                          className={`text-xs ${dayMoodData.isScraped ? "opacity-100" : "opacity-70"}`}
+
                         >
                           {dayMoodData.emoji}
                         </span>
@@ -550,13 +559,15 @@ export default function MoodCalendar() {
                 </div>
 
                 {/* 통합된 일정 목록 (Google 캘린더 + 사용자 추가) */}
-                <div className='space-y-2 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar'>
-                  {' '}
+
+                <div className="space-y-2 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
+                  {" "}
                   {selectedDateSchedules.length > 0 ? (
                     selectedDateSchedules.map((schedule) => (
                       <div
                         key={schedule.id}
                         onClick={() => handleScheduleSelect(schedule.id)}
+
                         className={`
                            p-3 rounded-lg cursor-pointer
                            ${
@@ -587,18 +598,18 @@ export default function MoodCalendar() {
                   {/* 새 일정 추가 버튼  */}
                   <div
                     onClick={() => setShowAddScheduleModal(true)}
-                    className='p-4 bg-green-100 rounded-lg cursor-pointer hover:bg-green-200 transition-colors flex items-center justify-center border border-green-200'
+                    className="p-4 bg-green-100 rounded-lg cursor-pointer hover:bg-green-200 transition-colors flex items-center justify-center border border-green-200"
                   >
-                    <Plus className='h-6 w-6 text-green-600' />
+                    <Plus className="h-6 w-6 text-green-600" />
+
                   </div>
                 </div>
 
                 {/* Let's talk to Emory Agent 버튼을 일정 선택 화면 안으로 이동 */}
-                <div className='pt-4'>
-                  <Button
-                    onClick={() => navigate('/voice-chat')}
-                    className='w-full bg-gray-600 hover:bg-gray-700 text-white'
-                  >
+
+                <div className="pt-4">
+                  <Button onClick={() => navigate('/voice-chat')} className="w-full bg-gray-600 hover:bg-gray-700 text-white">
+
                     {"Let's talk to Emory Agent"}
                   </Button>
                 </div>
@@ -609,79 +620,56 @@ export default function MoodCalendar() {
       </div>
       {/* 일정 추가 모달 */}
       {showAddScheduleModal && (
-        <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50'>
-          <div className='bg-white rounded-2xl p-6 w-full max-w-md'>
-            <div className='flex justify-between items-center mb-6'>
-              <h3 className='text-lg font-semibold text-gray-800'>
-                새 일정 추가
-              </h3>
-              <Button
-                variant='ghost'
-                size='icon'
-                onClick={() => setShowAddScheduleModal(false)}
-                className='h-8 w-8'
-              >
-                <X className='h-4 w-4' />
+
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-semibold text-gray-800">새 일정 추가</h3>
+              <Button variant="ghost" size="icon" onClick={() => setShowAddScheduleModal(false)} className="h-8 w-8">
+                <X className="h-4 w-4" />
               </Button>
             </div>
 
-            <div className='space-y-4'>
+            <div className="space-y-4">
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>
-                  제목
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">제목</label>
                 <Input
-                  placeholder='일정 제목을 입력하세요'
+                  placeholder="일정 제목을 입력하세요"
                   value={newSchedule.title}
-                  onChange={(e) =>
-                    setNewSchedule({ ...newSchedule, title: e.target.value })
-                  }
+                  onChange={(e) => setNewSchedule({ ...newSchedule, title: e.target.value })}
                 />
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>
-                  시간
-                </label>
+
+                <label className="block text-sm font-medium text-gray-700 mb-2">시간</label>
                 <input
-                  type='time'
-                  className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                  type="time"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   value={newSchedule.time}
-                  onChange={(e) =>
-                    setNewSchedule({ ...newSchedule, time: e.target.value })
-                  }
+                  onChange={(e) => setNewSchedule({ ...newSchedule, time: e.target.value })}
+
                 />
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>
-                  설명 (선택사항)
-                </label>
+
+                <label className="block text-sm font-medium text-gray-700 mb-2">설명 (선택사항)</label>
                 <Textarea
-                  placeholder='일정에 대한 설명을 입력하세요'
+                  placeholder="일정에 대한 설명을 입력하세요"
                   value={newSchedule.description}
-                  onChange={(e) =>
-                    setNewSchedule({
-                      ...newSchedule,
-                      description: e.target.value,
-                    })
-                  }
+                  onChange={(e) => setNewSchedule({ ...newSchedule, description: e.target.value })}
+
                   rows={3}
                 />
               </div>
 
-              <div className='flex space-x-3 pt-4'>
-                <Button
-                  onClick={handleAddSchedule}
-                  className='flex-1 bg-green-200 hover:bg-green-300 text-green-800'
-                >
+              <div className="flex space-x-3 pt-4">
+                <Button onClick={handleAddSchedule} className="flex-1 bg-green-200 hover:bg-green-300 text-green-800">
                   추가
                 </Button>
-                <Button
-                  variant='outline'
-                  onClick={() => setShowAddScheduleModal(false)}
-                  className='flex-1'
-                >
+                <Button variant="outline" onClick={() => setShowAddScheduleModal(false)} className="flex-1">
+
                   취소
                 </Button>
               </div>

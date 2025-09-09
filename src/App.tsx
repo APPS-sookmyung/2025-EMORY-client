@@ -12,11 +12,14 @@ import LogoutConfirmPage from './pages/logout-confirm-page';
 import WithdrawalPage from './pages/withdrawal';
 import StartPage from './pages/start-page';
 import EmotionReportPage from './pages/emotion-report';
+
 import MonthWeekReport from './pages/month-week-report';
 import TimeCapsulePage from './pages/time-capsule';
 import DiaryWriting from './pages/diary-write';
 import DiaryPreview from './pages/diary-preview';
 import DiaryLibrary from './pages/diary-library';
+
+import MoodCalendar from './pages/calendar';
 
 function Router() {
   return (
@@ -30,7 +33,9 @@ function Router() {
       <Route path='/withdrawal' component={WithdrawalPage} />
       <Route path='/start-page' component={StartPage} />
       <Route path='/time-capsule' component={TimeCapsulePage} />
-      <Route path='/diary-write' component={DiaryWriting} />
+      <Route path='/calendar' component={MoodCalendar} />
+      {/*<Route component={NotFound} />*/}
+      <Route path='/diary/write' component={DiaryWriting} />
       <Route path='/diary-preview' component={DiaryPreview} />
       <Route path='/diary-library' component={DiaryLibrary} />
     </Switch>
