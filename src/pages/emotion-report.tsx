@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { ArrowLeft, Download, TrendingUp, Heart } from 'lucide-react';
+import LoadingScreen from '../components/common/LoadingScreen';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { useToast } from '../hooks/use-toast';
@@ -174,16 +175,7 @@ export default function EmotionReportPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className='gradient-mypage flex flex-col relative h-full'>
-        <div className='flex items-center justify-center h-full'>
-          <div className='text-center'>
-            <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4'></div>
-            <p className='text-gray-400'>감정 리포트를 분석하고 있습니다...</p>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="감정 리포트를 분석하고 있습니다" submessage="AI가 대화 내용을 분석중이에요" />;
   }
 
   if (!emotionReport) {
