@@ -232,7 +232,7 @@ export default function VoiceChat() {
       {/* Chat Messages Area */}
       <div
         ref={chatContainerRef}
-        className={`flex-1 overflow-y-auto px-4 pb-4 transition-all duration-300 ${isListening || isLoading ? 'chat-blur' : ''}`}
+        className={`flex-1 overflow-y-auto px-4 pb-4 transition-all duration-300 custom-scrollbar ${isListening || isLoading ? 'chat-blur' : ''}`}
         style={{ height: 'calc(844px - 300px)', minHeight: '500px' }}
       >
         {messages.map((message) => (
