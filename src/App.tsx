@@ -22,6 +22,7 @@ import DiaryLibrary from './pages/diary-library';
 import MoodCalendar from './pages/calendar';
 import NotFoundPage from './pages/not-found';
 import ErrorPage from './pages/error';
+import LoadingPage from './pages/loading';
 
 function Router() {
   return (
@@ -39,6 +40,7 @@ function Router() {
       <Route path='/diary/write' component={DiaryWriting} />
       <Route path='/diary-preview' component={DiaryPreview} />
       <Route path='/diary-library' component={DiaryLibrary} />
+      <Route path='/loading' component={LoadingPage} />
       <Route path='/error' component={ErrorPage} />
       <Route component={NotFoundPage} />
     </Switch>
