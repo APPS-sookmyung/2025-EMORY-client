@@ -10,7 +10,7 @@ interface ChatHeaderProps {
 export function ChatHeader({ onMenuClick, onProfileClick }: ChatHeaderProps) {
   const { open } = useSidebar();
   return (
-    <header className='flex items-center justify-between px-6 pt-14 pb-4 z-10'>
+    <header className='flex items-center justify-between p-4 flex-shrink-0 z-10'>
       <Button
         variant='ghost'
         size='icon'

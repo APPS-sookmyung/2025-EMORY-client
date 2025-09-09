@@ -130,7 +130,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
         </div>
 
         {/* Settings Content */}
-        <div className="flex-1 px-6 py-4 bg-white overflow-y-auto">
+        <div className="flex-1 px-6 py-4 bg-white overflow-y-auto custom-scrollbar">
           <div className="space-y-1">
             {/* Account Info */}
             <div className="flex items-center justify-between py-4 border-b border-gray-50">

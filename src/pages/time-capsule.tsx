@@ -7,15 +7,11 @@ import Hamburger from "../components/common/Hamburger"
 export default function TimeCapsulePage() {
   return (
     <div className="gradient-time-capsule">
-      {/* Header */}
-      <header className="grid grid-cols-3 items-center p-4">
-        <div className="justify-self-start">
-          <Hamburger />
-        </div>
-        <div className="justify-self-center">
-          <Tag className="w-8 h-8 text-pink-800" />
-        </div>
-        <div className="justify-self-end"></div>
+      {/* 헤더 */}
+      <header className="flex items-center justify-between p-4 flex-shrink-0">
+        <Hamburger />
+        <Tag className="w-8 h-8 text-pink-800" />
+        <div className="w-6"></div>
       </header>
 
       {/* Main Content */}

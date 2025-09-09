@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cute+Font&family=Comfortaa:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -94,7 +96,7 @@
   }
 
   .gradient-mypage {
-    background-image: url('@/assets/img/gradientbackground.png');
+    background-image: url('@/assets/img/home.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -319,5 +321,27 @@
   }
   .typing-dots span:nth-child(3) {
     animation-delay: 0.4s;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar{
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track{
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb{
+    background: rgba(0,0,0,0.2);
+    border-radius: 2px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover{
+    background:rgba(0, 0, 0, 0.3);
+  }
+
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.2) transparent;
   }
 }
