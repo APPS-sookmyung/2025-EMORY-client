@@ -3,4 +3,5 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "22"
+  ROLLUP_USE_WASM = "true" // 느리지만 오류 해결 가능
