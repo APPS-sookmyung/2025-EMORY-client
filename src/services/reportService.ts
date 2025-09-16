@@ -2,9 +2,10 @@ import type { WeeklyReportResponse, MonthlyReportResponse } from '../types/repor
 
 // API 타임아웃 설정 (10초)
 const API_TIMEOUT = 10000;
+void API_TIMEOUT; // 배포 중 오류 해소 위해
 
 // 타임아웃이 있는 fetch 함수
-const fetchWithTimeout = async (url: string, options: RequestInit = {}): Promise<Response> => {
+/* const fetchWithTimeout = async (url: string, options: RequestInit = {}): Promise<Response> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
 
@@ -22,21 +23,22 @@ const fetchWithTimeout = async (url: string, options: RequestInit = {}): Promise
     }
     throw error;
   }
-};
+}; */
 
 // JSON 응답 검증 함수
-const validateJsonResponse = async (response: Response): Promise<any> => {
+/* const validateJsonResponse = async (response: Response): Promise<any> => {
   const text = await response.text();
   try {
     return JSON.parse(text);
   } catch (error) {
     throw new Error(`Invalid JSON response: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
-};
+}; */
 
 // 나중에 실제 API 연결시 사용할 서비스
 export const reportService = {
   async getWeeklyReport(targetDate: string): Promise<WeeklyReportResponse> {
+    void targetDate; // 배포 중 TS6133 오류 해소
     // TODO: 실제 API 연결시 아래 주석 해제하고 더미 데이터 제거
     /*
     try {
@@ -88,6 +90,7 @@ export const reportService = {
   },
 
   async getMonthlyReport(yearMonth: string): Promise<MonthlyReportResponse> {
+    void yearMonth; // 배포 중 TS6133 해소
     // TODO: 실제 API 연결시 아래 주석 해제하고 더미 데이터 제거
     /*
     try {
