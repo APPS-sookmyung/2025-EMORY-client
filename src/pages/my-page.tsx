@@ -23,9 +23,9 @@ export default function MyPage() {
     navigate('/logout-confirm-page');
   };
 
-  const openCalendar = () => {
+  /* const openCalendar = () => {
     navigate('/calendar');
-  };
+  }; */
 
   return (
     // <GradientBackground variant="default"> {/* ✅ 수정됨: 전체 페이지를 GradientBackground로 감쌈 */}

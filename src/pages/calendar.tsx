@@ -2,7 +2,7 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronLeft, ChevronRight, Menu, Plus, X, User } from "lucide-react" // User 아이콘 추가
+import { ChevronLeft, ChevronRight, Plus, X, User } from "lucide-react" // User 아이콘 추가
 import { Button } from "../components/ui/button"
 import { Switch } from "../components/ui/switch"
 import { Input } from "../components/ui/input"
@@ -399,7 +399,7 @@ export default function MoodCalendar() {
     });
   };
 
-  const handleTalkToAgent = () => {
+  /* const handleTalkToAgent = () => {
     if (selectedScheduleIds.length > 0 && selectedDate) {
       const schedulesForAgent = selectedDateSchedules.filter((s) => selectedScheduleIds.includes(s.id))
       console.log("AI Agent와 대화할 일정:", schedulesForAgent)
@@ -409,7 +409,7 @@ export default function MoodCalendar() {
     } else {
       alert('먼저 일정을 하나 이상 선택해주세요.');
     }
-  };
+  };*/
 
   const selectedDiary =
     selectedDate && selectedDate <= today ? diaryData[selectedDate] : null;
