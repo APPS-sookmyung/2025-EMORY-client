@@ -45,7 +45,17 @@ const NotFoundPage: React.FC = () => {
           <Button asChild>
             <Link href="/">홈으로</Link>
           </Button>
-          <Button variant="outline" onClick={() => window.history.back()}>
+          <Button
+            variant="outline"
+            onClick={() => {
+              // Fallback to home if history is empty
+              if (window.history.length <= 1) {
+                window.location.href = '/';
+              } else {
+                window.history.back();
+              }
+            }}
+          >
             이전으로
           </Button>
         </div>

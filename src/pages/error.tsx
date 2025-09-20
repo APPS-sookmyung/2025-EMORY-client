@@ -87,7 +87,14 @@ const ErrorPage: React.FC = () => {
 
         <div className="flex justify-center">
           {/* 화면 폭이 좁으므로 작은 타일/간격 */}
-          <EmojiPixel404 images={icons} matrix={matrix} tile={14} gap={2} rotate={1} />
+          <EmojiPixel404
+            images={icons}
+            matrix={matrix}
+            tile={14}
+            gap={2}
+            rotate={1}
+            ariaLabel="Error message displayed as pixel art with emojis"
+          />
         </div>
 
         <div className="mt-10 flex items-center justify-center gap-3">
