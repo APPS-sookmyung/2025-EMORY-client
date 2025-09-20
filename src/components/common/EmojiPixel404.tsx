@@ -7,6 +7,7 @@ export interface EmojiPixel404Props {
   rotate?: number; // max random rotation in degrees
   matrix?: number[][]; // optional custom bitmap: 1 = emoji, 0 = empty
   spaceCols?: number; // digits spacing in columns when matrix not provided
+  ariaLabel?: string; // custom aria-label for accessibility
 }
 
 /*
@@ -69,7 +70,7 @@ function joinWithSpacing(a: number[][], b: number[][], spacingCols = 3): number[
   return A.map((row, r) => [...row, ...space, ...B[r]]);
 }
 
-export default function EmojiPixel404({ images, tile = 26, gap = 4, rotate = 0, matrix: custom, spaceCols = 2 }: EmojiPixel404Props) {
+export default function EmojiPixel404({ images, tile = 26, gap = 4, rotate = 0, matrix: custom, spaceCols = 2, ariaLabel }: EmojiPixel404Props) {
   const matrix = useMemo(() => {
     if (custom && custom.length && custom[0]?.length) return custom;
     const d4 = DIGIT_4;
@@ -79,13 +80,26 @@ export default function EmojiPixel404({ images, tile = 26, gap = 4, rotate = 0, 
     return all;
   }, [custom, spaceCols]);
 
+  // Early return if no images provided
+  if (!images || images.length === 0) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <p className="text-muted-foreground">No emoji images available</p>
+      </div>
+    );
+  }
+
   const rows = matrix.length;
   const cols = matrix[0]?.length ?? 0;
   const W = cols * tile + (cols - 1) * gap;
   const H = rows * tile + (rows - 1) * gap;
 
+  // Generate dynamic aria-label based on context
+  const defaultAriaLabel = custom ? "Pixel art display with emojis" : "404 error displayed as pixel art with emojis";
+  const finalAriaLabel = ariaLabel || defaultAriaLabel;
+
   return (
-    <svg width="100%" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="404 Pixel Emoji" className="mx-auto">
+    <svg width="100%" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={finalAriaLabel} className="mx-auto">
       {matrix.map((row, r) =>
         row.map((v, c) => {
           if (!v) return null;

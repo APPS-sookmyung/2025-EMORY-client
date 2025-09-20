@@ -25,9 +25,18 @@ export default function EmojiText({
 }: EmojiTextProps) {
   const [placed, setPlaced] = useState<Placed[]>([]);
 
+  // Generate unique clipPath ID to prevent conflicts
+  const clipPathId = useMemo(() => `roundedEmojiTile-${Math.random().toString(36).substr(2, 9)}`, []);
+
   const distMin = useMemo(() => (minDistance ?? tile * 0.82), [minDistance, tile]);
 
   useEffect(() => {
+    // Early return if no images provided
+    if (!images || images.length === 0) {
+      setPlaced([]);
+      return;
+    }
+
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
@@ -112,16 +121,25 @@ export default function EmojiText({
     setPlaced(tiles);
   }, [text, images, width, height, step, outline, distMin]);
 
+  // Early return if no images provided
+  if (!images || images.length === 0) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <p className="text-muted-foreground">No emoji images available</p>
+      </div>
+    );
+  }
+
   return (
     <svg width="100%" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={text} className="mx-auto">
       <defs>
-        <clipPath id="roundedEmojiTile" clipPathUnits="userSpaceOnUse">
+        <clipPath id={clipPathId} clipPathUnits="userSpaceOnUse">
           <rect x={-tile / 2} y={-tile / 2} width={tile} height={tile} rx={6} ry={6} />
         </clipPath>
       </defs>
       <g>
         {placed.map((p, i) => (
-          <g key={i} transform={`translate(${p.x}, ${p.y}) rotate(${p.a})`} clipPath="url(#roundedEmojiTile)">
+          <g key={i} transform={`translate(${p.x}, ${p.y}) rotate(${p.a})`} clipPath={`url(#${clipPathId})`}>
             <image href={p.src} x={-tile / 2} y={-tile / 2} width={tile} height={tile} preserveAspectRatio="xMidYMid slice" />
           </g>
         ))}
