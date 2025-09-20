@@ -217,8 +217,8 @@ export default function VoiceChat() {
       '대화를 종료하고 감정 리포트를 확인하시겠습니까?'
     );
     if (confirmed) {
-      // 감정 리포트 페이지로 이동
-      navigate('/emotion-report');
+      // 로딩 화면을 거쳐 감정 리포트로 이동
+      navigate('/loading?redirect=emotion-report');
     }
   };
 
