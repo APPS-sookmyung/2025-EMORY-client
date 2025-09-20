@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { emojiPool } from '../../assets/emojiPool';
 import gradientBg from '../../assets/img/gradientbackground.png';
 
@@ -9,23 +9,36 @@ interface LoadingScreenProps {
   submessage?: string;
 }
 
-const LoadingScreen: React.FC<LoadingScreenProps> = ({ 
+const LoadingScreen: React.FC<LoadingScreenProps> = ({
   message = "잠시만 기다려주세요",
   submessage = "감정을 불러오고 있어요"
 }) => {
   const [currentEmoji, setCurrentEmoji] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    if (icons.length === 0) return;
+
+    intervalRef.current = setInterval(() => {
       setIsVisible(false);
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setCurrentEmoji((prev) => (prev + 1) % icons.length);
         setIsVisible(true);
       }, 200);
     }, 800);
 
-    return () => clearInterval(interval);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
   }, []);
 
   return (
