@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'wouter';
 import { emojiPool } from '../assets/emojiPool';
 import gradientBg from '../assets/img/gradientbackground.png';
@@ -9,34 +9,67 @@ const LoadingPage: React.FC = () => {
   const [currentEmoji, setCurrentEmoji] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const [, navigate] = useLocation();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const loadingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    if (icons.length === 0) return;
+
+    intervalRef.current = setInterval(() => {
       setIsVisible(false);
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setCurrentEmoji((prev) => (prev + 1) % icons.length);
         setIsVisible(true);
       }, 200);
     }, 800);
 
-    return () => clearInterval(interval);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
   }, []);
 
   // 로딩 완료 후 리다이렉트 처리
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const redirectPage = urlParams.get('redirect');
-    
-    const loadingTimer = setTimeout(() => {
-      if (redirectPage) {
-        navigate(`/${redirectPage}`);
+
+    // Sanitize redirect parameter - only allow alphanumeric characters, hyphens, and slashes
+    const sanitizeRedirect = (redirect: string | null): string | null => {
+      if (!redirect) return null;
+      // Remove any potentially dangerous characters and only allow safe paths
+      const sanitized = redirect.replace(/[^a-zA-Z0-9\-\/]/g, '');
+      // Prevent directory traversal attacks
+      if (sanitized.includes('..') || sanitized.startsWith('//')) return null;
+      // Only allow specific known routes
+      const allowedRoutes = ['diary-write', 'diary-library', 'calendar', 'my-page', 'voice-chat', 'emotion-report'];
+      return allowedRoutes.includes(sanitized) ? sanitized : null;
+    };
+
+    const safeRedirectPage = sanitizeRedirect(redirectPage);
+
+    loadingTimerRef.current = setTimeout(() => {
+      if (safeRedirectPage) {
+        navigate(`/${safeRedirectPage}`, { replace: true });
       } else {
         // 기본적으로 홈으로 이동
-        navigate('/');
+        navigate('/', { replace: true });
       }
     }, 3000); // 3초 로딩
 
-    return () => clearTimeout(loadingTimer);
+    return () => {
+      if (loadingTimerRef.current) {
+        clearTimeout(loadingTimerRef.current);
+        loadingTimerRef.current = null;
+      }
+    };
   }, [navigate]);
 
   return (
@@ -104,7 +137,7 @@ const LoadingPage: React.FC = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes gentlePulse {
           0% { transform: scale(1); }
           100% { transform: scale(1.03); }
