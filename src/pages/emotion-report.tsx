@@ -307,11 +307,25 @@ export default function EmotionReportPage() {
               </div>
             </Card>
 
-            {/* 하단 저장 버튼 */}
-            <div className='pt-6 pb-8'>
+            {/* 하단 버튼들 */}
+            <div className='pt-6 pb-8 space-y-3'>
+              {/* 일기 작성하기 버튼 */}
+              <Button
+                onClick={() => {
+                  // 감정 리포트 데이터를 일기 작성 페이지로 전달하기 위해 loading 페이지를 거침
+                  navigate('/loading?redirect=diary-write');
+                }}
+                className='w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 rounded-2xl font-medium shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 border border-blue-500/30'
+              >
+                <Heart className='w-5 h-5' />
+                <span>✏️ 감정 일기 작성하기</span>
+              </Button>
+
+              {/* 감정 리포트 저장 버튼 */}
               <Button
                 onClick={handleSaveReport}
-                className='w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-4 rounded-2xl font-medium shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 border border-purple-500/30'
+                variant="outline"
+                className='w-full bg-white/10 hover:bg-white/20 text-gray-400 border-gray-400/30 py-4 rounded-2xl font-medium transition-all duration-300 flex items-center justify-center space-x-2'
               >
                 <Download className='w-5 h-5' />
                 <span>↓ 감정 리포트 저장하기</span>
