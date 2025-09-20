@@ -106,7 +106,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes gentlePulse {
           0% { transform: scale(1); }
           100% { transform: scale(1.03); }
