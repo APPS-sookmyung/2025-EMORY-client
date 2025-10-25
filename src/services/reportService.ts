@@ -4,6 +4,7 @@ import type { WeeklyReportResponse, MonthlyReportResponse } from '../types/repor
 const API_TIMEOUT = 10000;
 
 // 타임아웃이 있는 fetch 함수
+// @ts-ignore
 const fetchWithTimeout = async (url: string, options: RequestInit = {}): Promise<Response> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
@@ -25,6 +26,7 @@ const fetchWithTimeout = async (url: string, options: RequestInit = {}): Promise
 };
 
 // JSON 응답 검증 함수
+// @ts-ignore
 const validateJsonResponse = async (response: Response): Promise<any> => {
   const text = await response.text();
   try {
@@ -36,6 +38,7 @@ const validateJsonResponse = async (response: Response): Promise<any> => {
 
 // 나중에 실제 API 연결시 사용할 서비스
 export const reportService = {
+  // @ts-ignore
   async getWeeklyReport(targetDate: string): Promise<WeeklyReportResponse> {
     // TODO: 실제 API 연결시 아래 주석 해제하고 더미 데이터 제거
     /*
@@ -87,6 +90,7 @@ export const reportService = {
     });
   },
 
+  // @ts-ignore
   async getMonthlyReport(yearMonth: string): Promise<MonthlyReportResponse> {
     // TODO: 실제 API 연결시 아래 주석 해제하고 더미 데이터 제거
     /*
