@@ -26,7 +26,6 @@ export default function VoiceChat() {
     startListening,
     stopListening,
     resetTranscript,
-    processTranscript,
     isSupported,
   } = useSpeechRecognition();
 
