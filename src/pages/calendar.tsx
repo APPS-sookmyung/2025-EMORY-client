@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Menu, Plus, X, User } from 'lucide-react'; // User 아이콘 추가
+import { ChevronLeft, ChevronRight, Plus, X, User } from 'lucide-react'; // User 아이콘 추가
 import { Button } from '../components/ui/button';
 import { Switch } from '../components/ui/switch';
 import { Input } from '../components/ui/input';
