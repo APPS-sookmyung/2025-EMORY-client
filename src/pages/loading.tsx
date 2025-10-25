@@ -13,6 +13,32 @@ const LoadingPage: React.FC = () => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const loadingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // URL에서 redirect 파라미터를 가져와서 메시지 결정
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirectPage = urlParams.get('redirect');
+
+  const getLoadingMessage = () => {
+    switch (redirectPage) {
+      case 'emotion-report':
+        return {
+          message: "감정을 분석하고 있어요",
+          submessage: "AI가 대화 내용을 바탕으로 감정을 분석중이에요"
+        };
+      case 'diary-write':
+        return {
+          message: "일기 작성 준비 중이에요",
+          submessage: "감정 분석 결과를 바탕으로 일기 작성을 도와드릴게요"
+        };
+      default:
+        return {
+          message: "잠시만 기다려주세요",
+          submessage: "감정을 불러오고 있어요"
+        };
+    }
+  };
+
+  const { message, submessage } = getLoadingMessage();
+
   useEffect(() => {
     if (icons.length === 0) return;
 
@@ -89,8 +115,8 @@ const LoadingPage: React.FC = () => {
 
       <div className="relative max-w-[440px] w-full">
         <header className="mb-8">
-          <h1 className="text-xl font-bold">잠시만 기다려주세요</h1>
-          <p className="mt-2 text-sm text-muted-foreground">감정을 불러오고 있어요</p>
+          <h1 className="text-xl font-bold">{message}</h1>
+          <p className="mt-2 text-sm text-muted-foreground">{submessage}</p>
         </header>
 
         {/* Large animated emoji */}
