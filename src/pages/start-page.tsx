@@ -1,6 +1,5 @@
 "use client"
 
-import { useLocation } from "wouter"
 import { Button } from "../components/ui/button"
 import { GoogleIcon, AppleIcon, KakaoIcon } from "../components/ui/socialicons"
 import Hamburger from "../components/common/Hamburger"
@@ -8,7 +7,6 @@ import { useToast } from '../hooks/use-toast';
 
 
 export default function StartPage() {
-  const [, navigate] = useLocation()
   const { toast } = useToast();
 
   const handleGoogleLogin = () => {
