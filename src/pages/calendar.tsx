@@ -1,12 +1,13 @@
 
-"use client"
+'use client';
 
-import { useState } from "react"
-import { ChevronLeft, ChevronRight, Plus, X, User } from "lucide-react" // User 아이콘 추가
-import { Button } from "../components/ui/button"
-import { Switch } from "../components/ui/switch"
-import { Input } from "../components/ui/input"
-import { Textarea } from "../components/ui/textarea"
+import { useState } from 'react';
+import { ChevronLeft, ChevronRight, Plus, X, User } from 'lucide-react'; // User 아이콘 추가
+import { Button } from '../components/ui/button';
+import { Switch } from '../components/ui/switch';
+import { Input } from '../components/ui/input';
+import { Textarea } from '../components/ui/textarea';
+
 import { useLocation } from 'wouter';
 import { useToast } from "../hooks/use-toast";
 import Hamburger from "../components/common/Hamburger"
@@ -399,17 +400,6 @@ export default function MoodCalendar() {
     });
   };
 
-  /* const handleTalkToAgent = () => {
-    if (selectedScheduleIds.length > 0 && selectedDate) {
-      const schedulesForAgent = selectedDateSchedules.filter((s) => selectedScheduleIds.includes(s.id))
-      console.log("AI Agent와 대화할 일정:", schedulesForAgent)
-      alert(`AI Agent와 대화: ${schedulesForAgent.map((s) => s.title).join(", ")}`)
-
-      // 여기서 agent로 이동동
-    } else {
-      alert('먼저 일정을 하나 이상 선택해주세요.');
-    }
-  };*/
 
   const selectedDiary =
     selectedDate && selectedDate <= today ? diaryData[selectedDate] : null;
