@@ -77,6 +77,24 @@
 }
 
 @layer components {
+  .gradient-calendar{
+    background: linear-gradient(
+      to bottom,
+      #86efac 0%,
+      #bbf7d0 25%,
+      #dcfce7 50%,
+      #f0fdf4 75%,
+      #ffffff 100%
+    );
+    width: 480px;
+    height: 844px;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(134, 239, 172, 0.3);
+  }
+
   .gradient-bg {
     background: linear-gradient(
       to bottom,
@@ -107,6 +125,29 @@
     overflow: hidden;
     border-radius: 20px;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar{
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track{
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb{
+    background: rgba(0,0,0,0.2);
+    border-radius: 2px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover{
+    background:rgba(0, 0, 0, 0.3);
+  }
+
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.2) transparent;
+    }
   }
 
   .gradient-time-capsule-page{
@@ -154,7 +195,6 @@
     overflow: hidden;
     border-radius: 20px;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
-  }
 }
 .voice-button-gradient {
   background: linear-gradient(145deg, hsl(266, 83%, 65%), hsl(262, 83%, 58%));

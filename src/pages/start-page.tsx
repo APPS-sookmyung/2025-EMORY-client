@@ -7,6 +7,9 @@ import { useToast } from '../hooks/use-toast';
 
 
 export default function StartPage() {
+  // const [, navigate] = useLocation()
+  useLocation();
+
   const { toast } = useToast();
 
   const handleGoogleLogin = () => {
