@@ -1,12 +1,15 @@
 import { useMemo, useState, useRef, useEffect } from "react";
 import {
   Menu, CircleUserRound, CircleCheckBig,
-  CircleDashed, Volume2, VolumeOff, Images as ImageIcon, X, Loader2, Wand2
+  CircleDashed, Images as ImageIcon, X, Loader2, Wand2
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { useToast } from "../hooks/use-toast";
 import { useLocation } from "wouter";
 import { useSidebar } from "../components/sidebar/SidebarContext";
+import { CloudSun, CloudRain, Snowflake, Cloud, Sun } from "lucide-react";
+
+
 
 // 이모지 경로
 import angryEmoji from "../assets/img/emotion/angry-emoji.png";
@@ -21,7 +24,19 @@ export default function DiaryWriting() {
   const [isCompleted, setIsCompleted] = useState(false);
   const { toast } = useToast();
   const [, navigate] = useLocation();
-  const [isMuted, setIsMuted] = useState(false);
+
+  // 상태 추가
+  const [showWeatherPicker, setShowWeatherPicker] = useState(false);
+  const [selectedWeather, setSelectedWeather] = useState("");
+
+  // const [isMuted, setIsMuted] = useState(false);
+  const WEATHER_OPTIONS = [
+    { icon: <Sun className="text-yellow-400" />, label: "맑음" },
+    { icon: <CloudSun className="text-orange-400" />, label: "구름" },
+    { icon: <CloudRain className="text-blue-400" />, label: "비" },
+    { icon: <Snowflake className="text-sky-300" />, label: "눈" },
+    { icon: <Cloud className="text-gray-400" />, label: "흐림" },
+  ];
 
   // 모달 상태 & 선택 옵션
   const [isFeedbackOpen, setFeedbackOpen] = useState(false);
@@ -196,21 +211,49 @@ export default function DiaryWriting() {
             >
               <CircleDashed className="stroke-white" />
             </button>
+            
+            {/* 날씨 이모지 선택 */}
+            <div className="relative">
+              <button
+                type="button"
+                aria-label="날씨 선택"
+                onClick={() => setShowWeatherPicker(v => !v)}
+                className="h-11 w-11 p-0 rounded-full hover:bg-white/30 flex items-center justify-center [&_svg]:size-7"
+              >
+                {selectedWeather
+                  ? WEATHER_OPTIONS.find(w => w.label === selectedWeather)?.icon
+                  : <Sun className="stroke-white" />}
+              </button>
 
-            {/* 음악 */}
-            {/* 음악 (볼륨 토글) */}
-            <button
-              type="button"
-              aria-label="음악"
-              onClick={() => setIsMuted(v => !v)}
-              className="h-11 w-11 p-0 rounded-full hover:bg-white/30 flex items-center justify-center [&_svg]:size-7"
-            >
-              {isMuted ? (
-                <VolumeOff className="stroke-white" />
-              ) : (
-                <Volume2 className="stroke-white" />
+              {showWeatherPicker && (
+                <div className="absolute top-12 left-[180%] -translate-x-1/2
+             z-30 bg-white rounded-xl shadow-lg p-3
+             w-[250px] text-center"
+                >
+                  <p className="text-slate-600 text-sm mb-2 text-center">오늘의 날씨를 선택하세요 ☁️</p>
+                  <div className="flex items-center justify-center gap-3">
+                    {WEATHER_OPTIONS.map(({ icon, label }) => (
+                      <button
+                        key={label}
+                        type="button"
+                        onClick={() => {
+                          setSelectedWeather(label);
+                          setShowWeatherPicker(false);
+                        }}
+                        title={label}
+                        className={`h-10 w-10 rounded-full flex items-center justify-center 
+              border transition ${selectedWeather === label
+                            ? "border-blue-400 bg-blue-50"
+                            : "border-transparent hover:bg-slate-100"}`}
+                      >
+                        {icon}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
-            </button>
+            </div>
+
 
 
             {/* 이모지 */}
