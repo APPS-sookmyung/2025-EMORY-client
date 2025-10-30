@@ -42,13 +42,10 @@ function Router() {
       <Route path='/diary-write' component={DiaryWriting} />
       <Route path='/diary-preview' component={DiaryPreview} />
       <Route path='/diary-library' component={DiaryLibrary} />
-<<<<<<< HEAD
+
       <Route path='/loading' component={LoadingPage} />
       <Route path='/error' component={ErrorPage} />
       <Route component={NotFoundPage} />
-=======
-
->>>>>>> 4320079 (feat: 일기 미리보기 페이지 구현)
     </Switch>
   );
 }
