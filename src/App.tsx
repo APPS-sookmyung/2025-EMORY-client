@@ -35,11 +35,14 @@ function Router() {
       <Route path='/logout-confirm-page' component={LogoutConfirmPage} />
       <Route path='/withdrawal' component={WithdrawalPage} />
       <Route path='/start-page' component={StartPage} />
+
       <Route path='/time-capsule' component={TimeCapsulePage} />
+
       <Route path='/calendar' component={MoodCalendar} />
       <Route path='/diary-write' component={DiaryWriting} />
       <Route path='/diary-preview' component={DiaryPreview} />
       <Route path='/diary-library' component={DiaryLibrary} />
+
       <Route path='/loading' component={LoadingPage} />
       <Route path='/error' component={ErrorPage} />
       <Route component={NotFoundPage} />
@@ -52,7 +55,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <SidebarProvider>
+
           <div className='min-h-dvh bg-gray-100 flex items-center justify-center p-4'>
+
             <Toaster />
             <div
               className='relative overflow-hidden'

@@ -23,8 +23,9 @@ export default function DiaryLibrary() {
       `}</style>
 
             <div className="w-full h-full rounded-3xl bg-gradient-to-b from-[#A1CBFF] to-white shadow-xl flex flex-col min-h-0">
-                {/* 헤더 */}
-                <header className="flex items-center justify-between p-4 flex-shrink-0">
+
+                {/* 상단바 */}
+                <header className="w-full h-[112px] px-4 flex items-end pb-3 border-b border-white/50">
                     <div className="w-full flex items-center justify-between">
                         <Button
                             variant="ghost"
@@ -55,7 +56,8 @@ export default function DiaryLibrary() {
                     className="
             flex-1 min-h-0 px-3 md:px-4
             pb-[calc(env(safe-area-inset-bottom)+32px)]
-            overflow-y-auto custom-scrollbar scroll-smooth
+
+            overflow-y-auto no-scrollbar scroll-smooth
           "
                 >
                     {/* 토글 */}
