@@ -113,7 +113,7 @@ const LoadingPage: React.FC = () => {
         }}
       />
 
-      <div className="relative max-w-[440px] w-full">
+      <div className="relative max-w-[440px] md:max-w-2xl lg:max-w-3xl w-full">
         <header className="mb-8">
           <h1 className="text-xl font-bold">{message}</h1>
           <p className="mt-2 text-sm text-muted-foreground">{submessage}</p>
