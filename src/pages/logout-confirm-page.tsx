@@ -39,7 +39,7 @@ export default function LogoutConfirmPage() {
           </div>
 
         <div className="flex items-center justify-center min-h-[75vh]">
-          <Card className="bg-white/90 backdrop-blur-sm p-6 mx-4 rounded-lg shadow-lg max-w-sm w-full">
+          <Card className="bg-white/90 backdrop-blur-sm p-6 mx-4 rounded-lg shadow-lg max-w-sm md:max-w-md lg:max-w-lg w-full">
             <div className="text-center">
               <div className="mb-4">
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
