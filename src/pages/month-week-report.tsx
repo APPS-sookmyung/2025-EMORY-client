@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSidebar } from '../components/sidebar/SidebarContext';
 import { Sparkles, Cloud, Brain, AlertTriangle, Menu } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -93,41 +93,68 @@ const createDummyReportData = (): {
   return { weekly: weeklyData, monthly: monthlyData };
 };
 
-// 원형 차트 컴포넌트
-const CircularChart = ({ data }: { data: CategoryData[] }) => {
+// 원형 차트 컴포넌트 (반응형)
+const CircularChart = ({
+  data,
+  maxSize = 240,
+  minSize = 120,
+}: {
+  data: CategoryData[];
+  maxSize?: number;
+  minSize?: number;
+}) => {
   const [isAnimated, setIsAnimated] = useState(false);
-  const size = 120;
-  const strokeWidth = 12;
-  const radius = (size - strokeWidth) / 2;
+  const [size, setSize] = useState(minSize);
+  const chartRef = useRef<HTMLDivElement | null>(null);
+
+  const strokeWidth = Math.max(10, Math.round(size / 12));
+  const baseRadius = (size - strokeWidth) / 2;
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsAnimated(true);
-    }, 500);
+    const timer = setTimeout(() => setIsAnimated(true), 500);
     return () => clearTimeout(timer);
   }, []);
 
+  // 컨테이너 너비에 맞춰 차트 크기 조정
+  useEffect(() => {
+    if (!chartRef.current) return;
+    const el = chartRef.current;
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const w = Math.floor(entry.contentRect.width);
+        const s = Math.max(minSize, Math.min(maxSize, w));
+        setSize(s);
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [maxSize, minSize]);
+
   return (
-    <div className='relative'>
-      <svg 
-        width={size} 
-        height={size} 
-        className='transform -rotate-90'
+    <div className='relative w-full' ref={chartRef}>
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        className='transform -rotate-90 block mx-auto'
         role='img'
-        aria-label={`원형 차트: 감정 분포를 보여주는 차트입니다. ${data.map(cat => `${cat.name} ${cat.percentage}%`).join(', ')}`}
+        aria-label={`원형 차트: 감정 분포를 보여주는 차트입니다. ${data
+          .map((cat) => `${cat.name} ${cat.percentage}%`) 
+          .join(', ')}`}
+        preserveAspectRatio='xMidYMid meet'
       >
         {/* 배경 원 */}
         <circle
           cx={size / 2}
           cy={size / 2}
-          r={radius}
+          r={baseRadius}
           stroke='#d1d5db'
           strokeWidth={strokeWidth}
           fill='none'
         />
         {/* 데이터 원들 */}
         {data.map((category, index) => {
-          const currentRadius = radius - index * (strokeWidth + 4);
+          const currentRadius = Math.max(8, baseRadius - index * (strokeWidth + 4));
           const ringCircumference = 2 * Math.PI * currentRadius;
           const strokeDasharray = ringCircumference;
           const targetOffset = ringCircumference - (category.percentage / 100) * ringCircumference;
@@ -147,7 +174,7 @@ const CircularChart = ({ data }: { data: CategoryData[] }) => {
               cy={size / 2}
               r={currentRadius}
               stroke={colorMap[category.color]}
-              strokeWidth={strokeWidth - 2}
+              strokeWidth={Math.max(6, strokeWidth - 2)}
               fill='none'
               strokeDasharray={strokeDasharray}
               strokeDashoffset={strokeDashoffset}
@@ -237,11 +264,12 @@ const ReportCard = ({ title, data }: { title: string; data: ReportData }) => {
       <Card className='bg-white/40 backdrop-blur-sm border-white/60 p-6 shadow-lg'>
         <div className='space-y-4'>
 
-          {/* 차트와 범례 */}
-          <div className='flex items-center justify-center space-x-8'>
-            <CircularChart data={data.categories} />
-
-            <div className='flex-1 space-y-4'>
+          {/* 차트와 범례: 모바일 스택 → md+ 2열 */}
+          <div className='row'>
+            <div className='col-12 col-md-5 flex items-center justify-center mb-3 mb-md-0'>
+              <CircularChart data={data.categories} />
+            </div>
+            <div className='col-12 col-md-7 space-y-4'>
               {data.categories.map((category, index) => {
                 const IconComponent: Record<EmotionIcon, typeof Sparkles> = {
                   sparkles: Sparkles,
