@@ -101,7 +101,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
       {/* Modal - 3/4 height */}
       <div
         ref={modalRef}
-        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-white z-50 transition-transform duration-300 ease-out h-3/4 rounded-t-3xl ${
+        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm md:max-w-md lg:max-w-lg bg-white z-50 transition-transform duration-300 ease-out h-3/4 rounded-t-3xl ${
           isOpen ? "translate-y-0" : "translate-y-full"
         } `}
         style={{
