@@ -1,4 +1,5 @@
 import { Switch, Route } from 'wouter';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import { queryClient } from './lib/queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from './components/ui/toaster';
@@ -55,17 +56,16 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <SidebarProvider>
-
-          <div className='min-h-dvh bg-gray-100 flex items-center justify-center p-4'>
-
+          <div className='min-h-dvh bg-gray-100'>
             <Toaster />
-            <div
-              className='relative overflow-hidden'
-              style={{ width: 480, height: 844, borderRadius: '20px' }}
-            >
-              <Router />
-              {/* 글로벌 사이드바 */}
-              <Sidebar />
+            <div className='app-shell'>
+              <div className='relative overflow-hidden w-full min-h-dvh rounded-2xl'>
+                <ErrorBoundary>
+                  <Router />
+                </ErrorBoundary>
+                {/* 글로벌 사이드바 */}
+                <Sidebar />
+              </div>
             </div>
           </div>
         </SidebarProvider>

@@ -316,7 +316,7 @@ export default function DiaryWriting() {
           <section className="mt-6 pb-4">
             {images.length > 0 ? (
               <>
-                <div className="grid grid-cols-3 gap-3 max-w-[280px] mx-auto">
+                <div className="grid grid-cols-3 gap-3 max-w-[280px] md:max-w-md lg:max-w-lg mx-auto">
                   {images.map((src, idx) => (
                     <div key={idx} className="relative group">
                       <img
@@ -358,7 +358,7 @@ export default function DiaryWriting() {
               </>
             ) : (
               // 이미지 없을 때: 박스 안에 버튼
-              <div className="border-2 border-dashed border-gray-400 rounded-2xl p-8 text-center bg-gray-100 flex flex-col items-center justify-center max-w-[280px] mx-auto">
+              <div className="border-2 border-dashed border-gray-400 rounded-2xl p-8 text-center bg-gray-100 flex flex-col items-center justify-center max-w-[280px] md:max-w-md lg:max-w-lg mx-auto">
                 <ImageIcon className="h-8 w-8 text-slate-600 mb-3" />
                 <p className="text-slate-700 text-sm mb-4">No images have been created</p>
                 <Button
@@ -397,7 +397,7 @@ export default function DiaryWriting() {
             aria-modal="true"
             aria-labelledby="ai-feedback-title"
           >
-            <div className="w-full max-w-[420px] rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">
+            <div className="w-full max-w-[420px] md:max-w-lg lg:max-w-xl rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">
               <div className="px-6 pt-6 pb-3 text-center">
                 <h2 id="ai-feedback-title" className="text-xl font-semibold text-slate-900">
                   Feedback of AI Diary

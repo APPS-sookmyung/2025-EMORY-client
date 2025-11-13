@@ -130,48 +130,67 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
       </AnimatePresence>
 
       {/* Modal - 3/4 height */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            ref={modalRef}
-            initial={{
-              y: "100%",
-              opacity: 0,
-              scale: 0.95,
-            }}
-            animate={{
-              y: dragY,
-              opacity: 1,
-              scale: 1,
-            }}
-            exit={{
-              y: "100%",
-              opacity: 0,
-              scale: 0.95,
-            }}
-            transition={{
-              type: "spring",
-              damping: 30,
-              stiffness: 300,
-              mass: 0.8,
-              duration: isDragging ? 0 : undefined,
-            }}
-            className="fixed bottom-0  left-2/5 w-[480px] bg-white z-50 h-3/4 rounded-t-3xl shadow-2xl"
-            style={{
-              transform: `translate(-50%) translateY(${dragY}px)`,
-              transition: isDragging ? "none" : undefined,
-            }}
-          >
-            {/* Drag Handle */}
-            <motion.div
-              className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing bg-white rounded-t-3xl"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              onMouseDown={handleMouseDown}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.3 }}
+      <div
+        ref={modalRef}
+        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm md:max-w-md lg:max-w-lg bg-white z-50 transition-transform duration-300 ease-out h-3/4 rounded-t-3xl ${
+          isOpen ? "translate-y-0" : "translate-y-full"
+        } `}
+        style={{
+          transform: isOpen ? `translateX(-50%) translateY(${dragY}px)` : "translateX(-50%) translateY(100%)",
+          transition: isDragging ? "none" : "transform 0.3s ease-out",
+        }}
+      >
+        {/* Drag Handle */}
+        <div
+          className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing bg-white rounded-t-3xl"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+        >
+          <div className="w-10 h-1 bg-gray-300 rounded-full" />
+        </div>
+
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white">
+          <button onClick={onClose}>
+            <ArrowLeft className="w-6 h-6 text-gray-600" />
+          </button>
+          <h2 className="text-lg font-medium text-gray-800">설정</h2>
+          <div className="w-6" />
+        </div>
+
+        {/* Settings Content */}
+        <div className="flex-1 px-6 py-4 bg-white overflow-y-auto custom-scrollbar">
+          <div className="space-y-1">
+            {/* Account Info */}
+            <div className="flex items-center justify-between py-4 border-b border-gray-50">
+              <div className="flex items-center space-x-3">
+                <Mail className="w-5 h-5 text-gray-500" />
+                <div>
+                  <div className="text-sm font-medium text-gray-800">로그인된 계정</div>
+                  <div className="text-xs text-gray-500">rey@gmail.com</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Subscription */}
+            <div className="flex items-center justify-between py-4 border-b border-gray-50">
+              <div className="flex items-center space-x-3">
+                <Clock className="w-5 h-5 text-gray-500" />
+                <div>
+                  <div className="text-sm font-medium text-gray-800">구독 활동</div>
+                  <div className="text-xs text-gray-500">Emory Plus</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Member Withdrawal */}
+            <button
+              onClick={() => {
+                window.location.href = "/withdrawal"
+              }}
+              className="flex items-center justify-between w-full py-4 border-b border-gray-50 hover:bg-gray-50 rounded-lg px-2 -mx-2"
             >
               <motion.div
                 className="w-10 h-1 bg-gray-300 rounded-full"

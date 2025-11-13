@@ -69,14 +69,34 @@
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    min-height: 100dvh; /* 모바일 주소창 높이 변화 대응 */
   }
 }
 
 @layer components {
+  /* 페이지 공통 래퍼: 데스크탑에서도 적당한 폭 유지 */
+  .app-shell {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 1rem;
+    max-width: 480px;   /* 기본(모바일) */
+  }
+  @media (min-width: 768px) {   /* md (태블릿) */
+    .app-shell { max-width: 600px; padding-inline: 1.5rem; }
+  }
+  @media (min-width: 1024px) {  /* lg (데스크탑) */
+    .app-shell { max-width: 720px; padding-inline: 2rem; }
+  }
+  @media (min-width: 1280px) {  /* xl (큰 데스크탑) */
+    .app-shell { max-width: 720px; } /* 데스크탑에서는 더 이상 넓어지지 않음 */
+  }
+
+  /* 배경 패널은 높이를 '100%' 대신 min-height로 */
+  .panel {
+    border-radius: 20px;
+    min-height: calc(100dvh - 4rem);
+  }
+
   .gradient-calendar{
     background: linear-gradient(
       to bottom,
@@ -86,8 +106,8 @@
       #f0fdf4 75%,
       #ffffff 100%
     );
-    width: 480px;
-    height: 844px;
+    width: 100%;
+    min-height: 100dvh;
     margin: 0;
     position: relative;
     overflow: hidden;
@@ -104,8 +124,8 @@
       #f3e8ff 75%,
       #ffffff 100%
     );
-    width: 480px;
-    height: 844px;
+    width: 100%;
+    min-height: 100dvh;
     margin: 0;
     position: relative;
     overflow: hidden;
@@ -118,13 +138,58 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    width: 480px;
-    height: 844px;
+    width: 100%;
+    min-height: 100dvh;
     margin: 0;
     position: relative;
     overflow: hidden;
     border-radius: 20px;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .gradient-time-capsule-page{
+    background-image: url('@/assets/img/time_capsule.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    min-height: 100dvh;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .gradient-time-capsule {
+    background: linear-gradient(
+      to bottom,
+      #f98fab 0%,
+      #fcd6e0 35%,
+      #feeaf2 70%,
+      #ffffff 100%
+    );
+    width: 100%;
+    min-height: 100dvh;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+  }
+
+  .gradient-emotion-report {
+    background-image: url('@/assets/img/home.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    min-height: 100dvh;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
   }
 
   .custom-scrollbar::-webkit-scrollbar{
@@ -147,58 +212,12 @@
   .custom-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: rgba(0,0,0,0.2) transparent;
-    }
   }
-
-  .gradient-time-capsule-page{
-    
-    background-image: url('@/assets/img/time_capsule.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 480px;
-    height: 844px;
-    margin: 0;
-    position: relative;
-    overflow: hidden;
-    border-radius: 20px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-  }
-
-  .gradient-time-capsule {
-    background: linear-gradient(
-      to bottom,
-      #f98fab 0%,
-      #fcd6e0 35%,
-      #feeaf2 70%,
-      #ffffff 100%  
-    );
-    width: 480px;
-    height: 844px;
-    margin: 0;
-    position: relative;
-    overflow: hidden;
-    border-radius: 20px;
-    box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
-  }
-
-
-  .gradient-emotion-report {
-    background-image: url('@/assets/img/home.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 480px;
-    height: 844px;
-    margin: 0;
-    position: relative;
-    overflow: hidden;
-    border-radius: 20px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
 }
 .voice-button-gradient {
   background: linear-gradient(145deg, hsl(266, 83%, 65%), hsl(262, 83%, 58%));
 }
+
 
 .voice-button-shadow {
   box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
@@ -387,3 +406,5 @@
     scrollbar-color: rgba(0,0,0,0.2) transparent;
   }
 }
+
+/* 페이지 최상위 컨테이너는 Tailwind 클래스(반응형 max-w)로 제어합니다. */
