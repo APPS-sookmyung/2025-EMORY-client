@@ -383,6 +383,7 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar{
+    display: none;
     width: 4px;
   }
 
@@ -400,7 +401,8 @@
   }
 
   .custom-scrollbar {
-    scrollbar-width: thin;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     scrollbar-color: rgba(0,0,0,0.2) transparent;
   }
 }
