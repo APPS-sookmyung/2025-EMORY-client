@@ -5,7 +5,6 @@ import { Button } from "../components/ui/button"
 import { GoogleIcon, AppleIcon, KakaoIcon } from "../components/ui/socialicons"
 import Hamburger from "../components/common/Hamburger"
 import { useToast } from '../hooks/use-toast';
-import { useLocation } from "wouter";
 
 
 export default function StartPage() {

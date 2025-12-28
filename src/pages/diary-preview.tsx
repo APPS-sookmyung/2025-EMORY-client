@@ -12,18 +12,19 @@ import {
 /* ========= 타입 & 더미 데이터 ========= */
 type DiaryItem = {
   id: string;
-  dateLabel: string; // "7/1"
+  dateLabel: string;
   hasContent: boolean; // 내용 유무
   bookmarked?: boolean;
+  imageUrl?: string; // 이미지 삽입
 };
 
 const MOCK: DiaryItem[] = [
-  { id: "d1", dateLabel: "6/28", hasContent: true },
-  { id: "d2", dateLabel: "6/29", hasContent: true },
-  { id: "d3", dateLabel: "6/30", hasContent: true },
-  { id: "d4", dateLabel: "7/1", hasContent: false },
-  { id: "d5", dateLabel: "7/2", hasContent: true },
-  { id: "d6", dateLabel: "7/3", hasContent: true },
+  { id: "d1", dateLabel: "12/25", hasContent: true, imageUrl: 'https://images.unsplash.com/photo-1519681393784-d120267933ba', },
+  { id: "d2", dateLabel: "12/26", hasContent: true, imageUrl: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee', },
+  { id: "d3", dateLabel: "12/27", hasContent: true, imageUrl: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9', },
+  { id: "d4", dateLabel: "12/28", hasContent: false },
+  { id: "d5", dateLabel: "12/29", hasContent: true },
+  { id: "d6", dateLabel: "12/30", hasContent: true },
 ];
 
 /* ========= 휠/터치로 인덱스 전환(쓰로틀) ========= */
@@ -86,8 +87,19 @@ function DiaryCard({
       {/* 본문 */}
       <div className="w-full h-full flex items-center justify-center">
         {item.hasContent ? (
-          // 내용이 있는 날은 단순 플레이스홀더 박스만
-          <div className="w-[88%] h-[70%] rounded-xl bg-white/20 flex items-center justify-center text-white/70" />
+          <div className="w-[88%] h-[70%] rounded-xl overflow-hidden shadow-inner">
+            {item.imageUrl ? (
+              <img
+                src={item.imageUrl}
+                alt={`${item.dateLabel} diary`}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-white/20 flex items-center justify-center text-white/70">
+                No Image
+              </div>
+            )}
+          </div>
         ) : (
           // 내용이 없는 날: + 버튼 → 일기 작성 라우팅
           <button

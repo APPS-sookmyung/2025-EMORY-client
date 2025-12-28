@@ -5,10 +5,48 @@ import ToggleSwitch from "../components/ui/ToggleSwitch";
 import { Menu, CircleUserRound } from "lucide-react";
 
 /* ========= 더미 데이터 ========= */
-const LIBRARY: { year: number; items: number }[] = [
-    { year: 2024, items: 12 },
-    { year: 2025, items: 12 },
+type LibraryMonth = {
+    year: string;
+    images: (string | null)[];
+};
+
+const LIBRARY: LibraryMonth[] = [
+    {
+        year: "2025.11",
+        images: [
+            "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+            null,
+            "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
+            "https://images.unsplash.com/photo-1502082553048-f009c37129b9",
+            null,
+            null,
+            null,
+            null,
+            null,
+            "https://images.unsplash.com/photo-1494526585095-c41746248156",
+            null,
+            null,
+
+        ],
+    },
+    {
+        year: "2025.12",
+        images: [
+            "https://images.unsplash.com/photo-1511765224389-37f0e77cf0eb",
+            "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d",
+            null,
+            null,
+            null,
+            null,
+            "https://images.unsplash.com/photo-1441974231531-c6227db76b6e",
+            "https://images.unsplash.com/photo-1519681393784-d120267933ba",
+            "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+            "https://images.unsplash.com/photo-1502082553048-f009c37129b9",
+
+        ],
+    },
 ];
+
 
 export default function DiaryLibrary() {
     const [, navigate] = useLocation();
@@ -68,24 +106,40 @@ export default function DiaryLibrary() {
 
                     {/* 연도별 라이브러리 */}
                     <div className="mt-6 space-y-10">
-                        {LIBRARY.map(({ year, items }) => (
+                        {LIBRARY.map(({ year, images }) => (
                             <section key={year}>
-                                <h2 className="text-lg font-semibold text-gray-500 mb-3 px-4">{year}</h2>
+                                <h2 className="text-lg font-semibold text-gray-500 mb-3 px-4">
+                                    {year}
+                                </h2>
+
                                 <div className="grid grid-cols-4 gap-2 px-4">
-                                    {Array.from({ length: items }).map((_, idx) => (
+                                    {images.map((src, idx) => (
                                         <div
                                             key={idx}
-                                            className="aspect-square rounded-xl bg-blue-300/60 border border-white/50
-                                 shadow-[0_8px_18px_rgba(30,64,175,0.15)]
-                                 hover:shadow-[0_10px_22px_rgba(30,64,175,0.22)]
-                                 transition-shadow"
-                                        />
+                                            className="
+        aspect-square rounded-xl overflow-hidden
+        border border-white/50
+        shadow-[0_8px_18px_rgba(30,64,175,0.15)]
+        hover:shadow-[0_10px_22px_rgba(30,64,175,0.22)]
+        transition-shadow
+        bg-blue-300/60
+      "
+                                        >
+                                            {src && (
+                                                <img
+                                                    src={src}
+                                                    alt={`${year} diary ${idx + 1}`}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            )}
+                                        </div>
                                     ))}
                                 </div>
+
                             </section>
                         ))}
-                        <div className="h-4" />
                     </div>
+
                 </main>
             </div>
         </div>
