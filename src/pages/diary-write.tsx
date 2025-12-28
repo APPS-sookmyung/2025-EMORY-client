@@ -1,12 +1,10 @@
 import { useMemo, useState, useRef, useEffect } from "react";
-import {
-  Menu, CircleUserRound, CircleCheckBig,
-  CircleDashed, Volume2, VolumeOff, Images as ImageIcon, X, Loader2, Wand2
-} from "lucide-react";
+import { Menu, CircleUserRound, CircleCheckBig, CircleDashed } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { useToast } from "../hooks/use-toast";
 import { useLocation } from "wouter";
 import { useSidebar } from "../components/sidebar/SidebarContext";
+import { CloudSun, CloudRain, Snowflake, Cloud, Sun } from "lucide-react";
 
 // 이모지 경로
 import angryEmoji from "../assets/img/emotion/angry-emoji.png";
@@ -21,7 +19,18 @@ export default function DiaryWriting() {
   const [isCompleted, setIsCompleted] = useState(false);
   const { toast } = useToast();
   const [, navigate] = useLocation();
-  const [isMuted, setIsMuted] = useState(false);
+
+  // 상태 추가
+  const [showWeatherPicker, setShowWeatherPicker] = useState(false);
+  const [selectedWeather, setSelectedWeather] = useState("");
+
+  const WEATHER_OPTIONS = [
+    { icon: <Sun className="text-yellow-400" />, label: "맑음" },
+    { icon: <CloudSun className="text-orange-400" />, label: "구름" },
+    { icon: <CloudRain className="text-blue-400" />, label: "비" },
+    { icon: <Snowflake className="text-sky-300" />, label: "눈" },
+    { icon: <Cloud className="text-gray-400" />, label: "흐림" },
+  ];
 
   // 모달 상태 & 선택 옵션
   const [isFeedbackOpen, setFeedbackOpen] = useState(false);
@@ -44,7 +53,7 @@ export default function DiaryWriting() {
     toast({
       title: "작성 완료",
       description: selectedFeedback
-        ? `피드백 : "${selectedFeedback}" 로 저장했어요.`
+        ? `피드백 : "${selectedFeedback}"로 저장했어요.`
         : "일기 작성을 완료했습니다.",
     });
   };
@@ -56,9 +65,19 @@ export default function DiaryWriting() {
     closeFeedbackModal();
   };
 
-  // AI 생성 이미지 (UI만)
-  const [images, setImages] = useState<string[]>([]);
-  const [isGenLoading, setIsGenLoading] = useState(false);
+  // 사진 업로드
+  const [images, setImages] = useState<File[]>([]);
+
+  const onAddImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const files = Array.from(e.target.files);
+    setImages(prev => [...prev, ...files]);
+  };
+
+  const removeImage = (idx: number) => {
+    setImages(prev => prev.filter((_, i) => i !== idx));
+  };
+
 
   // 이모지 선택 상태
   const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
@@ -130,23 +149,6 @@ export default function DiaryWriting() {
     }
   };
 
-  // 백엔드 연결 포인트 (이미지 생성 요청)
-  const onRequestAIGenerate = async () => {
-    try {
-      setIsGenLoading(true);
-      // TODO: 실제 API 호출
-      // const res = await fetch("/api/generate-image", { method:"POST" });
-      // const data = await res.json(); // { images: string[] }
-      // setImages(data.images);
-      toast({ title: "이미지 생성 요청", description: "이미지 생성을 요청했습니다." });
-    } finally {
-      setIsGenLoading(false);
-    }
-  };
-
-  const removeImage = (idx: number) =>
-    setImages(prev => prev.filter((_, i) => i !== idx));
-
   return (
     // App.tsx의 480x844 프레임 안을 꽉 채움
     <div className="h-full w-full">
@@ -196,20 +198,48 @@ export default function DiaryWriting() {
               <CircleDashed className="stroke-white" />
             </button>
 
-            {/* 음악 */}
-            {/* 음악 (볼륨 토글) */}
-            <button
-              type="button"
-              aria-label="음악"
-              onClick={() => setIsMuted(v => !v)}
-              className="h-11 w-11 p-0 rounded-full hover:bg-white/30 flex items-center justify-center [&_svg]:size-7"
-            >
-              {isMuted ? (
-                <VolumeOff className="stroke-white" />
-              ) : (
-                <Volume2 className="stroke-white" />
+            {/* 날씨 이모지 선택 */}
+            <div className="relative">
+              <button
+                type="button"
+                aria-label="날씨 선택"
+                onClick={() => setShowWeatherPicker(v => !v)}
+                className="h-11 w-11 p-0 rounded-full hover:bg-white/30 flex items-center justify-center [&_svg]:size-7"
+              >
+                {selectedWeather
+                  ? WEATHER_OPTIONS.find(w => w.label === selectedWeather)?.icon
+                  : <Sun className="stroke-white" />}
+              </button>
+
+              {showWeatherPicker && (
+                <div className="absolute top-12 left-[180%] -translate-x-1/2
+             z-30 bg-white rounded-xl shadow-lg p-3
+             w-[250px] text-center"
+                >
+                  <p className="text-slate-600 text-sm mb-2 text-center">오늘의 날씨를 선택하세요 ☁️</p>
+                  <div className="flex items-center justify-center gap-3">
+                    {WEATHER_OPTIONS.map(({ icon, label }) => (
+                      <button
+                        key={label}
+                        type="button"
+                        onClick={() => {
+                          setSelectedWeather(label);
+                          setShowWeatherPicker(false);
+                        }}
+                        title={label}
+                        className={`h-10 w-10 rounded-full flex items-center justify-center 
+              border transition ${selectedWeather === label
+                            ? "border-blue-400 bg-blue-50"
+                            : "border-transparent hover:bg-slate-100"}`}
+                      >
+                        {icon}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
-            </button>
+            </div>
+
 
 
             {/* 이모지 */}
@@ -308,74 +338,68 @@ export default function DiaryWriting() {
             style={linesBg}
           />
 
-          {/* === AI 생성 이미지 섹션 === */}
-          <section className="mt-6 pb-4">
-            {images.length > 0 ? (
-              <>
-                <div className="grid grid-cols-3 gap-3 max-w-[280px] mx-auto">
-                  {images.map((src, idx) => (
-                    <div key={idx} className="relative group">
-                      <img
-                        src={src}
-                        alt={`ai-gen-${idx}`}
-                        className="h-28 w-full object-cover rounded-xl shadow-sm"
-                      />
+          {/* 사진 추가 영역 */}
+          <div className="mt-6 px-5">
+            {/* 숨겨진 파일 인풋 */}
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              id="image-upload"
+              className="hidden"
+              onChange={onAddImages}
+              disabled={isCompleted}
+            />
+
+            {/* 버튼 */}
+            <label
+              htmlFor="image-upload"
+              className={`
+    mt-6 ml-5 inline-flex items-center gap-2
+    text-slate-700/70 text-sm
+    cursor-pointer
+    hover:text-white
+    transition
+    ${isCompleted ? "opacity-40 pointer-events-none" : ""}
+  `}
+            >
+              <span>사진 추가</span>
+            </label>
+
+
+
+
+            {/* 미리보기 */}
+            {images.length > 0 && (
+              <div className="mt-4 flex gap-3 overflow-x-auto no-scrollbar">
+                {images.map((file, idx) => (
+                  <div
+                    key={idx}
+                    className="relative w-24 h-24 rounded-xl overflow-hidden shadow"
+                  >
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={`preview-${idx}`}
+                      className="w-full h-full object-cover"
+                    />
+                    {!isCompleted && (
                       <button
                         type="button"
                         onClick={() => removeImage(idx)}
-                        className="absolute -top-2 -right-2 hidden group-hover:flex h-7 w-7 items-center justify-center rounded-full bg-white/90 shadow border border-slate-200"
-                        aria-label="이미지 삭제"
-                        title="삭제"
+                        className="absolute top-1 right-1 w-6 h-6 rounded-full
+                bg-black/50 text-white text-xs
+                flex items-center justify-center"
                       >
-                        <X className="h-4 w-4 text-slate-700" />
+                        ✕
                       </button>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex justify-end mt-3">
-                  <Button
-                    type="button"
-                    onClick={onRequestAIGenerate}
-                    disabled={isGenLoading}
-                    className="rounded-xl bg-white/80 hover:bg-white text-slate-800 border border-white/60 h-9 px-3 text-sm"
-                  >
-                    {isGenLoading ? (
-                      <span className="inline-flex items-center gap-2">
-                        <Loader2 className="h-4 w-4 animate-spin" /> 다시 생성
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-2">
-                        <Wand2 className="h-4 w-4" /> 다시 생성
-                      </span>
                     )}
-                  </Button>
-                </div>
-              </>
-            ) : (
-              // 이미지 없을 때: 박스 안에 버튼
-              <div className="border-2 border-dashed border-gray-400 rounded-2xl p-8 text-center bg-gray-100 flex flex-col items-center justify-center max-w-[280px] mx-auto">
-                <ImageIcon className="h-8 w-8 text-slate-600 mb-3" />
-                <p className="text-slate-700 text-sm mb-4">No images have been created</p>
-                <Button
-                  type="button"
-                  onClick={onRequestAIGenerate}
-                  disabled={isGenLoading}
-                  className="rounded-xl bg-white/80 hover:bg-white text-slate-800 border border-white/60"
-                >
-                  {isGenLoading ? (
-                    <span className="inline-flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" /> 생성 중
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-2">
-                      <Wand2 className="h-4 w-4" /> Create an image
-                    </span>
-                  )}
-                </Button>
+                  </div>
+                ))}
               </div>
             )}
-          </section>
+          </div>
+
+
         </div>
       </div>
 
