@@ -15,8 +15,8 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
 }) => {
   const [currentEmoji, setCurrentEmoji] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     if (icons.length === 0) return;
@@ -80,7 +80,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                 filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.12))',
                 animation: isVisible ? 'gentlePulse 2s ease-in-out infinite alternate' : 'none',
                 imageRendering: 'crisp-edges',
-                WebkitImageRendering: 'crisp-edges',
+                // WebkitImageRendering: 'crisp-edges',
               }}
             />
           </div>

@@ -1,5 +1,5 @@
-import { Component, ReactNode, ErrorInfo } from 'react';
-import { useLocation } from 'wouter';
+import { Component } from "react";
+import type { ReactNode, ErrorInfo } from "react";
 
 interface Props {
   children: ReactNode;
