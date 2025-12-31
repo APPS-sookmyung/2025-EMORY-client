@@ -23,6 +23,7 @@ export default function MyPage() {
     navigate('/logout-confirm-page');
   };
 
+
   return (
     // <GradientBackground variant="default"> {/* ✅ 수정됨: 전체 페이지를 GradientBackground로 감쌈 */}
     <div className='gradient-mypage flex flex-col relative'>
@@ -74,9 +75,10 @@ export default function MyPage() {
             {/* ✅ 수정됨 */}
             <ChevronRight className='w-5 h-5 text-orange-300' />
           </button>
-          <button 
+          <button
             onClick={() => navigate('/time-capsule')}
-            className='w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
+            className='w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'
+          >
             <span className='text-gray-400 font-medium'>타임캡슐</span>{' '}
             {/* ✅ 수정됨 */}
             <ChevronRight className='w-5 h-5 text-orange-300' />

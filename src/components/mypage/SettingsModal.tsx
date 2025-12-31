@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useState, useRef, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { ArrowLeft, ChevronRight, Mail, Clock, UserMinus, Edit, LogOut, Moon } from "lucide-react"
 import { Switch } from "../../components/ui/switch"
 
@@ -17,14 +18,13 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const [darkMode, setDarkMode] = useState(false)
 
-
   const handleTouchStart = (e: React.TouchEvent) => {
     setIsDragging(true)
     setStartY(e.touches[0].clientY)
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return 
+    if (!isDragging) return
 
     const currentY = e.touches[0].clientY
     const deltaY = currentY - startY
@@ -88,20 +88,51 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     }
   }, [isOpen])
 
+  // 설정 항목들의 애니메이션 variants
+  const itemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+      },
+    },
+  }
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.2,
+      },
+    },
+  }
+
   return (
     <>
       {/* Backdrop */}
-      <div
-        className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${
-          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-        onClick={onClose}
-      />
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed inset-0 bg-black/50 z-40"
+            onClick={onClose}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Modal - 3/4 height */}
       <div
         ref={modalRef}
-        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-white z-50 transition-transform duration-300 ease-out h-3/4 rounded-t-3xl ${
+        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm md:max-w-md lg:max-w-lg bg-white z-50 transition-transform duration-300 ease-out h-3/4 rounded-t-3xl ${
           isOpen ? "translate-y-0" : "translate-y-full"
         } `}
         style={{
@@ -130,7 +161,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
         </div>
 
         {/* Settings Content */}
-        <div className="flex-1 px-6 py-4 bg-white overflow-y-auto">
+        <div className="flex-1 px-6 py-4 bg-white overflow-y-auto custom-scrollbar">
           <div className="space-y-1">
             {/* Account Info */}
             <div className="flex items-center justify-between py-4 border-b border-gray-50">
@@ -161,51 +192,131 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               }}
               className="flex items-center justify-between w-full py-4 border-b border-gray-50 hover:bg-gray-50 rounded-lg px-2 -mx-2"
             >
-              <div className="flex items-center space-x-3">
-                <UserMinus className="w-5 h-5 text-gray-500" />
-                <span className="text-sm font-medium text-gray-800">회원 탈퇴</span>
-              </div>
-            </button>
+              <motion.div
+                className="w-10 h-1 bg-gray-300 rounded-full"
+                whileHover={{ scale: 1.1, backgroundColor: "#9CA3AF" }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              />
+            </motion.div>
 
-            {/* Member Info Edit */}
-            <button
-              onClick={() => {
-                window.location.href = "/member-info"
-              }}
-              className="flex items-center justify-between w-full py-4 border-b border-gray-50 hover:bg-gray-50 rounded-lg px-2 -mx-2"
+            {/* Header */}
+            <motion.div
+              className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15, duration: 0.4 }}
             >
-              <div className="flex items-center space-x-3">
-                <Edit className="w-5 h-5 text-gray-500" />
-                <span className="text-sm font-medium text-gray-800">회원 정보 수정</span>
-              </div>
-              <ChevronRight className="w-4 h-4 text-gray-400" />
-            </button>
+              <motion.button
+                onClick={onClose}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                <ArrowLeft className="w-6 h-6 text-gray-600" />
+              </motion.button>
+              <h2 className="text-lg font-medium text-gray-800">설정</h2>
+              <div className="w-6" />
+            </motion.div>
 
-            {/* Logout */}
-            <button
-              onClick={() => {
-                window.location.href = "/logout-confirm-page"
-              }}
-              className="flex items-center justify-between w-full py-4 border-b border-gray-50 hover:bg-gray-50 rounded-lg px-2 -mx-2"
+            {/* Settings Content */}
+            <motion.div
+              className="flex-1 px-6 py-4 bg-white overflow-y-auto custom-scrollbar"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.25, duration: 0.4 }}
             >
-              <div className="flex items-center space-x-3">
-                <LogOut className="w-5 h-5 text-gray-500" />
-                <span className="text-sm font-medium text-gray-800">로그아웃</span>
-              </div>
-              <ChevronRight className="w-4 h-4 text-gray-400" />
-            </button>
+              <motion.div className="space-y-1" variants={containerVariants} initial="hidden" animate="visible">
+                {/* Account Info */}
+                <motion.div
+                  variants={itemVariants}
+                  className="flex items-center justify-between py-4 border-b border-gray-50"
+                >
+                  <div className="flex items-center space-x-3">
+                    <Mail className="w-5 h-5 text-gray-500" />
+                    <div>
+                      <div className="text-sm font-medium text-gray-800">로그인된 계정</div>
+                      <div className="text-xs text-gray-500">rey@gmail.com</div>
+                    </div>
+                  </div>
+                </motion.div>
 
-            {/* Dark Mode */}
-            <div className="flex items-center justify-between py-4">
-              <div className="flex items-center space-x-3">
-                <Moon className="w-5 h-5 text-gray-500" />
-                <span className="text-sm font-medium text-gray-800">야간모드</span>
-              </div>
-              <Switch checked={darkMode} onCheckedChange={setDarkMode} />
-            </div>
-          </div>
-        </div>
-      </div>
+                {/* Subscription */}
+                <motion.div
+                  variants={itemVariants}
+                  className="flex items-center justify-between py-4 border-b border-gray-50"
+                >
+                  <div className="flex items-center space-x-3">
+                    <Clock className="w-5 h-5 text-gray-500" />
+                    <div>
+                      <div className="text-sm font-medium text-gray-800">구독 활동</div>
+                      <div className="text-xs text-gray-500">Emory Plus</div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Member Withdrawal */}
+                <motion.button
+                  variants={itemVariants}
+                  onClick={() => {
+                    window.location.href = "/withdrawal"
+                  }}
+                  className="flex items-center justify-between w-full py-4 border-b border-gray-50 hover:bg-gray-50 rounded-lg px-2 -mx-2 transition-colors"
+                  whileHover={{ scale: 1.02, backgroundColor: "#F9FAFB" }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="flex items-center space-x-3">
+                    <UserMinus className="w-5 h-5 text-gray-500" />
+                    <span className="text-sm font-medium text-gray-800">회원 탈퇴</span>
+                  </div>
+                </motion.button>
+
+                {/* Member Info Edit */}
+                <motion.button
+                  variants={itemVariants}
+                  onClick={() => {
+                    window.location.href = "/member-info"
+                  }}
+                  className="flex items-center justify-between w-full py-4 border-b border-gray-50 hover:bg-gray-50 rounded-lg px-2 -mx-2 transition-colors"
+                  whileHover={{ scale: 1.02, backgroundColor: "#F9FAFB" }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="flex items-center space-x-3">
+                    <Edit className="w-5 h-5 text-gray-500" />
+                    <span className="text-sm font-medium text-gray-800">회원 정보 수정</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-gray-400" />
+                </motion.button>
+
+                {/* Logout */}
+                <motion.button
+                  variants={itemVariants}
+                  onClick={() => {
+                    window.location.href = "/logout-confirm-page"
+                  }}
+                  className="flex items-center justify-between w-full py-4 border-b border-gray-50 hover:bg-gray-50 rounded-lg px-2 -mx-2 transition-colors"
+                  whileHover={{ scale: 1.02, backgroundColor: "#F9FAFB" }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="flex items-center space-x-3">
+                    <LogOut className="w-5 h-5 text-gray-500" />
+                    <span className="text-sm font-medium text-gray-800">로그아웃</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-gray-400" />
+                </motion.button>
+
+                {/* Dark Mode */}
+                <motion.div variants={itemVariants} className="flex items-center justify-between py-4">
+                  <div className="flex items-center space-x-3">
+                    <Moon className="w-5 h-5 text-gray-500" />
+                    <span className="text-sm font-medium text-gray-800">야간모드</span>
+                  </div>
+                  <Switch checked={darkMode} onCheckedChange={setDarkMode} />
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }

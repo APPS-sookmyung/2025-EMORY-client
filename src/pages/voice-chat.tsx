@@ -26,7 +26,7 @@ export default function VoiceChat() {
     startListening,
     stopListening,
     resetTranscript,
-    processTranscript,
+
     isSupported,
   } = useSpeechRecognition();
 
@@ -217,8 +217,8 @@ export default function VoiceChat() {
       '대화를 종료하고 감정 리포트를 확인하시겠습니까?'
     );
     if (confirmed) {
-      // 감정 리포트 페이지로 이동
-      navigate('/emotion-report');
+      // 로딩 화면을 거쳐 감정 리포트로 이동
+      navigate('/loading?redirect=emotion-report');
     }
   };
 
@@ -232,7 +232,7 @@ export default function VoiceChat() {
       {/* Chat Messages Area */}
       <div
         ref={chatContainerRef}
-        className={`flex-1 overflow-y-auto px-4 pb-4 transition-all duration-300 ${isListening || isLoading ? 'chat-blur' : ''}`}
+        className={`flex-1 overflow-y-auto px-4 pb-4 transition-all duration-300 custom-scrollbar ${isListening || isLoading ? 'chat-blur' : ''}`}
         style={{ height: 'calc(844px - 300px)', minHeight: '500px' }}
       >
         {messages.map((message) => (

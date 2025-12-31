@@ -1,14 +1,16 @@
 "use client"
 
-import { useLocation } from "wouter"
 import { Button } from "../components/ui/button"
 import { GoogleIcon, AppleIcon, KakaoIcon } from "../components/ui/socialicons"
 import Hamburger from "../components/common/Hamburger"
 import { useToast } from '../hooks/use-toast';
+import { useLocation } from 'wouter';
 
 
 export default function StartPage() {
-  const [, navigate] = useLocation()
+  // const [, navigate] = useLocation()
+  useLocation();
+
   const { toast } = useToast();
 
   const handleGoogleLogin = () => {
@@ -49,7 +51,7 @@ export default function StartPage() {
         </div>
 
         {/* Let's Get Started 섹션 */}
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-sm md:max-w-md lg:max-w-lg">
           <h3 className="text-xl font-medium text-gray-600 text-center mb-8 drop-shadow-sm">Let's Get Started!</h3>
 
           {/* 로그인 버튼들 */}
@@ -75,7 +77,7 @@ export default function StartPage() {
             {/* KakaoTalk 로그인 */}
             <Button
               onClick={handleKakaoLogin}
-              className="w-full bg-yellow-400/60 hover:bg-yellow-500/60 text-gray-800 py-4 rounded-2xl backdrop-blur-sm border border-yellow-300/50 shadow-lg transition-all duration-300 flex items-center justify-center space-x-3"
+              className="w-full bg-yellow-400/60 hover:bg-yellow-500/60 text-gray-800 py-4 rounded-2xl backdrop-blur-sm border border-yellow-300/50 shadow-lg transition-all duration-300 flex items-center justify-content-center space-x-3"
             >
               <KakaoIcon />
               <span className="font-medium">Continue with KakaoTalk</span>
