@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 export interface EmojiPixel404Props {
   images: string[];
@@ -33,7 +33,7 @@ export const DIGIT_0: number[][] = [
   [0, 1, 1, 1, 0],
 ];
 
-function makeDigit4(height = 11, width = 9): number[][] {
+/* function makeDigit4(height = 11, width = 9): number[][] {
   const rows: number[][] = [];
   for (let r = 0; r < height; r++) {
     const row = new Array(width).fill(0);
@@ -58,7 +58,7 @@ function makeDigit0(height = 11, width = 9): number[][] {
     rows.push(row);
   }
   return rows;
-}
+} */
 
 function joinWithSpacing(a: number[][], b: number[][], spacingCols = 3): number[][] {
   const height = Math.max(a.length, b.length);
