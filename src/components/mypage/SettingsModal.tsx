@@ -151,29 +151,6 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           <div className="w-10 h-1 bg-gray-300 rounded-full" />
         </div>
 
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white">
-          <button onClick={onClose}>
-            <ArrowLeft className="w-6 h-6 text-gray-600" />
-          </button>
-          <h2 className="text-lg font-medium text-gray-800">설정</h2>
-          <div className="w-6" />
-        </div>
-
-        {/* Settings Content */}
-        <div className="flex-1 px-6 py-4 bg-white overflow-y-auto custom-scrollbar">
-          <div className="space-y-1">
-            {/* Account Info */}
-            <div className="flex items-center justify-between py-4 border-b border-gray-50">
-              <div className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-gray-500" />
-                <div>
-                  <div className="text-sm font-medium text-gray-800">로그인된 계정</div>
-                  <div className="text-xs text-gray-500">rey@gmail.com</div>
-                </div>
-              </div>
-            </div>
-
             {/* Subscription */}
             <div className="flex items-center justify-between py-4 border-b border-gray-50">
               <div className="flex items-center space-x-3">
@@ -197,7 +174,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 whileHover={{ scale: 1.1, backgroundColor: "#9CA3AF" }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               />
-            </motion.div>
+            </button>
 
             {/* Header */}
             <motion.div
