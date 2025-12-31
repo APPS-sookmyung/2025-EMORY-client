@@ -155,8 +155,11 @@ export default function DiaryWriting() {
       <div className={`w-full h-full rounded-3xl ${cardBgClass}
                        shadow-xl overflow-hidden flex flex-col min-h-0`}>
 
-        {/* 헤더 */}
-        <header className="flex items-center justify-between p-4 flex-shrink-0">
+
+        {/* 상단바 (고정) */}
+        {/* === 상단바 480 x 112 === */}
+        <header className="w-full h-[112px] px-4 flex items-end pb-3 border-b border-white/50">
+
           <div className="w-full flex items-center justify-between">
             {/* 왼쪽: 햄버거 */}
             <Button
@@ -326,6 +329,7 @@ export default function DiaryWriting() {
 
         {/* 컨텐츠 스크롤 영역 (이모지/텍스트/AI 이미지 전부) */}
         <div className="px-4 flex-1 min-h-0 overflow-y-auto pb-6 custom-scrollbar">
+
           {/* 본문 입력 (흰 라인 배경) */}
           <textarea
             value={body}
@@ -417,7 +421,7 @@ export default function DiaryWriting() {
             aria-modal="true"
             aria-labelledby="ai-feedback-title"
           >
-            <div className="w-full max-w-[420px] rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">
+            <div className="w-full max-w-[420px] md:max-w-lg lg:max-w-xl rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">
               <div className="px-6 pt-6 pb-3 text-center">
                 <h2 id="ai-feedback-title" className="text-xl font-semibold text-slate-900">
                   Feedback of AI Diary
