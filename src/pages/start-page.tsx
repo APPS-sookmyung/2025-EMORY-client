@@ -6,7 +6,6 @@ import Hamburger from "../components/common/Hamburger"
 import { useToast } from '../hooks/use-toast';
 import { useLocation } from 'wouter';
 
-
 export default function StartPage() {
   // const [, navigate] = useLocation()
   useLocation();
