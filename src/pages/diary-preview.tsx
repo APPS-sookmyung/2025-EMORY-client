@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useToast } from "../hooks/use-toast";
 import { useSidebar } from "../components/sidebar/SidebarContext";
@@ -8,24 +8,7 @@ import {
   Menu, CircleUserRound,
   Bookmark, BookmarkCheck, Trash2, Plus,
 } from "lucide-react";
-
-/* ========= 타입 & 더미 데이터 ========= */
-type DiaryItem = {
-  id: string;
-  dateLabel: string;
-  hasContent: boolean; // 내용 유무
-  bookmarked?: boolean;
-  imageUrl?: string; // 이미지 삽입
-};
-
-const MOCK: DiaryItem[] = [
-  { id: "d1", dateLabel: "12/25", hasContent: true, imageUrl: 'https://images.unsplash.com/photo-1519681393784-d120267933ba', },
-  { id: "d2", dateLabel: "12/26", hasContent: true, imageUrl: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee', },
-  { id: "d3", dateLabel: "12/27", hasContent: true, imageUrl: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9', },
-  { id: "d4", dateLabel: "12/28", hasContent: false },
-  { id: "d5", dateLabel: "12/29", hasContent: true },
-  { id: "d6", dateLabel: "12/30", hasContent: true },
-];
+import { diaryService, type DiaryItem } from "../services/diaryService";
 
 /* ========= 휠/터치로 인덱스 전환(쓰로틀) ========= */
 function useScrollStepper(onStep: (dir: 1 | -1) => void, delay = 160) {
@@ -117,27 +100,76 @@ function DiaryCard({
 
 /* ========= 페이지 ========= */
 export default function DiaryPreview() {
-  const [items, setItems] = useState<DiaryItem[]>(MOCK);
-  const [current, setCurrent] = useState(Math.floor(MOCK.length / 2));
+  const [items, setItems] = useState<DiaryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [current, setCurrent] = useState(0);
   const clamp = (n: number) => Math.max(0, Math.min(items.length - 1, n));
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const { open } = useSidebar();
 
+  // 초기 데이터 로드
+  useEffect(() => {
+    const loadDiaries = async () => {
+      try {
+        setLoading(true);
+        const diaries = await diaryService.getAllDiaries();
+        setItems(diaries);
+        setCurrent(Math.floor(diaries.length / 2));
+      } catch (error) {
+        console.error('Failed to load diaries:', error);
+        toast({
+          title: "일기 로드 실패",
+          description: error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDiaries();
+  }, [toast]);
+
   const step = useCallback((dir: 1 | -1) => setCurrent((c) => clamp(c + dir)), [items.length]);
   const { onWheel, onTouchStart, onTouchEnd } = useScrollStepper(step);
 
   // 삭제/북마크
-  const onDelete = (idx: number) => {
-    setItems((prev) => {
-      const next = prev.filter((_, i) => i !== idx);
-      return next.length ? next : prev;
-    });
-    setCurrent((c) => clamp(Math.min(c, items.length - 2)));
-    toast({ title: "삭제됨", description: `${items[idx]?.dateLabel} 카드가 삭제되었습니다.` });
+  const onDelete = async (idx: number) => {
+    const item = items[idx];
+    if (!item) return;
+
+    try {
+      await diaryService.deleteDiary(item.id);
+      setItems((prev) => {
+        const next = prev.filter((_, i) => i !== idx);
+        return next.length ? next : prev;
+      });
+      setCurrent((c) => clamp(Math.min(c, items.length - 2)));
+      toast({ title: "삭제됨", description: `${item.dateLabel} 카드가 삭제되었습니다.` });
+    } catch (error) {
+      toast({
+        title: "삭제 실패",
+        description: error instanceof Error ? error.message : "삭제에 실패했습니다.",
+        variant: "destructive",
+      });
+    }
   };
-  const onToggleBookmark = (idx: number) => {
+
+  const onToggleBookmark = async (idx: number) => {
+    const item = items[idx];
+    if (!item) return;
+
+    // 먼저 로컬 상태 업데이트 (낙관적 업데이트)
     setItems((prev) => prev.map((it, i) => i === idx ? { ...it, bookmarked: !it.bookmarked } : it));
+
+    try {
+      await diaryService.toggleBookmark(item.id, item.bookmarked || false);
+    } catch (error) {
+      // 실패 시 원래 상태로 복원
+      setItems((prev) => prev.map((it, i) => i === idx ? { ...it, bookmarked: !it.bookmarked } : it));
+      console.error('Bookmark toggle failed:', error);
+    }
   };
 
   // 열기
