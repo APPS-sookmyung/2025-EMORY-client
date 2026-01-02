@@ -7,82 +7,16 @@ import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { useToast } from '../hooks/use-toast';
 import type { EmotionData, EmotionReport, EmotionIcon as EmotionIconType, EmotionCategory } from '../types/emotion';
+import { reportService } from '../services/reportService';
 
-// 더미 데이터 생성 함수 (나중에 API 호출로 교체)
-const createDummyEmotionReport = (): EmotionReport => {
-  const emotions: EmotionData[] = [
-    {
-      id: 'joy' as EmotionCategory,
-      name: '기쁨',
-      icon: 'sun' as EmotionIconType,
-      description: '밝고 긍정적인 순간들',
-      percentage: 35,
-      color: 'bg-orange-500',
-    },
-    {
-      id: 'calm' as EmotionCategory,
-      name: '평온',
-      icon: 'cloud' as EmotionIconType,
-      description: '평화롭고 차분한 상태',
-      percentage: 25,
-      color: 'bg-blue-400',
-    },
-    {
-      id: 'thoughtful' as EmotionCategory,
-      name: '사려깊음',
-      icon: 'brain' as EmotionIconType,
-      description: '깊은 성찰과 분석',
-      percentage: 20,
-      color: 'bg-purple-500',
-    },
-    {
-      id: 'anger' as EmotionCategory,
-      name: '분노',
-      icon: 'flame' as EmotionIconType,
-      description: '강한 감정적 반응',
-      percentage: 10,
-      color: 'bg-red-500',
-    },
-    {
-      id: 'anxiety' as EmotionCategory,
-      name: '불안',
-      icon: 'alert-triangle' as EmotionIconType,
-      description: '걱정과 긴장감',
-      percentage: 5,
-      color: 'bg-yellow-500',
-    },
-    {
-      id: 'sadness' as EmotionCategory,
-      name: '슬픔',
-      icon: 'droplets' as EmotionIconType,
-      description: '우울하고 슬픈 감정',
-      percentage: 3,
-      color: 'bg-indigo-500',
-    },
-    {
-      id: 'excitement' as EmotionCategory,
-      name: '신남',
-      icon: 'zap' as EmotionIconType,
-      description: '흥미진진하고 즐거운 기분',
-      percentage: 2,
-      color: 'bg-pink-500',
-    },
-  ];
-
-  // 가장 높은 퍼센티지를 가진 감정을 주요 감정으로 설정
-  const mainEmotion = emotions.reduce((max, current) =>
-    current.percentage > max.percentage ? current : max
-  );
-
-  return {
-    id: `report_${Date.now()}`,
-    userId: 'user_123',
-    createdAt: new Date().toISOString(),
-    mainEmotion,
-    emotionDistribution: emotions,
-    feedback:
-      '오늘 대화에서 기쁨과 평온이 주를 이루었습니다. 전반적으로 긍정적인 에너지가 느껴졌어요. 특히 새로운 아이디어에 대한 호기심과 사려깊은 성찰이 돋보였습니다.',
-  };
+// 감정 카테고리 매핑
+const emotionCategoryMap: Record<string, { name: string; icon: EmotionIconType; description: string; color: string; id: EmotionCategory }> = {
+  'HAPPY': { id: 'joy' as EmotionCategory, name: '기쁨', icon: 'sun' as EmotionIconType, description: '밝고 긍정적인 순간들', color: 'bg-orange-500' },
+  'SOSO': { id: 'calm' as EmotionCategory, name: '평온', icon: 'cloud' as EmotionIconType, description: '평화롭고 차분한 상태', color: 'bg-blue-400' },
+  'SAD': { id: 'sadness' as EmotionCategory, name: '슬픔', icon: 'droplets' as EmotionIconType, description: '우울하고 슬픈 감정', color: 'bg-indigo-500' },
+  'ANGRY': { id: 'anger' as EmotionCategory, name: '분노', icon: 'flame' as EmotionIconType, description: '강한 감정적 반응', color: 'bg-red-500' },
+  'ANXIOUS': { id: 'anxiety' as EmotionCategory, name: '불안', icon: 'alert-triangle' as EmotionIconType, description: '걱정과 긴장감', color: 'bg-yellow-500' },
+  'THOUGHTFUL': { id: 'thoughtful' as EmotionCategory, name: '사려깊음', icon: 'brain' as EmotionIconType, description: '깊은 성찰과 분석', color: 'bg-purple-500' },
 };
 
 // 감정 아이콘 컴포넌트 (타입 안전 버전)
@@ -117,30 +51,59 @@ export default function EmotionReportPage() {
   );
   const [isLoading, setIsLoading] = useState(true);
 
-  // 감정 리포트 데이터 로드 (나중에 API 호출로 교체)
+  // 감정 리포트 데이터 로드 - 월간 리포트 데이터 사용
   useEffect(() => {
     const loadEmotionReport = async () => {
       try {
         setIsLoading(true);
 
-        // TODO: 여기에 실제 API 호출 코드를 넣으세요
-        // 예시:
-        // const reportId = new URLSearchParams(window.location.search).get('reportId')
-        // const response = await fetch(`/api/emotion-reports/${reportId}`)
-        // const report = await response.json()
+        // 현재 월의 리포트 데이터 가져오기
+        const currentYearMonth = new Date().toISOString().substring(0, 7);
+        const monthlyReport = await reportService.getMonthlyReport(currentYearMonth);
 
-        // 현재는 더미 데이터 사용
-        const report = createDummyEmotionReport();
+        // 백엔드 응답을 EmotionReport 형식으로 변환
+        const emotions: EmotionData[] = monthlyReport.data.emotionStatistics.map(stat => {
+          const mapping = emotionCategoryMap[stat.emotionCategory] || {
+            id: 'joy' as EmotionCategory,
+            name: stat.emotionCategory,
+            icon: 'sparkles' as EmotionIconType,
+            description: '',
+            color: 'bg-gray-500'
+          };
+
+          return {
+            id: mapping.id,
+            name: mapping.name,
+            icon: mapping.icon,
+            description: mapping.description,
+            percentage: Math.round(stat.percentage),
+            color: mapping.color,
+          };
+        });
+
+        const mainEmotion = emotions.length > 0
+          ? emotions.reduce((max, current) => current.percentage > max.percentage ? current : max)
+          : emotions[0];
+
+        const report: EmotionReport = {
+          id: `report_${Date.now()}`,
+          userId: 'current_user',
+          createdAt: new Date().toISOString(),
+          mainEmotion,
+          emotionDistribution: emotions,
+          feedback: monthlyReport.data.mostFrequentEmotions
+            ? `이번 달에는 ${monthlyReport.data.mostFrequentEmotions} 감정이 주를 이루었습니다. 총 ${monthlyReport.data.totalDiaries}개의 일기가 작성되었어요.`
+            : '감정 데이터를 분석 중입니다.',
+        };
+
         setEmotionReport(report);
       } catch (error) {
         console.error('감정 리포트 로드 실패:', error);
         toast({
           title: '오류',
-          description: '감정 리포트를 불러오는데 실패했습니다.',
+          description: error instanceof Error ? error.message : '감정 리포트를 불러오는데 실패했습니다.',
           variant: 'destructive',
         });
-        // 에러 시에도 더미 데이터 표시
-        setEmotionReport(createDummyEmotionReport());
       } finally {
         setIsLoading(false);
       }
