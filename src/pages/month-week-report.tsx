@@ -6,6 +6,8 @@ import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { useToast } from '../hooks/use-toast';
 import type { EmotionIcon } from '../types/emotion';
+import { reportService } from '../services/reportService';
+import type { WeeklyReportResponse, MonthlyReportResponse, EmotionStatistic } from '../types/reports';
 
 // 데이터 타입 정의
 interface CategoryData {
@@ -22,75 +24,74 @@ interface ReportData {
   totalDays: number;
 }
 
-// 더미 데이터 생성 함수
-const createDummyReportData = (): {
-  weekly: ReportData;
-  monthly: ReportData;
-} => {
-  const weeklyData: ReportData = {
-    period: '7월 첫째 주',
-    totalDays: 7,
-    categories: [
-      {
-        name: '기쁨',
-        days: 4,
-        color: 'bg-orange-300',
-        percentage: 57,
-        icon: 'sparkles' as EmotionIcon,
-      },
-      {
-        name: '평온',
-        days: 2,
-        color: 'bg-blue-300',
-        percentage: 29,
-        icon: 'cloud' as EmotionIcon,
-      },
-      {
-        name: '사려깊음',
-        days: 1,
-        color: 'bg-purple-300',
-        percentage: 14,
-        icon: 'brain' as EmotionIcon,
-      },
-    ],
+// 감정 카테고리 한글 매핑
+const emotionNameMap: { [key: string]: string } = {
+  'HAPPY': '기쁨',
+  'SOSO': '평온',
+  'SAD': '슬픔',
+  'ANGRY': '화남',
+  'ANXIOUS': '불안',
+  'THOUGHTFUL': '사려깊음',
+};
+
+// 감정 카테고리별 색상 매핑
+const emotionColorMap: { [key: string]: string } = {
+  'HAPPY': 'bg-orange-300',
+  'SOSO': 'bg-blue-300',
+  'SAD': 'bg-purple-300',
+  'ANGRY': 'bg-red-300',
+  'ANXIOUS': 'bg-yellow-300',
+  'THOUGHTFUL': 'bg-purple-300',
+};
+
+// 감정 카테고리별 아이콘 매핑
+const emotionIconMap: { [key: string]: EmotionIcon } = {
+  'HAPPY': 'sparkles' as EmotionIcon,
+  'SOSO': 'cloud' as EmotionIcon,
+  'SAD': 'droplets' as EmotionIcon,
+  'ANGRY': 'flame' as EmotionIcon,
+  'ANXIOUS': 'alert-triangle' as EmotionIcon,
+  'THOUGHTFUL': 'brain' as EmotionIcon,
+};
+
+// 백엔드 응답을 CategoryData[]로 변환
+const transformEmotionStats = (stats: EmotionStatistic[]): CategoryData[] => {
+  return stats.map(stat => ({
+    name: emotionNameMap[stat.emotionCategory] || stat.emotionCategory,
+    days: stat.count,
+    color: emotionColorMap[stat.emotionCategory] || 'bg-gray-300',
+    percentage: Math.round(stat.percentage),
+    icon: emotionIconMap[stat.emotionCategory] || ('sparkles' as EmotionIcon),
+  }));
+};
+
+// Weekly 응답 변환
+const transformWeeklyData = (response: WeeklyReportResponse): ReportData => {
+  const startDate = new Date(response.data.weekStartDate);
+  const endDate = new Date(response.data.weekEndDate);
+
+  const formatDate = (date: Date) => {
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${month}/${day}`;
   };
 
-  const monthlyData: ReportData = {
-    period: '7월',
-    totalDays: 31,
-    categories: [
-      {
-        name: '기쁨',
-        days: 18,
-        color: 'bg-orange-300',
-        percentage: 58,
-        icon: 'sparkles' as EmotionIcon,
-      },
-      {
-        name: '평온',
-        days: 8,
-        color: 'bg-blue-300',
-        percentage: 26,
-        icon: 'cloud' as EmotionIcon,
-      },
-      {
-        name: '사려깊음',
-        days: 3,
-        color: 'bg-purple-300',
-        percentage: 10,
-        icon: 'brain' as EmotionIcon,
-      },
-      {
-        name: '불안',
-        days: 2,
-        color: 'bg-yellow-300',
-        percentage: 6,
-        icon: 'alert-triangle' as EmotionIcon,
-      },
-    ],
+  return {
+    period: `${formatDate(startDate)} - ${formatDate(endDate)}`,
+    totalDays: response.data.totalDiaries,
+    categories: transformEmotionStats(response.data.emotionStatistics),
   };
+};
 
-  return { weekly: weeklyData, monthly: monthlyData };
+// Monthly 응답 변환
+const transformMonthlyData = (response: MonthlyReportResponse): ReportData => {
+  const [year, month] = response.data.yearMonth.split('-');
+
+  return {
+    period: `${year}년 ${parseInt(month)}월`,
+    totalDays: response.data.totalDiaries,
+    categories: transformEmotionStats(response.data.emotionStatistics),
+  };
 };
 
 // 원형 차트 컴포넌트 (반응형)
@@ -139,7 +140,7 @@ const CircularChart = ({
         className='transform -rotate-90 block mx-auto'
         role='img'
         aria-label={`원형 차트: 감정 분포를 보여주는 차트입니다. ${data
-          .map((cat) => `${cat.name} ${cat.percentage}%`) 
+          .map((cat) => `${cat.name} ${cat.percentage}%`)
           .join(', ')}`}
         preserveAspectRatio='xMidYMid meet'
       >
@@ -165,6 +166,7 @@ const CircularChart = ({
             'bg-purple-300': '#c4b5fd',
             'bg-yellow-300': '#fde047',
             'bg-green-300': '#86efac',
+            'bg-red-300': '#fca5a5',
           };
 
           return (
@@ -198,6 +200,7 @@ const ProgressBar = ({ category }: { category: CategoryData }) => {
     'bg-purple-300': 'bg-purple-300',
     'bg-yellow-300': 'bg-yellow-300',
     'bg-green-300': 'bg-green-300',
+    'bg-red-300': 'bg-red-300',
   };
 
   return (
@@ -257,7 +260,7 @@ const ReportCard = ({ title, data }: { title: string; data: ReportData }) => {
           {title === '주별 분석' ? 'Weekly Analysis' : 'Monthly Insights'}
         </h2>
         <span className='text-lg font-semibold text-[#364153] tracking-wide' style={{ fontFamily: 'Cute Font, cursive' }}>
-          {title === '주별 분석' ? 'July Week 1' : 'July 2025'}
+          {data.period}
         </span>
       </div>
 
@@ -287,8 +290,8 @@ const ReportCard = ({ title, data }: { title: string; data: ReportData }) => {
                   <div
                     key={category.name}
                     className={`flex items-center space-x-4 transition-all duration-700 ease-in-out ${
-                      isTextAnimated 
-                        ? 'opacity-100 translate-x-0' 
+                      isTextAnimated
+                        ? 'opacity-100 translate-x-0'
                         : 'opacity-0 translate-x-4'
                     }`}
                     style={{
@@ -327,28 +330,25 @@ export default function MonthWeekReport() {
     weekly: ReportData;
     monthly: ReportData;
   } | null>(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const loadReportData = async () => {
       try {
-        // 현재는 더미 데이터 사용, 나중에 실제 API 호출로 교체
-        const data = createDummyReportData();
-        setReportData(data);
-        
-        // TODO: 실제 API 연결시 아래 주석 해제
-        /*
+        setLoading(true);
+
         const currentDate = new Date().toISOString().split('T')[0];
         const currentYearMonth = currentDate.substring(0, 7);
-        
-        const [weeklyData, monthlyData] = await Promise.all([
+
+        const [weeklyResponse, monthlyResponse] = await Promise.all([
           reportService.getWeeklyReport(currentDate),
           reportService.getMonthlyReport(currentYearMonth)
         ]);
-        
+
         setReportData({
-          weekly: transformWeeklyData(weeklyData),
-          monthly: transformMonthlyData(monthlyData)
+          weekly: transformWeeklyData(weeklyResponse),
+          monthly: transformMonthlyData(monthlyResponse)
         });
-        */
       } catch (error) {
         console.error('Report data loading failed:', error);
         toast({
@@ -356,19 +356,27 @@ export default function MonthWeekReport() {
           description: error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.',
           variant: 'destructive',
         });
-        
+
         // 에러 발생시 빈 데이터로 대체
         setReportData({
           weekly: { period: '이번 주', categories: [], totalDays: 0 },
           monthly: { period: '이번 달', categories: [], totalDays: 0 }
         });
+      } finally {
+        setLoading(false);
       }
     };
 
     loadReportData();
   }, [toast]);
 
-
+  if (loading) {
+    return (
+      <div className='gradient-mypage flex items-center justify-center'>
+        <div className='text-[#364153] text-lg'>데이터를 불러오는 중...</div>
+      </div>
+    );
+  }
 
   if (!reportData) {
     return (
