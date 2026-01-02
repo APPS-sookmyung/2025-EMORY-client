@@ -1,10 +1,28 @@
 import type { WeeklyReportResponse, MonthlyReportResponse } from '../types/reports';
 
+// API Base URL from environment variable
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+
 // API 타임아웃 설정 (10초)
 const API_TIMEOUT = 10000;
 
+// 백엔드 응답 타입 정의
+interface BackendEmotionStat {
+  emotion: string;
+  count: number;
+  percentage: number;
+}
+
+interface BackendReportResponse {
+  periodStart: string;
+  periodEnd: string;
+  reportType: string;
+  emotionStats: BackendEmotionStat[];
+  totalDiaryCount: number;
+  dominantEmotion: string;
+}
+
 // 타임아웃이 있는 fetch 함수
-// @ts-ignore
 const fetchWithTimeout = async (url: string, options: RequestInit = {}): Promise<Response> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
@@ -25,119 +43,109 @@ const fetchWithTimeout = async (url: string, options: RequestInit = {}): Promise
   }
 };
 
-// JSON 응답 검증 함수
-// @ts-ignore
-const validateJsonResponse = async (response: Response): Promise<any> => {
-  const text = await response.text();
-  try {
-    return JSON.parse(text);
-  } catch (error) {
-    throw new Error(`Invalid JSON response: ${error instanceof Error ? error.message : 'Unknown error'}`);
-  }
+// 인증 토큰 가져오기
+const getAuthToken = (): string | null => {
+  return localStorage.getItem('token');
 };
 
-// 나중에 실제 API 연결시 사용할 서비스
+// 백엔드 응답을 프론트엔드 Weekly 타입으로 변환
+const adaptWeeklyReport = (backendData: BackendReportResponse): WeeklyReportResponse => {
+  return {
+    success: true,
+    message: 'Success',
+    data: {
+      weekStartDate: backendData.periodStart,
+      weekEndDate: backendData.periodEnd,
+      totalDiaries: backendData.totalDiaryCount,
+      emotionStatistics: backendData.emotionStats.map(stat => ({
+        emotionCategory: stat.emotion,
+        count: stat.count,
+        percentage: stat.percentage,
+      })),
+      mostFrequentEmotions: backendData.dominantEmotion,
+    },
+  };
+};
+
+// 백엔드 응답을 프론트엔드 Monthly 타입으로 변환
+const adaptMonthlyReport = (backendData: BackendReportResponse): MonthlyReportResponse => {
+  // yearMonth는 periodStart에서 YYYY-MM 형식으로 추출
+  const yearMonth = backendData.periodStart.substring(0, 7);
+
+  return {
+    success: true,
+    message: 'Success',
+    data: {
+      yearMonth: yearMonth,
+      totalDiaries: backendData.totalDiaryCount,
+      emotionStatistics: backendData.emotionStats.map(stat => ({
+        emotionCategory: stat.emotion,
+        count: stat.count,
+        percentage: stat.percentage,
+      })),
+      mostFrequentEmotions: backendData.dominantEmotion,
+    },
+  };
+};
+
 export const reportService = {
-  // @ts-ignore
   async getWeeklyReport(targetDate: string): Promise<WeeklyReportResponse> {
-    // TODO: 실제 API 연결시 아래 주석 해제하고 더미 데이터 제거
-    /*
     try {
-      const response = await fetchWithTimeout(`/api/reports/weekly?targetDate=${targetDate}`, {
+      const token = getAuthToken();
+      if (!token) {
+        throw new Error('No authentication token found. Please log in.');
+      }
+
+      const response = await fetchWithTimeout(`${API_BASE_URL}/report/weekly/${targetDate}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('Authentication failed. Please log in again.');
+        }
         throw new Error(`Weekly report fetch failed: ${response.status} ${response.statusText}`);
       }
 
-      return await validateJsonResponse(response);
+      const backendData: BackendReportResponse = await response.json();
+      return adaptWeeklyReport(backendData);
     } catch (error) {
       console.error('Weekly report API error:', error);
       throw new Error(`Failed to fetch weekly report: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
-    */
-
-    // 더미 데이터 (실제 API 응답 형식)
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          success: true,
-          message: "Success",
-          data: {
-            weekStartDate: "2025-07-27",
-            weekEndDate: "2025-08-02",
-            totalDiaries: 2,
-            emotionStatistics: [
-              {
-                emotionCategory: "SOSO",
-                count: 1,
-                percentage: 50.0
-              },
-              {
-                emotionCategory: "HAPPY",
-                count: 1,
-                percentage: 50.0
-              }
-            ],
-            mostFrequentEmotions: "보통, 행복"
-          }
-        });
-      }, 1000);
-    });
   },
 
-  // @ts-ignore
   async getMonthlyReport(yearMonth: string): Promise<MonthlyReportResponse> {
-    // TODO: 실제 API 연결시 아래 주석 해제하고 더미 데이터 제거
-    /*
     try {
-      const response = await fetchWithTimeout(`/api/reports/monthly?yearMonth=${yearMonth}`, {
+      const token = getAuthToken();
+      if (!token) {
+        throw new Error('No authentication token found. Please log in.');
+      }
+
+      const response = await fetchWithTimeout(`${API_BASE_URL}/report/monthly/${yearMonth}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('Authentication failed. Please log in again.');
+        }
         throw new Error(`Monthly report fetch failed: ${response.status} ${response.statusText}`);
       }
 
-      return await validateJsonResponse(response);
+      const backendData: BackendReportResponse = await response.json();
+      return adaptMonthlyReport(backendData);
     } catch (error) {
       console.error('Monthly report API error:', error);
       throw new Error(`Failed to fetch monthly report: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
-    */
-
-    // 더미 데이터 (실제 API 응답 형식)
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          success: true,
-          message: "Success",
-          data: {
-            yearMonth: "2025-08",
-            totalDiaries: 3,
-            emotionStatistics: [
-              {
-                emotionCategory: "HAPPY",
-                count: 2,
-                percentage: 66.67
-              },
-              {
-                emotionCategory: "SOSO",
-                count: 1,
-                percentage: 33.33
-              }
-            ],
-            mostFrequentEmotions: "행복"
-          }
-        });
-      }, 1000);
-    });
   },
 };
