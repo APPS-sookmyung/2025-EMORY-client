@@ -35,18 +35,18 @@ export default function MyPage() {
         <Hamburger />
       </div>
 
-      <div className='flex flex-col items-center px-6 pt-16'>
+      <div className='flex flex-col items-center px-4 sm:px-6 md:px-8 pt-8 sm:pt-12 md:pt-16'>
         {/* 프로필 섹션 */}
-        <div className='flex flex-col items-center mb-8'>
-          <div className='w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 shadow-lg border border-white/30'>
-            <User className='w-12 h-12 text-gray-400' />{' '}
+        <div className='flex flex-col items-center mb-6 sm:mb-8'>
+          <div className='w-20 h-20 sm:w-24 sm:h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 shadow-lg border border-white/30'>
+            <User className='w-10 h-10 sm:w-12 sm:h-12 text-gray-400' />{' '}
             {/* ✅ 수정됨: 흰색 아이콘으로 변경 */}
           </div>
-          <h1 className='text-2xl font-medium text-gray-400 mb-1 drop-shadow-sm'>
+          <h1 className='text-xl sm:text-2xl font-medium text-gray-400 mb-1 drop-shadow-sm'>
             Jeewon
           </h1>{' '}
           {/* ✅ 수정됨: 흰색 텍스트 */}
-          <p className='text-gray-400 text-sm mb-6 drop-shadow-sm'>
+          <p className='text-gray-400 text-sm mb-4 sm:mb-6 drop-shadow-sm'>
             emory@gmail.com
           </p>{' '}
           {/* ✅ 수정됨 */}
@@ -60,7 +60,7 @@ export default function MyPage() {
         </div>
 
         {/* 메뉴 항목들 */}
-        <div className='w-full px-6 space-y-3 mt-8 pb-10'>
+        <div className='w-full max-w-md space-y-3 mt-6 sm:mt-8 pb-10'>
           {' '}
           {/* ✅ 수정됨: 전체 폭 사용 */}
           <button className='w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>

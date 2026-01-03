@@ -3,20 +3,17 @@ import { ArrowLeft } from "lucide-react"
 import { Button } from "../components/ui/button"
 import { Card } from "../components/ui/card"
 import { useToast } from '../hooks/use-toast';
-import { useLocation } from "wouter";   
+import { useLocation } from "wouter";
 import Hamburger from "../components/common/Hamburger";
+import { authService } from '../services/authService';
 
 export default function LogoutConfirmPage() {
     const { toast } = useToast();
     const [, navigate] = useLocation();
     const handleLogout = () => {
-        // 로그아웃 로직 추후에 추가
-
-        localStorage.removeItem("token"); 
-        sessionStorage.clear()
-        setTimeout(() => {
-            navigate('/my-page')
-        }, 2000) // 마이페이지로 2초 후에 리다이렉트
+        // authService를 사용하여 로그아웃
+        authService.logout();
+        sessionStorage.clear();
 
         // 토스트 메시지 표시
         toast({
@@ -24,7 +21,10 @@ export default function LogoutConfirmPage() {
             description: "안전하게 로그아웃되었습니다.",
         });
 
-
+        // 로그인 페이지로 이동
+        setTimeout(() => {
+            navigate('/start-page');
+        }, 1500);
     };
 
 

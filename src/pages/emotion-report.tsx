@@ -7,82 +7,16 @@ import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { useToast } from '../hooks/use-toast';
 import type { EmotionData, EmotionReport, EmotionIcon as EmotionIconType, EmotionCategory } from '../types/emotion';
+import { reportService } from '../services/reportService';
 
-// 더미 데이터 생성 함수 (나중에 API 호출로 교체)
-const createDummyEmotionReport = (): EmotionReport => {
-  const emotions: EmotionData[] = [
-    {
-      id: 'joy' as EmotionCategory,
-      name: '기쁨',
-      icon: 'sun' as EmotionIconType,
-      description: '밝고 긍정적인 순간들',
-      percentage: 35,
-      color: 'bg-orange-500',
-    },
-    {
-      id: 'calm' as EmotionCategory,
-      name: '평온',
-      icon: 'cloud' as EmotionIconType,
-      description: '평화롭고 차분한 상태',
-      percentage: 25,
-      color: 'bg-blue-400',
-    },
-    {
-      id: 'thoughtful' as EmotionCategory,
-      name: '사려깊음',
-      icon: 'brain' as EmotionIconType,
-      description: '깊은 성찰과 분석',
-      percentage: 20,
-      color: 'bg-purple-500',
-    },
-    {
-      id: 'anger' as EmotionCategory,
-      name: '분노',
-      icon: 'flame' as EmotionIconType,
-      description: '강한 감정적 반응',
-      percentage: 10,
-      color: 'bg-red-500',
-    },
-    {
-      id: 'anxiety' as EmotionCategory,
-      name: '불안',
-      icon: 'alert-triangle' as EmotionIconType,
-      description: '걱정과 긴장감',
-      percentage: 5,
-      color: 'bg-yellow-500',
-    },
-    {
-      id: 'sadness' as EmotionCategory,
-      name: '슬픔',
-      icon: 'droplets' as EmotionIconType,
-      description: '우울하고 슬픈 감정',
-      percentage: 3,
-      color: 'bg-indigo-500',
-    },
-    {
-      id: 'excitement' as EmotionCategory,
-      name: '신남',
-      icon: 'zap' as EmotionIconType,
-      description: '흥미진진하고 즐거운 기분',
-      percentage: 2,
-      color: 'bg-pink-500',
-    },
-  ];
-
-  // 가장 높은 퍼센티지를 가진 감정을 주요 감정으로 설정
-  const mainEmotion = emotions.reduce((max, current) =>
-    current.percentage > max.percentage ? current : max
-  );
-
-  return {
-    id: `report_${Date.now()}`,
-    userId: 'user_123',
-    createdAt: new Date().toISOString(),
-    mainEmotion,
-    emotionDistribution: emotions,
-    feedback:
-      '오늘 대화에서 기쁨과 평온이 주를 이루었습니다. 전반적으로 긍정적인 에너지가 느껴졌어요. 특히 새로운 아이디어에 대한 호기심과 사려깊은 성찰이 돋보였습니다.',
-  };
+// 감정 카테고리 매핑
+const emotionCategoryMap: Record<string, { name: string; icon: EmotionIconType; description: string; color: string; id: EmotionCategory }> = {
+  'HAPPY': { id: 'joy' as EmotionCategory, name: '기쁨', icon: 'sun' as EmotionIconType, description: '밝고 긍정적인 순간들', color: 'bg-orange-500' },
+  'SOSO': { id: 'calm' as EmotionCategory, name: '평온', icon: 'cloud' as EmotionIconType, description: '평화롭고 차분한 상태', color: 'bg-blue-400' },
+  'SAD': { id: 'sadness' as EmotionCategory, name: '슬픔', icon: 'droplets' as EmotionIconType, description: '우울하고 슬픈 감정', color: 'bg-indigo-500' },
+  'ANGRY': { id: 'anger' as EmotionCategory, name: '분노', icon: 'flame' as EmotionIconType, description: '강한 감정적 반응', color: 'bg-red-500' },
+  'ANXIOUS': { id: 'anxiety' as EmotionCategory, name: '불안', icon: 'alert-triangle' as EmotionIconType, description: '걱정과 긴장감', color: 'bg-yellow-500' },
+  'THOUGHTFUL': { id: 'thoughtful' as EmotionCategory, name: '사려깊음', icon: 'brain' as EmotionIconType, description: '깊은 성찰과 분석', color: 'bg-purple-500' },
 };
 
 // 감정 아이콘 컴포넌트 (타입 안전 버전)
@@ -117,30 +51,59 @@ export default function EmotionReportPage() {
   );
   const [isLoading, setIsLoading] = useState(true);
 
-  // 감정 리포트 데이터 로드 (나중에 API 호출로 교체)
+  // 감정 리포트 데이터 로드 - 월간 리포트 데이터 사용
   useEffect(() => {
     const loadEmotionReport = async () => {
       try {
         setIsLoading(true);
 
-        // TODO: 여기에 실제 API 호출 코드를 넣으세요
-        // 예시:
-        // const reportId = new URLSearchParams(window.location.search).get('reportId')
-        // const response = await fetch(`/api/emotion-reports/${reportId}`)
-        // const report = await response.json()
+        // 현재 월의 리포트 데이터 가져오기
+        const currentYearMonth = new Date().toISOString().substring(0, 7);
+        const monthlyReport = await reportService.getMonthlyReport(currentYearMonth);
 
-        // 현재는 더미 데이터 사용
-        const report = createDummyEmotionReport();
+        // 백엔드 응답을 EmotionReport 형식으로 변환
+        const emotions: EmotionData[] = monthlyReport.data.emotionStatistics.map(stat => {
+          const mapping = emotionCategoryMap[stat.emotionCategory] || {
+            id: 'joy' as EmotionCategory,
+            name: stat.emotionCategory,
+            icon: 'sparkles' as EmotionIconType,
+            description: '',
+            color: 'bg-gray-500'
+          };
+
+          return {
+            id: mapping.id,
+            name: mapping.name,
+            icon: mapping.icon,
+            description: mapping.description,
+            percentage: Math.round(stat.percentage),
+            color: mapping.color,
+          };
+        });
+
+        const mainEmotion = emotions.length > 0
+          ? emotions.reduce((max, current) => current.percentage > max.percentage ? current : max)
+          : emotions[0];
+
+        const report: EmotionReport = {
+          id: `report_${Date.now()}`,
+          userId: 'current_user',
+          createdAt: new Date().toISOString(),
+          mainEmotion,
+          emotionDistribution: emotions,
+          feedback: monthlyReport.data.mostFrequentEmotions
+            ? `이번 달에는 ${monthlyReport.data.mostFrequentEmotions} 감정이 주를 이루었습니다. 총 ${monthlyReport.data.totalDiaries}개의 일기가 작성되었어요.`
+            : '감정 데이터를 분석 중입니다.',
+        };
+
         setEmotionReport(report);
       } catch (error) {
         console.error('감정 리포트 로드 실패:', error);
         toast({
           title: '오류',
-          description: '감정 리포트를 불러오는데 실패했습니다.',
+          description: error instanceof Error ? error.message : '감정 리포트를 불러오는데 실패했습니다.',
           variant: 'destructive',
         });
-        // 에러 시에도 더미 데이터 표시
-        setEmotionReport(createDummyEmotionReport());
       } finally {
         setIsLoading(false);
       }
@@ -205,30 +168,30 @@ export default function EmotionReportPage() {
       </div>
 
       {/* 스크롤 가능한 메인 콘텐츠 */}
-      <div className='flex-1 overflow-y-auto px-6 pb-6 custom-scrollbar'>
-        <div className='flex flex-col items-center pt-8'>
+      <div className='flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 pb-6 custom-scrollbar'>
+        <div className='flex flex-col items-center pt-6 sm:pt-8'>
           {/* 프로필 섹션 */}
-          <div className='flex flex-col items-center mb-8'>
-            <div className='w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 shadow-lg border border-white/30'>
-              <Heart className='w-12 h-12 text-gray-400' />
+          <div className='flex flex-col items-center mb-6 sm:mb-8'>
+            <div className='w-20 h-20 sm:w-24 sm:h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 shadow-lg border border-white/30'>
+              <Heart className='w-10 h-10 sm:w-12 sm:h-12 text-gray-400' />
             </div>
-            <h1 className='text-2xl font-medium text-gray-400 mb-1 drop-shadow-sm'>
+            <h1 className='text-xl sm:text-2xl font-medium text-gray-400 mb-1 drop-shadow-sm'>
               감정 리포트
             </h1>
-            <p className='text-gray-400 text-sm mb-6 drop-shadow-sm'>
+            <p className='text-gray-400 text-xs sm:text-sm mb-4 sm:mb-6 drop-shadow-sm'>
               오늘의 대화 분석 결과
             </p>
           </div>
 
           {/* 메뉴 항목들 */}
-          <div className='w-full space-y-3 mt-8'>
+          <div className='w-full max-w-2xl space-y-3 mt-6 sm:mt-8'>
             {/* 감정 분포 카드 */}
-            <Card className='bg-white/30 backdrop-blur-sm rounded-2xl p-4 shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
+            <Card className='bg-white/30 backdrop-blur-sm rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
               <div className='text-center mb-4'>
-                <h2 className='text-lg font-medium text-gray-400 mb-2'>
+                <h2 className='text-base sm:text-lg font-medium text-gray-400 mb-2'>
                   감정 분포
                 </h2>
-                <p className='text-xs text-gray-400'>
+                <p className='text-xs sm:text-sm text-gray-400'>
                   오늘 하루 당신의 감정이 어떻게 균형을 이뤘는지 보여드려요
                 </p>
               </div>
@@ -268,12 +231,12 @@ export default function EmotionReportPage() {
             </Card>
 
             {/* 주요 감정 카드 */}
-            <Card className='bg-white/30 backdrop-blur-sm rounded-2xl p-4 shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
+            <Card className='bg-white/30 backdrop-blur-sm rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
               <div className='text-center mb-4'>
-                <h2 className='text-lg font-medium text-gray-400 mb-2'>
+                <h2 className='text-base sm:text-lg font-medium text-gray-400 mb-2'>
                   주요 감정
                 </h2>
-                <p className='text-xs text-gray-400'>오늘 하루를 정의한 감정</p>
+                <p className='text-xs sm:text-sm text-gray-400'>오늘 하루를 정의한 감정</p>
               </div>
 
               <div className='text-center'>
@@ -296,12 +259,12 @@ export default function EmotionReportPage() {
             </Card>
 
             {/* Emory Agent Feedback */}
-            <Card className='bg-white/30 backdrop-blur-sm rounded-2xl p-4 shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
-              <h3 className='font-bold text-gray-400 mb-3 text-center'>
+            <Card className='bg-white/30 backdrop-blur-sm rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
+              <h3 className='font-bold text-gray-400 text-base sm:text-lg mb-3 text-center'>
                 Emory Agent 의 Feedback
               </h3>
-              <div className='bg-white/20 rounded-lg p-3'>
-                <p className='text-sm text-gray-400 leading-relaxed text-center'>
+              <div className='bg-white/20 rounded-lg p-3 sm:p-4'>
+                <p className='text-xs sm:text-sm text-gray-400 leading-relaxed text-center'>
                   {emotionReport.feedback}
                 </p>
               </div>
