@@ -196,7 +196,6 @@ export const diaryService = {
   },
 
   // 북마크 토글 (스크랩 기능)
-  // 주의: 백엔드에 북마크 토글 API가 있다면 해당 엔드포인트로 수정 필요
   async toggleBookmark(diaryId: string, currentBookmarkState: boolean): Promise<void> {
     try {
       const token = getAuthToken();
@@ -204,9 +203,8 @@ export const diaryService = {
         throw new Error('No authentication token found. Please log in.');
       }
 
-      // TODO: 실제 북마크 토글 API 엔드포인트 확인 필요
-      // 현재는 PATCH /diaries/{id}/bookmark 또는 유사한 엔드포인트를 가정
-      const response = await fetchWithTimeout(`${API_BASE_URL}/diaries/${diaryId}/bookmark`, {
+      // 백엔드 API: PATCH /diaries/{id}/scrap
+      const response = await fetchWithTimeout(`${API_BASE_URL}/diaries/${diaryId}/scrap`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

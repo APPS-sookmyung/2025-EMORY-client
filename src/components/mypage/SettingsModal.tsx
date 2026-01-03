@@ -14,13 +14,15 @@ import {
   Moon,
 } from "lucide-react";
 import { Switch } from "../../components/ui/switch";
+import type { UserProfileResponse } from "../../services/userService";
 
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
+  profile: UserProfileResponse | null;
 }
 
-export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+export default function SettingsModal({ isOpen, onClose, profile }: SettingsModalProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [dragY, setDragY] = useState(0);
   const [startY, setStartY] = useState(0);
@@ -121,8 +123,8 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
         {/* Content */}
         <div className="px-6 py-4 space-y-4 overflow-y-auto">
-          <Item icon={<Mail />} title="로그인된 계정" desc="rey@gmail.com" />
-          <Item icon={<Clock />} title="구독 활동" desc="Emory Plus" />
+          <Item icon={<Mail />} title="로그인된 계정" desc={profile?.email || "로딩 중..."} />
+          <Item icon={<Clock />} title="구독 활동" desc="무료" />
 
           <Action
             icon={<UserMinus />}
