@@ -168,30 +168,30 @@ export default function EmotionReportPage() {
       </div>
 
       {/* 스크롤 가능한 메인 콘텐츠 */}
-      <div className='flex-1 overflow-y-auto px-6 pb-6 custom-scrollbar'>
-        <div className='flex flex-col items-center pt-8'>
+      <div className='flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 pb-6 custom-scrollbar'>
+        <div className='flex flex-col items-center pt-6 sm:pt-8'>
           {/* 프로필 섹션 */}
-          <div className='flex flex-col items-center mb-8'>
-            <div className='w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 shadow-lg border border-white/30'>
-              <Heart className='w-12 h-12 text-gray-400' />
+          <div className='flex flex-col items-center mb-6 sm:mb-8'>
+            <div className='w-20 h-20 sm:w-24 sm:h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 shadow-lg border border-white/30'>
+              <Heart className='w-10 h-10 sm:w-12 sm:h-12 text-gray-400' />
             </div>
-            <h1 className='text-2xl font-medium text-gray-400 mb-1 drop-shadow-sm'>
+            <h1 className='text-xl sm:text-2xl font-medium text-gray-400 mb-1 drop-shadow-sm'>
               감정 리포트
             </h1>
-            <p className='text-gray-400 text-sm mb-6 drop-shadow-sm'>
+            <p className='text-gray-400 text-xs sm:text-sm mb-4 sm:mb-6 drop-shadow-sm'>
               오늘의 대화 분석 결과
             </p>
           </div>
 
           {/* 메뉴 항목들 */}
-          <div className='w-full space-y-3 mt-8'>
+          <div className='w-full max-w-2xl space-y-3 mt-6 sm:mt-8'>
             {/* 감정 분포 카드 */}
-            <Card className='bg-white/30 backdrop-blur-sm rounded-2xl p-4 shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
+            <Card className='bg-white/30 backdrop-blur-sm rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
               <div className='text-center mb-4'>
-                <h2 className='text-lg font-medium text-gray-400 mb-2'>
+                <h2 className='text-base sm:text-lg font-medium text-gray-400 mb-2'>
                   감정 분포
                 </h2>
-                <p className='text-xs text-gray-400'>
+                <p className='text-xs sm:text-sm text-gray-400'>
                   오늘 하루 당신의 감정이 어떻게 균형을 이뤘는지 보여드려요
                 </p>
               </div>
@@ -231,12 +231,12 @@ export default function EmotionReportPage() {
             </Card>
 
             {/* 주요 감정 카드 */}
-            <Card className='bg-white/30 backdrop-blur-sm rounded-2xl p-4 shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
+            <Card className='bg-white/30 backdrop-blur-sm rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
               <div className='text-center mb-4'>
-                <h2 className='text-lg font-medium text-gray-400 mb-2'>
+                <h2 className='text-base sm:text-lg font-medium text-gray-400 mb-2'>
                   주요 감정
                 </h2>
-                <p className='text-xs text-gray-400'>오늘 하루를 정의한 감정</p>
+                <p className='text-xs sm:text-sm text-gray-400'>오늘 하루를 정의한 감정</p>
               </div>
 
               <div className='text-center'>
@@ -259,12 +259,12 @@ export default function EmotionReportPage() {
             </Card>
 
             {/* Emory Agent Feedback */}
-            <Card className='bg-white/30 backdrop-blur-sm rounded-2xl p-4 shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
-              <h3 className='font-bold text-gray-400 mb-3 text-center'>
+            <Card className='bg-white/30 backdrop-blur-sm rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg hover:bg-white/40 transition-all duration-300 border border-white/40'>
+              <h3 className='font-bold text-gray-400 text-base sm:text-lg mb-3 text-center'>
                 Emory Agent 의 Feedback
               </h3>
-              <div className='bg-white/20 rounded-lg p-3'>
-                <p className='text-sm text-gray-400 leading-relaxed text-center'>
+              <div className='bg-white/20 rounded-lg p-3 sm:p-4'>
+                <p className='text-xs sm:text-sm text-gray-400 leading-relaxed text-center'>
                   {emotionReport.feedback}
                 </p>
               </div>

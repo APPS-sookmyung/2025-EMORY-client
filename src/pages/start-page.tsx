@@ -35,7 +35,7 @@ export default function StartPage() {
     onSuccess: async (tokenResponse) => {
       try {
         setIsLoading(true);
-        const { accessToken, isNewUser } = await authService.login('google', tokenResponse.access_token);
+        const { isNewUser } = await authService.login('google', tokenResponse.access_token);
 
         toast({
           title: "로그인 성공",
@@ -79,7 +79,7 @@ export default function StartPage() {
       success: async (authObj: any) => {
         try {
           setIsLoading(true);
-          const { accessToken, isNewUser } = await authService.login('kakao', authObj.access_token);
+          const { isNewUser } = await authService.login('kakao', authObj.access_token);
 
           toast({
             title: "로그인 성공",
@@ -154,7 +154,7 @@ export default function StartPage() {
           <div className="space-y-4">
             {/* Google 로그인 */}
             <Button
-              onClick={handleGoogleLogin}
+              onClick={() => handleGoogleLogin()}
               disabled={isLoading}
               className="w-full bg-white/40 hover:bg-white/50 text-gray-700 py-4 rounded-2xl backdrop-blur-sm border border-white/50 shadow-lg transition-all duration-300 flex items-center justify-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed"
             >

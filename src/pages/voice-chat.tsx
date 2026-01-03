@@ -232,8 +232,8 @@ export default function VoiceChat() {
       {/* Chat Messages Area */}
       <div
         ref={chatContainerRef}
-        className={`flex-1 overflow-y-auto px-4 pb-4 transition-all duration-300 custom-scrollbar ${isListening || isLoading ? 'chat-blur' : ''}`}
-        style={{ height: 'calc(844px - 300px)', minHeight: '500px' }}
+        className={`flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 pb-4 transition-all duration-300 custom-scrollbar ${isListening || isLoading ? 'chat-blur' : ''}`}
+        style={{ minHeight: '40vh', maxHeight: 'calc(100vh - 320px)' }}
       >
         {messages.map((message) => (
           <ChatMessage key={message.id} message={message} />

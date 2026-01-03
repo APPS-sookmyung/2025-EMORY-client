@@ -101,7 +101,6 @@ function DiaryCard({
 /* ========= 페이지 ========= */
 export default function DiaryPreview() {
   const [items, setItems] = useState<DiaryItem[]>([]);
-  const [loading, setLoading] = useState(true);
   const [current, setCurrent] = useState(0);
   const clamp = (n: number) => Math.max(0, Math.min(items.length - 1, n));
   const { toast } = useToast();
@@ -112,7 +111,6 @@ export default function DiaryPreview() {
   useEffect(() => {
     const loadDiaries = async () => {
       try {
-        setLoading(true);
         const diaries = await diaryService.getAllDiaries();
         setItems(diaries);
         setCurrent(Math.floor(diaries.length / 2));
@@ -123,8 +121,6 @@ export default function DiaryPreview() {
           description: error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.",
           variant: "destructive",
         });
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -198,12 +194,12 @@ export default function DiaryPreview() {
     });
   }, [items, current]);
 
-  // 카드 크기/위치 (화면 꽉 차지 않게 + 중앙보다 조금 아래)
-  const CARD_MAX_W = 420;
-  const CARD_MAX_H = 480;
-  const CARD_W_PCT = 0.8;
-  const CARD_H_VH = 45;
-  const CENTER_OFFSET = 32;
+  // 카드 크기/위치 (화면 꽉 차지 않게 + 중앙보다 조금 아래) - 반응형 개선
+  const CARD_MAX_W = 480;
+  const CARD_MAX_H = 560;
+  const CARD_W_PCT = 0.82;
+  const CARD_H_VH = 48;
+  const CENTER_OFFSET = 28;
 
   return (
     <div className="h-full w-full">
@@ -236,7 +232,7 @@ export default function DiaryPreview() {
         </header>
 
         {/* 콘텐츠 */}
-        <main className="flex-1 min-h-0 px-3 md:px-4 pb-[calc(env(safe-area-inset-bottom)+32px)]">
+        <main className="flex-1 min-h-0 px-3 sm:px-4 md:px-6 pb-[calc(env(safe-area-inset-bottom)+32px)]">
           {/* 토글: 상단바 하얀 줄 바로 밑, 우측 */}
           <div className="flex justify-end pt-2 pe-1 mt-2">
             <ToggleSwitch
@@ -247,7 +243,7 @@ export default function DiaryPreview() {
 
           <section
             className="relative select-none pt-4"
-            style={{ height: `60vh` }}
+            style={{ height: `min(65vh, 600px)` }}
             onWheel={onWheel}
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
