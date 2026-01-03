@@ -152,7 +152,7 @@ export default function TimeCapsulePage() {
             {/* 나머지 이미지들 */}
             {timecapsule.diaries.length > 1 && (
               <div className="grid grid-cols-3 gap-4">
-                {timecapsule.diaries.slice(1, 7).map((diary, index) => (
+                {timecapsule.diaries.slice(1, 7).map((diary) => (
                   <Card
                     key={diary.diaryId}
                     className="aspect-square bg-white/60 backdrop-blur-sm border-0 shadow-md rounded-xl overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
