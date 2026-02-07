@@ -5,3 +5,14 @@
 [build.environment]
   NODE_VERSION = "22"
   ROLLUP_USE_WASM = "true"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://emory-server-406346608321.asia-northeast3.run.app/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
