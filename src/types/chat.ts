@@ -37,7 +37,8 @@ export interface ClientSecretResponse {
 
 export interface ChatSaveMessage {
   role: 'user' | 'assistant';
-  content: string;
+  text: string;
+  timestamp?: string;
 }
 
 export interface ChatSaveRequest {

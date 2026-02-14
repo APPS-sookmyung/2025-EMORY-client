@@ -274,7 +274,8 @@ export function useRealtimeChat(): UseRealtimeChatReturn {
           .filter((msg) => msg.message.trim() !== '')
           .map((msg) => ({
             role: msg.type === 'user' ? ('user' as const) : ('assistant' as const),
-            content: msg.message,
+            text: msg.message,
+            timestamp: msg.timestamp.toISOString(),
           }));
 
         if (saveMessages.length > 0) {
