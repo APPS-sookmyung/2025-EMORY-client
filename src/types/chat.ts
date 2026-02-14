@@ -18,3 +18,37 @@ export interface VoiceChatState {
   isLoading: boolean;
   statusText: string;
 }
+
+// --- Realtime Chat API Types ---
+
+export interface ChatStartRequest {
+  selectedEmotion: string;
+  calendarSummary: string;
+}
+
+export interface ChatStartResponse {
+  sessionId: string;
+}
+
+export interface ClientSecretResponse {
+  clientSecret: string;
+  expiresAt: number;
+}
+
+export interface ChatSaveMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+export interface ChatSaveRequest {
+  sessionId: string;
+  messages: ChatSaveMessage[];
+}
+
+export type RealtimeStatus =
+  | 'idle'
+  | 'connecting'
+  | 'connected'
+  | 'ai-speaking'
+  | 'error'
+  | 'disconnected';
