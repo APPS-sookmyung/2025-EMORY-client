@@ -4,7 +4,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080
 // API 타임아웃 설정 (10초)
 const API_TIMEOUT = 10000;
 
-// 백엔드 응답 타입 정의
+// 백엔드 응답 타입 정의 (DiaryResponse)
 export interface BackendDiaryResponse {
   diaryId: string;
   title: string;
@@ -18,10 +18,25 @@ export interface BackendDiaryResponse {
   updatedAt: string;
 }
 
+// 백엔드 응답 타입 정의 (DiaryImage)
 export interface BackendDiaryImage {
   diaryId: string;
   imageId: string;
   date: string; // LocalDate -> YYYY-MM-DD
+}
+
+// 피드백 요청 타입 (FeedbackSaveRequestDto)
+export interface FeedbackSaveRequest {
+  selectedOption: string;
+}
+
+// 피드백 응답 타입 (FeedbackSaveResponseDto)
+export interface FeedbackSaveResponse {
+  feedbackId: string;
+  diaryId: string;
+  selectedOption: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // 프론트엔드 타입 정의
@@ -60,6 +75,17 @@ const fetchWithTimeout = async (url: string, options: RequestInit = {}): Promise
 // 인증 토큰 가져오기
 const getAuthToken = (): string | null => {
   return localStorage.getItem('token');
+};
+
+const getAuthHeaders = (): Record<string, string> => {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error('인증 토큰이 없습니다. 로그인해주세요.');
+  }
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  };
 };
 
 // 이미지 URL 생성 (이미지 ID로부터)
@@ -104,130 +130,106 @@ const adaptDiaryImage = (backendImage: BackendDiaryImage): DiaryItem => {
 export const diaryService = {
   // 전체 일기 목록 조회
   async getAllDiaries(): Promise<DiaryItem[]> {
-    try {
-      const token = getAuthToken();
-      if (!token) {
-        throw new Error('No authentication token found. Please log in.');
+    const response = await fetchWithTimeout(`${API_BASE_URL}/diaries`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error('인증에 실패했습니다. 다시 로그인해주세요.');
       }
-
-      const response = await fetchWithTimeout(`${API_BASE_URL}/diaries`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Authentication failed. Please log in again.');
-        }
-        throw new Error(`Failed to fetch diaries: ${response.status} ${response.statusText}`);
-      }
-
-      const backendDiaries: BackendDiaryResponse[] = await response.json();
-      return backendDiaries.map(adaptDiaryResponse);
-    } catch (error) {
-      console.error('Diaries API error:', error);
-      throw new Error(`Failed to fetch diaries: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(`일기 목록 조회 실패: ${response.status} ${response.statusText}`);
     }
+
+    const backendDiaries: BackendDiaryResponse[] = await response.json();
+    return backendDiaries.map(adaptDiaryResponse);
   },
 
   // 이미지가 있는 일기 목록 조회
   async getDiaryImages(year?: number): Promise<DiaryItem[]> {
-    try {
-      const token = getAuthToken();
-      if (!token) {
-        throw new Error('No authentication token found. Please log in.');
+    const url = year
+      ? `${API_BASE_URL}/diaries/images?year=${year}`
+      : `${API_BASE_URL}/diaries/images`;
+
+    const response = await fetchWithTimeout(url, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error('인증에 실패했습니다. 다시 로그인해주세요.');
       }
-
-      const url = year
-        ? `${API_BASE_URL}/diaries/images?year=${year}`
-        : `${API_BASE_URL}/diaries/images`;
-
-      const response = await fetchWithTimeout(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Authentication failed. Please log in again.');
-        }
-        throw new Error(`Failed to fetch diary images: ${response.status} ${response.statusText}`);
-      }
-
-      const backendImages: BackendDiaryImage[] = await response.json();
-      return backendImages.map(adaptDiaryImage);
-    } catch (error) {
-      console.error('Diary images API error:', error);
-      throw new Error(`Failed to fetch diary images: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(`일기 이미지 조회 실패: ${response.status} ${response.statusText}`);
     }
+
+    const backendImages: BackendDiaryImage[] = await response.json();
+    return backendImages.map(adaptDiaryImage);
   },
 
   // 일기 삭제
   async deleteDiary(diaryId: string): Promise<void> {
-    try {
-      const token = getAuthToken();
-      if (!token) {
-        throw new Error('No authentication token found. Please log in.');
-      }
+    const response = await fetchWithTimeout(`${API_BASE_URL}/diaries/${diaryId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
 
-      const response = await fetchWithTimeout(`${API_BASE_URL}/diaries/${diaryId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Authentication failed. Please log in again.');
-        }
-        throw new Error(`Failed to delete diary: ${response.status} ${response.statusText}`);
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error('인증에 실패했습니다. 다시 로그인해주세요.');
       }
-    } catch (error) {
-      console.error('Delete diary API error:', error);
-      throw new Error(`Failed to delete diary: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      if (response.status === 404) {
+        throw new Error('해당 일기를 찾을 수 없습니다.');
+      }
+      throw new Error(`일기 삭제 실패: ${response.status} ${response.statusText}`);
     }
   },
 
-  // 북마크 토글 (스크랩 기능)
-  async toggleBookmark(diaryId: string, currentBookmarkState: boolean): Promise<void> {
-    try {
-      const token = getAuthToken();
-      if (!token) {
-        throw new Error('No authentication token found. Please log in.');
-      }
+  // 북마크 토글 (스크랩 기능) — 백엔드가 자체적으로 토글, body 불필요
+  async toggleBookmark(diaryId: string): Promise<BackendDiaryResponse> {
+    const response = await fetchWithTimeout(`${API_BASE_URL}/diaries/${diaryId}/scrap`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+    });
 
-      // 백엔드 API: PATCH /diaries/{id}/scrap
-      const response = await fetchWithTimeout(`${API_BASE_URL}/diaries/${diaryId}/scrap`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ scraped: !currentBookmarkState }),
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Authentication failed. Please log in again.');
-        }
-        // 404면 엔드포인트가 없는 것이므로 로컬 상태만 업데이트
-        if (response.status === 404) {
-          console.warn('Bookmark API endpoint not found. Update local state only.');
-          return;
-        }
-        throw new Error(`Failed to toggle bookmark: ${response.status} ${response.statusText}`);
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error('인증에 실패했습니다. 다시 로그인해주세요.');
       }
-    } catch (error) {
-      console.error('Toggle bookmark API error:', error);
-      // 에러가 발생해도 로컬 상태는 유지하도록 함
-      console.warn('Bookmark toggle failed, but continuing with local state update.');
+      if (response.status === 404) {
+        throw new Error('해당 일기를 찾을 수 없습니다.');
+      }
+      throw new Error(`북마크 토글 실패: ${response.status} ${response.statusText}`);
     }
+
+    return response.json();
+  },
+
+  // AI 일기 피드백 저장
+  async saveFeedback(diaryId: string, selectedOption: string): Promise<FeedbackSaveResponse> {
+    const response = await fetchWithTimeout(
+      `${API_BASE_URL}/aidiary/diary/${encodeURIComponent(diaryId)}/feedback`,
+      {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ selectedOption } as FeedbackSaveRequest),
+      },
+    );
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error('인증에 실패했습니다. 다시 로그인해주세요.');
+      }
+      if (response.status === 404) {
+        throw new Error('해당 일기를 찾을 수 없습니다.');
+      }
+      if (response.status === 400) {
+        throw new Error('피드백 옵션을 선택해주세요.');
+      }
+      throw new Error(`피드백 저장 실패: ${response.status} ${response.statusText}`);
+    }
+
+    return response.json();
   },
 };
