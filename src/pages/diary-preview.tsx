@@ -156,15 +156,21 @@ export default function DiaryPreview() {
     const item = items[idx];
     if (!item) return;
 
-    // 먼저 로컬 상태 업데이트 (낙관적 업데이트)
+    // 낙관적 업데이트
     setItems((prev) => prev.map((it, i) => i === idx ? { ...it, bookmarked: !it.bookmarked } : it));
 
     try {
-      await diaryService.toggleBookmark(item.id, item.bookmarked || false);
+      const updated = await diaryService.toggleBookmark(item.id);
+      // 서버 응답으로 확정
+      setItems((prev) => prev.map((it, i) => i === idx ? { ...it, bookmarked: updated.scraped } : it));
     } catch (error) {
       // 실패 시 원래 상태로 복원
-      setItems((prev) => prev.map((it, i) => i === idx ? { ...it, bookmarked: !it.bookmarked } : it));
-      console.error('Bookmark toggle failed:', error);
+      setItems((prev) => prev.map((it, i) => i === idx ? { ...it, bookmarked: item.bookmarked } : it));
+      toast({
+        title: '북마크 실패',
+        description: error instanceof Error ? error.message : '북마크 변경에 실패했습니다.',
+        variant: 'destructive',
+      });
     }
   };
 

@@ -5,6 +5,7 @@ import { useToast } from "../hooks/use-toast";
 import { useLocation } from "wouter";
 import { useSidebar } from "../components/sidebar/SidebarContext";
 import { CloudSun, CloudRain, Snowflake, Cloud, Sun } from "lucide-react";
+import { diaryService } from "../services/diaryService";
 
 // 이모지 경로
 import angryEmoji from "../assets/img/emotion/angry-emoji.png";
@@ -58,9 +59,25 @@ export default function DiaryWriting() {
     });
   };
 
-  // 모달 Confirm
-  const confirmFeedback = () => {
-    // (필요하면 서버 전송 코드 추가)
+  // 모달 Confirm — 피드백 API 호출 후 일기 완료 처리
+  const confirmFeedback = async () => {
+    if (!selectedFeedback) return;
+
+    try {
+      // TODO: diaryId는 AI 일기 생성 후 전달받아야 함 (현재는 임시값)
+      // 실제 구현 시 생성된 diaryId를 state/query param으로 전달
+      const diaryId = new URLSearchParams(window.location.search).get('diaryId');
+      if (diaryId) {
+        await diaryService.saveFeedback(diaryId, selectedFeedback);
+      }
+    } catch (error) {
+      toast({
+        title: "피드백 저장 실패",
+        description: error instanceof Error ? error.message : "피드백 저장에 실패했습니다.",
+        variant: "destructive",
+      });
+    }
+
     completeDiary();
     closeFeedbackModal();
   };
